@@ -1,0 +1,43 @@
+/*
+ * Website Animation definitions
+ */
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+		opacity: 1;
+    }
+}
+
+@mixin fadein($time:0.5) {
+    animation: fadein #{$time}s;
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@mixin spin($time: 0.5) {
+    animation: spin #{$time}s linear infinite;
+}
+
+@keyframes slidein {
+	from {
+		top: -100%;
+	}
+	to {
+		top: 0;
+	}
+}
+
+.slidein {
+	animation: slidein 0.5s;
+}
+
+@mixin slidein($time) {
+    animation: slidein #{$time}s ease-in-out;
+}

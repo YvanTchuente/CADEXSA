@@ -1,0 +1,49 @@
+.carousel {
+    position: relative;
+    overflow: hidden;
+
+    .carousel-item {
+        width: 100%;
+        display: none;
+        position: relative;
+        @include fadein();
+    }
+
+    + .carousel-nav {
+        .prev, .next {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 10%;
+            height: 100%;
+            border-radius: 0;
+            background-color: transparent;
+    
+            &:hover, &:focus {
+                color: white;
+                border: none;
+                box-shadow: unset;
+            }
+
+            i {
+                font-size: 3em;
+            }
+        }
+    
+        .prev {
+            left: 0;
+        }
+        
+        .next {
+            right: 0;
+        }
+    }
+
+    .active {
+        display: block !important;
+    }
+
+    .f_active {
+        display: flex !important;
+    }
+}

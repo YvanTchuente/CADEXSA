@@ -1,0 +1,172 @@
+/*
+ * Reset SCSS file
+ * CSS resets
+ */
+
+ %html {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+html {
+    font-size: 16px;
+    box-sizing: border-box;
+    @extend %html;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    @extend %html;
+    color: black;
+    line-height: 1.5;
+    background-color: white;
+    font: {
+        size: 1rem;
+        family: $font-general-family;
+        style: normal;
+    }
+}
+
+header, nav, section, blockquote, footer {
+    @extend %html;
+    font-size: 100%;
+}
+
+%heading {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-style: $headings-font-style;
+    font-weight: $headings-font-weight;
+    line-height: $headings-line-height;
+    color: inherit;
+}
+
+h1 {
+    @extend %heading;
+    $font: Inter-semibold, sans-serif;
+    @include font($font, $h1-font-size);
+}
+
+h2 {
+    @extend %heading;
+    $font: Inter-semibold, sans-serif;
+    @include font($font, $h2-font-size);
+}
+
+h3 {
+    @extend %heading;
+    $font: Inter-semibold, sans-serif;
+    @include font($font, $h3-font-size);
+}
+
+h4 {
+    @extend %heading;
+    $font: Inter-medium, sans-serif;
+    @include font($font, $h4-font-size);
+}
+
+h5 {
+    @extend %heading;
+    $font: Inter-medium, sans-serif;
+    @include font($font, $h5-font-size);
+}
+
+h6 {
+    @extend %heading;
+    $font: Inter-medium, sans-serif;
+    @include font($font, $h6-font-size);
+}
+
+p {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+}
+
+a {
+    @extend %html;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ol, ul, dd {
+    @extend %html;
+    list-style: none;
+}
+
+img, svg, figure {
+    vertical-align: middle;
+}   
+
+input, label, button, select, textarea {
+  @extend %html;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input, button:focus:not(:focus-visible) {
+    outline: none;
+    outline-offset: 0;
+}
+
+button, select {
+  text-transform: none;
+}
+
+button, [role="button"], [role="submit"], [role="reset"] {
+    appearance: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+select {
+    word-wrap: normal;
+}
+
+table {
+    @extend %html;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+thead, tbody, tfoot {
+    @extend %html;
+}
+
+textarea {
+    resize: vertical; // Always and only rezsize vertically
+}
+
+iframe {
+    border: 0;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+::file-selector-button {
+    font: inherit;
+}
+
+/** Scrollbars style **/
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #555;
+}

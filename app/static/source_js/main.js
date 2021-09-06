@@ -42,7 +42,7 @@ function sticky_header () {
 		header.style.position = "fixed"
 		header.style.top = "0";
 		header.style.left = "0";	
-		header.style.boxShadow = "0px 5px 5px rgba(0,0,0,15%)";
+		header.style.boxShadow = "0px 5px 10px rgba(0,0,0,25%)";
 		header.classList.add("slidein");
 	}
 	else 
@@ -107,20 +107,20 @@ function openTab(event, tab)
 /* JS functions to handle nice-select elements */
 function openSelect(event,niceSelect) {
 	// Closes all open nice select dropdowns
-	var dropdowns = document.querySelectorAll(".dropdownMenu");
+	var dropdowns = document.querySelectorAll(".nice-select .dropdown");
 	for (dropdown of dropdowns) 
 	{
 		dropdown.style = "";
 	}
-	// Removes the class opened from all nice-selects
-	var currents = document.querySelectorAll(".nice-select > span");
-	for (icon of currents)
+	// Removes the class .opened from all nice-selects
+	var currents = document.querySelectorAll(".nice-select > [class='current']");
+	for (current of currents)
 	{
-		icon.classList.remove("opened");
+		current.classList.remove("opened");
 	}
 
 	// Open the specific dropdown
-	var selector = "#"+niceSelect+" .dropdownMenu";
+	var selector = "#"+niceSelect+" .dropdown";
 	var dropdown = document.querySelector(selector);
 	dropdown.style.top = "105%";
 	dropdown.style.opacity = "1";
@@ -145,46 +145,39 @@ function toggle_visibility(id) {
 	}
 }
 
-/*** Mobile nav dropdown function***/
+/* Mobile nav dropdown function */
 function nav_drop() {
 	var mlinks = document.getElementsByClassName("m-links")[0];
 	var menubtn = document.getElementsByClassName("m-menu-btn")[0];
-	var nav_visibility = mlinks.style.visibility;
 
-	/*** Get the bars of the nav icon ***/
-	var bar1 = document.querySelector(".m-menu-btn #menu-bar1");
-	var bar2 = document.querySelector(".m-menu-btn #menu-bar2");
-	var bar3 = document.querySelector(".m-menu-btn #menu-bar3");
+	/* Get the bars of the nav icon */
+	let bar // For use in loops to refer to any bar below
+	let bar1 = document.querySelector(".m-menu-btn #menu-bar1");
+	let bar2 = document.querySelector(".m-menu-btn #menu-bar2");
+	let bar3 = document.querySelector(".m-menu-btn #menu-bar3");
+	let bars = [bar1, bar2, bar3];
 
-	if(nav_visibility == "visible") 
+	if(mlinks.classList.contains("open")) 
 	{
-		mlinks.style = ""; 
-		bar1.style = "";
-		bar2.style = "";
-		bar3.style = "";
+		mlinks.classList.remove("open");
+		for(bar of bars) {
+			bar.style = "";
+		}
 	} 
 	else 
 	{
-		if(window.matchMedia("(max-width:375px)").matches)
-			mlinks.style.top = "100px";
-		else
-			mlinks.style.top = "60px";
-		mlinks.style.opacity = "1";
-		mlinks.style.visibility = "visible";
-
+		mlinks.classList.add("open");
 		/*** Animating the menu button ***/
-		bar1.style.transform = "rotate(45deg)";
-		bar1.style.position = "relative";
+		for(bar of bars) {
+			bar.style.position = "relative";
+		}
+		bar1.style.transform = "rotate(45deg)"
 		bar1.style.bottom = "-11px";
 
 		bar2.style.display = "none";
 
-		bar3.style.transform = "rotate(-45deg)";
-		bar3.style.position = "relative";
-		if(window.matchMedia("(max-width: 375px)").matches) 
-			bar3.style.top = "3px";
-		else
-			bar3.style.top = "1px";
+		bar3.style.transform = "rotate(-45deg)"; 
+		bar3.style.top = "1px";
 	}
 }
 
@@ -217,12 +210,12 @@ window.onload = function()
 		{
 			if(!event.target.matches('.nice-select .current'))
 			{
-				var dropdowns = document.querySelectorAll(".dropdownMenu");
+				var dropdowns = document.querySelectorAll(".dropdown");
 				for (dropdown of dropdowns) 
 				{
 					dropdown.style = "";
 				}
-				var currents = document.querySelectorAll(".nice-select > span");
+				var currents = document.querySelectorAll(".nice-select > [class='current']");
 				for (icon of currents)
 				{
 					icon.classList.remove("opened");
@@ -233,28 +226,28 @@ window.onload = function()
 	/*** ---User panel dropdown menu--- ***/
 
 	/*** Selection of option for the select elements of the news and events filter area ***/
-	$("#nice-select-1 .dropdownMenu li").click(function()
+	$("#nice-select-1 .dropdown li").click(function()
 	{
 		value = $(this).html()
-		$("#nice-select-1 .dropdownMenu li").removeClass("selected")
+		$("#nice-select-1 .dropdown li").removeClass("selected")
 		$(this).addClass("selected")
 		$("#nice-select-1 .current").html(value)
 		$("#nice-select-1 option").removeAttr("selected")
 		$("#nice-select-1 option:contains('"+value+"')").attr({'selected':''})
 	})
-	$("#nice-select-2 .dropdownMenu li").click(function()
+	$("#nice-select-2 .dropdown li").click(function()
 	{
 		value = $(this).html()
-		$("#nice-select-2 .dropdownMenu li").removeClass("selected")
+		$("#nice-select-2 .dropdown li").removeClass("selected")
 		$(this).addClass("selected")
 		$("#nice-select-2 .current").html(value)
 		$("#nice-select-2 option").removeAttr("selected")
 		$("#nice-select-2 option:contains('"+value+"')").attr({'selected':''})
 	})
-	$("#nice-select-3 .dropdownMenu li").click(function()
+	$("#nice-select-3 .dropdown li").click(function()
 	{
 		value = $(this).html() // Equavalent to JS innerHtml
-		$("#nice-select-3 .dropdownMenu li").removeClass("selected")
+		$("#nice-select-3 .dropdown li").removeClass("selected")
 		$(this).addClass("selected")
 		$("#nice-select-3 .current").html(value)
 		$("#nice-select-3 option").removeAttr("selected")

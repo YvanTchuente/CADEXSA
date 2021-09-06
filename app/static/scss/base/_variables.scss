@@ -1,5 +1,5 @@
 /*
- * Variable SCSS
+ * Variables SCSS
  * This file contains all the variables used through out the website
  */
 
@@ -25,9 +25,9 @@ $font-general-weight: 400;
 $font-general-style: normal;
 
 /* Headings */
-$h1-font-size: calc(2em + 0.5vw);
+$h1-font-size: calc(2em + 0.3vw);
 $h2-font-size: calc(1.5em + 0.3vw);
-$h3-font-size: calc(1.4em + 0.4vw);
+$h3-font-size: calc(1.2em + 0.3vw);
 $h4-font-size: 1.3em;
 $h5-font-size: 1.25em;
 $h6-font-size: 1em;
@@ -38,13 +38,19 @@ $headings-font-weight: 500;
 /* Visual style */
 $border-thickness: 2px;
 $border-radius: 5px;
-$shadow-blur: 5px;
+$shadow-blur: 10px;
+$shadow-color: rgba(0,0,0,25%);
 
 // Media query breakpoints
-
 $device-extra-small: 500px;
 $device-small: 600px;
 $device-medium: 768px;
 $device-large: 992px;
 $device-semi-large: 1200px; 
 $device-extra-large: 1400px;
+
+// Pagination
+$pagination-font-size: 1.1em;
+$pagination-item-gutter: 15px;
+$pagination-color: $color-theme1;
+$pagination-border-color: lightgray;

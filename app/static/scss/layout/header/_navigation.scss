@@ -28,7 +28,11 @@ header .nav {
             }
 
             &:not(:last-child) {
-                margin-right: 0.5em;
+                margin-right: 0;
+
+                @include min-responsify($device-semi-large) {
+                    margin-right: 0.5em;
+                }
             }
 
             a {

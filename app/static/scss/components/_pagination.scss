@@ -1,0 +1,65 @@
+/*
+ * Pagination SCSS
+ * Styles for page pagination
+ */
+
+.pagination-area {
+    display: flex;
+    justify-content: center;
+	margin: 50px 0px 70px 0px;
+
+    .pagination {
+        display: block;
+
+        .page-item {
+            display: inline-block;
+
+            &:first-child .page-link {
+                border-radius: 0.3em 0 0 0.3em;
+            }
+
+            &:last-child .page-link {
+                border-radius: 0 0.3em 0.3em 0;
+            }
+
+            &:not(.active) .page-link:hover {
+                color: white;
+                background-color: $pagination-color;
+                box-shadow: 0 0 $shadow-blur $shadow-color;
+            }
+
+            &:not(:last-child) {
+                margin-right: $pagination-item-gutter;
+            }
+
+            &:not(:first-child) .page-link {
+                margin-left: -5px;
+            }
+
+            .page-link {
+                position: relative;
+                font-size: $pagination-font-size;
+                color: $pagination-color;
+                padding: 0.7em 1em;
+                background-color: white;
+                border: 1px solid $pagination-border-color;
+
+                @include min-responsify($device-large) {
+                    padding: 0.75em 1.3em;
+                }
+            }
+
+            &.active .page-link {
+                color: white;
+                border-color: $pagination-color;
+                background-color: $pagination-color;
+            }
+
+            &.disabled .page-link {
+                color: $pagination-border-color;
+                pointer-events: none;
+                background-color: white;
+            }
+        }
+    }
+}

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CADEXSA - News Article</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initialscale=1.0">
+		<!-- Icon displayed on browser toolbar -->
+		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
+		<!-- Font Awesome 5.0 -->
+		<link href="/static/fonts/fontawesome/css/fontawesome.css" rel="stylesheet">
+		<link href="/static/fonts/fontawesome/css/brands.css" rel="stylesheet">
+		<link href="/static/fonts/fontawesome/css/regular.css" rel="stylesheet">
+		<link href="/static/fonts/fontawesome/css/solid.css" rel="stylesheet">
+		<script src="/static/js/jquery.js"></script>
+
+		<!-- Main CSS file -->
+		<link rel="stylesheet" href="/static/css/main.css">
+		<!-- Main Javascript file -->
+		<script src="/static/js/main.js"></script>
+
+		<script>
+		document.onreadystatechange = function() 
+		{
+			var loader = document.querySelector("#loader");
+    		if (document.readyState == "complete") {
+				fadeOut(loader,400);
+			}
+		}
+		</script>
+	</head>
+	<body id="news_dir">
+		<div id="loader"><div><div class="spinner"></div></div></div>
+		<header>
+			<div id="topnav">
+				<div class="ws-container">
+					<div class="content">
+						<div id="contact-us">
+							<div class="contact_info">
+								<span><i class="fas fa-phone-alt"></i> (+237) 657384876</span>
+								<span><i class="fas fa-envelope"></i> info@cadexsa.org</span>
+							</div>
+						</div>
+						<div id="members-space">
+							<a href="#" class="header-btn">Login</a>
+							<a href="#" class="header-btn">Create account</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-content">
+				<div class="ws-container">
+					<div class="header-grid-container">
+						<div class="logo"><a href="/"><img src="/static/images/logo/Logo.png" alt="logo"/></a></div>
+						<div class="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li class="active"><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+							</ul>
+						</div>
+						<!-- Navigation for mobile-->
+						<div class="m-menu-btn" onclick="nav_drop()">
+							<span id="menu-bar1"></span>
+							<span id="menu-bar2"></span>
+							<span id="menu-bar3"></span>
+						</div>
+						<div class="m-links">
+							<ul class="nav">
+								<li class="active"><a href="/">Home</a></li>
+								<li><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+								<li><a href="/members/login.php">Login</a></li>
+								<li><a href="/members/register.php">Create account</a></li>
+							</ul>
+						</div>
+						<!--End-->
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- Page Content -->
+		<div class="page-content">
+			<div class="page-header">
+				<div class="ws-container">
+					<h1>Recent News</h1>
+				</div>
+			</div>
+			<div class="ws-container">
+				<div class="cs-grid">
+						<div class="article-wrap" id="sec1">
+							<div class="article-content-header">
+								<h2>Several ex-students became ministers of the cameroonian government</h2>
+								<h6><span><img src="/static/images/graphics/profile-placeholder.png" alt="article_author"/>by Admin</span><span><i class="fas fa-clock"></i>Sep 5, 2021</span></h6>
+							</div>
+							<div class="article-content">
+								<div class="article-thumb"><img src="/static/images/gallery/group.jpg" alt="news thumbnail"></div>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quis diam erat. Duvelit lecspoe a blandit sit amet, tempor at lorem. Donec ultricies, lorem sed ultrices interdum, leo luctfiiius sem, vel vulputate diam ipsum sed lorem. Donec tempor arcu nisl, et molestie massa hhisque ut. Nunc at rutrum leo. Mauris metus mauris, tridd.</p>
+								<p>Mauris tempus erat laoreet turpis lobortis, eu tincidunt erat fermentum. Aliquam nonh edunt urna. Integer tincidunt nec nisl vitae ullamcorper. Proin sed ultrices erat. Praesent vdd warius ultricemassa at faucibus. Aenean dignissim, orci sed faucibus pharetra, dui mi dir ssim tortor, sit amet ntum mi ligula sit amet augue. Pellentesqs placerat.</p>
+								<p>Lorem ipsum condimentum ligula. Fusce fringilla magna non sapien dictum, eget faucibus dui maximus. Donec fringilla vel mi consequat tempor. Proin sed ultrices erat. Praesent vdd warius ultricemassa at faucibus. Aenean dignissim, orci sed faucibus pharetra, dui mi dir ssim tortor, sit amet ntum mi ligula sit amet augue. Pellentesqs placerat.</p>
+							</div>
+							<div class="share-div">
+								<div><span>Share this article</span></div>
+								<div>
+									<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+									<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+								</div>
+							</div>
+						</div>
+						<div id="aside_wrap">
+							<section class="aside_box">
+								<h3>Search</h3>
+								<form action="/search" method="get">
+									<input type="text" class="form-control" name="search" id="search_article" placeholder="Search articles">
+									<button type="submit"><i class="fas fa-search"></i> Search</button>
+								</form>
+							</section>
+							<section class="aside_box">
+								<h3>Categories</h3>
+								<ul class="list-unstyled">
+									<li><a href="#">Alumni</a></li>
+									<li><a href="#">Events</a></li>
+									<li><a href="#">Members</a></li>
+									<li><a href="#">School</a></li>
+									<li><a href="#">Current students</a></li>
+								</ul>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Website Footer Section -->
+		<footer>
+			<div class="ws-container">
+				<div class="footer-grid-container">
+					<div>
+						<h5>Stay in touch</h5>
+						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
+						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
+						<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+					</div>
+					<div>
+						<h5>Recent News</h5>
+							<ul class="list-unstyled">
+							<li><a href="">News from the ex-students</a></li>
+							<li><a href="">News from the Alma Mater</a></li>
+							<li><a href="/events/">Upcoming events</a></li>
+							<li><a href="">Submit News</a></li>
+						</ul>
+					</div>
+					<div>
+						<h5>Get Involved</h5>
+						<ul class="list-unstyled">
+							<li><a href="/members/register.php">Become a member</a></li>
+							<li><a href="">Become a sponsor</a></li>
+							<li><a href="">Make a donation</a></li>
+							<li><a href="">Volunteer</a></li>
+						</ul>
+					</div>
+					<div>
+					<h5>Networking</h5>
+					<ul class="list-unstyled">
+						<li><a href="">Ex-students Directory</a></li>
+						<li><a href="">Ambassadors</a></li>
+						<li><a href="">Testimonials</a></li>
+					</ul>
+					</div>
+					<div>
+						<h5>About Us</h5>
+						<ul class="list-unstyled">
+							<li><a href="">Mission</a></li>
+							<li><a href="">History</a></li>
+							<li><a href="">Administration</a></li>
+							<li><a href="/contact_us/" target="_blank">Contact Us</a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="gotop_btn" onclick="gotop()"><i class="fas fa-angle-up"></i></div>
+			</div>
+			<div id="contact_info">
+				<div class="ws-container">
+					<p>
+						<span><i class="fas fa-phone-alt"></i>(+237) 657384876</span>
+						<span><i class="fas fa-envelope"></i>info@cadexsa.org</span>
+					</p>
+				</div>
+			</div>
+			<div id="copyright">
+				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
+			</div>
+		</footer>
+		<script src="/static/js/sticky-header.js"></script>
+	</body>
+</html>

@@ -86,6 +86,13 @@
     	        padding: 6px 32px 6px 12px;
             }
 
+            &.opened {
+                &:after {
+                    transform: rotate(225deg);
+                    top: 45%;
+                }
+            }
+
             &:after {
                 content: "";
 	            display: block;
@@ -135,12 +142,5 @@
                 }
             }
         }
-    }
-}
-
-.opened {
-    &:after {
-	    transform: rotate(225deg);
-	    top: 45%;
     }
 }

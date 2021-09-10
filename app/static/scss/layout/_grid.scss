@@ -180,14 +180,14 @@
         column-gap: 50px;
     }
 
-    > div:nth-child(1) {
+    > div:first-child {
         grid-column: 1 / span 12;
         @include min-responsify($device-large) {
             grid-column: 1 / span 8;
         }
     }
 
-    > div:nth-child(2) {
+    > aside {
         grid-column: 1 / span 12;
         @include min-responsify($device-large) {
             grid-column: 9 / span 4;

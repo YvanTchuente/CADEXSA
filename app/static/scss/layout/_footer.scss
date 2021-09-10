@@ -60,6 +60,11 @@ footer
         padding: 4px 10px;
         border-radius: 0;
         background-color: $color-theme1;
+
+        &:focus {
+            color: unset;
+            border: 2px solid $color-theme1;
+        }
     }
 
     #contact_info {

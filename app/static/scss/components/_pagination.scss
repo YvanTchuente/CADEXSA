@@ -14,6 +14,10 @@
         .page-item {
             display: inline-block;
 
+            @include max-responsify($device-extra-small) {
+                margin-bottom: 2em;
+            }
+
             &:first-child .page-link {
                 border-radius: 0.3em 0 0 0.3em;
             }
@@ -25,7 +29,7 @@
             &:not(.active) .page-link:hover {
                 color: white;
                 background-color: $pagination-color;
-                box-shadow: 0 0 $shadow-blur $shadow-color;
+                box-shadow: 0 0 $shadow-blur-width $shadow-color;
             }
 
             &:not(:last-child) {

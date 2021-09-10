@@ -64,7 +64,7 @@
         padding: 30px 45px;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 0 ($shadow-blur+10) rgba(0,0,0,50%);
+        box-shadow: 0 0 ($shadow-blur-width+10) rgba(0,0,0,50%);
 
         &:not(:last-child) {
             margin-bottom: 2rem;

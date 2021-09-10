@@ -1,6 +1,16 @@
+/*
+ * Carousel Class
+ */
+
 // Constants
 const PREV = "prev";
 const NEXT = "next";
+
+/*
+ ******************************************************
+ ***** Class Definition                           *****
+ ******************************************************
+ */
 
 class carousel 
 {

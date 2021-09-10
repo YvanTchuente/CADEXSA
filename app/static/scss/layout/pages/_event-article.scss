@@ -1,0 +1,80 @@
+/*
+ * Event article page styles
+ */
+
+#event-wrap {
+    .thumbnail {
+        width: 100%;
+        height: 350px;
+        display: flex;
+        margin-bottom: 1em;
+        align-items:flex-end;
+        background-image: url("/static/images/gallery/students.jpg"); 
+        background-position: center;
+        background-size: cover;    
+        
+        .title {
+            width: 100%;
+            color: white;
+            padding: 25px 20px;
+            background-color: rgba(30,30,30,0.8);
+            backdrop-filter: blur(8px);
+
+            h2 {
+                margin-bottom: 0.3em;
+            }
+        }
+    }
+
+    .desc p {
+        margin-bottom: 0.5em;
+    }
+}
+
+#aside_wrap {
+    section#schedule {
+        > div {
+            &:not(:last-child) {
+                margin-bottom: 0.5em;
+            }
+
+            h5 {
+                margin: 0;
+                color: white;
+                padding: 0.5em 1em;
+                background-color: $color-footer;
+
+                i {
+                    float: right;
+                    line-height: 1.3;
+                    transition: all 0.5s ease-in-out;
+                }
+            }
+
+            &.accordion {
+                cursor: pointer;
+
+                &.open .content {
+                    display: block;
+                }
+
+                &.closed .content {
+                    @include shrink(); // Shrink animation
+                }
+
+                .content {
+                    display: none;
+                    padding: 1em;
+                    background-color: $color-background;
+                    @include expand(); // Expand animation
+                    
+                    li {
+                        &:not(:last-child) {
+                            margin-bottom: 0.5em;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

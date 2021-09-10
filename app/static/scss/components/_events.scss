@@ -1,0 +1,56 @@
+/*
+ * Events default styles
+ */
+
+.event_thumbnail {
+    height: 350px;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    overflow: hidden;
+
+    > img {
+        width: auto;
+        height: 100%;
+
+        @include range-responsify($device-medium, $device-large) {
+            height: 100%;
+            width: auto;
+        }
+    }
+}
+
+.display-table {
+    display:table;
+    width: 100%;
+    height: 100%;
+
+    .table-cell {
+        display: table-cell;
+        vertical-align: middle;
+    
+        > .event-text {
+            h6 i {
+                padding-right: 5px;	
+    
+                &:last-child {
+                    padding-left: 15px;
+                }
+            }
+    
+            p {
+                margin-top: 1.5em;
+                margin-bottom: 1.5em;
+            }
+    
+            .event-link {
+                display: inline-block;
+                padding: 0.4em 2em;
+                color: $color-theme1;
+                background-color: white;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+

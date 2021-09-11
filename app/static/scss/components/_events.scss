@@ -4,19 +4,12 @@
 
 .event_thumbnail {
     height: 350px;
-    display: flex;
     position: relative;
-    justify-content: center;
-    overflow: hidden;
 
     > img {
-        width: auto;
+        width: 100%;
         height: 100%;
-
-        @include range-responsify($device-medium, $device-large) {
-            height: 100%;
-            width: auto;
-        }
+        object-fit: cover;
     }
 }
 

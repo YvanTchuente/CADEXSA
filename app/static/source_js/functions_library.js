@@ -113,7 +113,7 @@ function openSelect(event,niceSelect) {
 		dropdown.style = "";
 	}
 	// Removes the class .opened from all nice-selects
-	var currents = document.querySelectorAll(".nice-select > [class='current']");
+	var currents = document.querySelectorAll(".nice-select > span");
 	for (current of currents)
 	{
 		current.classList.remove("opened");

@@ -20,17 +20,17 @@ $facebook: #3b5998;
 
 /* Font family related variables */
 $font-general-size: 1rem;
-$font-general-family: roboto, helvetica, sans-serif;
+$font-general-family: roboto, 'Segoe UI', sans-serif;
 $font-general-weight: 400;
 $font-general-style: normal;
 
 /* Headings */
-$h1-font-size: calc(2em + 0.3vw);
-$h2-font-size: calc(1.5em + 0.3vw);
-$h3-font-size: calc(1.35em + 0.3vw);
-$h4-font-size: 1.3em;
-$h5-font-size: 1.2em;
-$h6-font-size: 1em;
+$h1-font-size: calc(2rem + 0.3vw);
+$h2-font-size: calc(1.5rem + 0.3vw);
+$h3-font-size: calc(1.35rem + 0.3vw);
+$h4-font-size: calc(1.3rem + 0.1vw);
+$h5-font-size: 1.2rem;
+$h6-font-size: 1rem;
 $headings-font-style: normal;
 $headings-line-height: 1.2;
 $headings-font-weight: 400;

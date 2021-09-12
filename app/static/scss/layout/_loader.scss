@@ -2,6 +2,8 @@
  * Page Loader Component
  */
 
+@use "../abstracts" as *;
+
 #loader {
 	position: fixed;
 	left: 0px;

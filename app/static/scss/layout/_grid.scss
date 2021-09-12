@@ -3,6 +3,9 @@
  */
 
  /* Containers */
+@use "../abstracts" as *;
+@use "sass:math";
+
 .ws-container {
     width: 100%;
     margin: auto;
@@ -25,14 +28,6 @@
     @include min-responsify($device-extra-large) {
         max-width: 1320px;
     }
-}
-
-/* Grids */
-%grid-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-flow: column;
-    column-gap: 24px;
 }
 
 // Header Grid styles
@@ -140,7 +135,7 @@
     @extend %grid-container;
     row-gap: 15px;
 
-    $j:1; $k:1; $width: (12 / 3);
+    $j:1; $k:1; $width: math.div(12, 3);
     @for $i from 1 through 4 
     {
         > div:nth-child(#{$i}) {
@@ -211,34 +206,5 @@
         @include min-responsify($device-small) {
             grid-column: 8 / span 5;
         }
-    }
-}
-
-/* General grid Generator for miscellaneous grids */
-@mixin grid-generator($number_of_grids: 2) {
-    $j:1; $k:1; $width2:6;
-    $width1: 12 / $number_of_grids;  // Calculate width of each column
-    @extend %grid-container;
-    @for $i from 1 through $number_of_grids 
-    {
-        > div:nth-child(#{$i}) 
-        {
-            grid-column: 1 / span 12;
-
-            @if(($i % 2) > 0) {
-                $k:1;
-            }
-
-            @include min-responsify($device-medium) {
-                grid-column: $k / span #{$width2};
-            }
-
-            @include min-responsify($device-large)
-            { 
-                grid-column: $j / span #{$width1};
-            }
-        }
-        $j: ($j + $width1);
-        $k: ($k + $width2);
     }
 }

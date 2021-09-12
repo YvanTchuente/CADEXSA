@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-		<title>CADEXSA Event: We are having a meeting at the president's home</title>
+		<title>CADEXSA - Contact Us</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initialscale=1.0">
 		<!-- Icon displayed on browser toolbar -->
@@ -56,10 +56,10 @@
 							<ul>
 								<li><a href="/">Home</a></li>
 								<li><a href="/news/">News</a></li>
-								<li class="active"><a href="/events/">Events</a></li>
+								<li><a href="/events/">Events</a></li>
 								<li><a href="/gallery/">Gallery</a></li>
 								<li><a href="/about_us/">About Us</a></li>
-								<li><a href="/contact_us/">Contact Us</a></li>
+								<li class="active"><a href="/contact_us/">Contact Us</a></li>
 							</ul>
 						</div>
 						<!-- Navigation for mobile-->
@@ -84,56 +84,49 @@
 			</div>
 		</header>
 		<!-- Page Content -->
-		<div class="page-content">
-			<div class="page-header">
-				<div class="wrap"></div>
+		<div id="contact_page" class="page-content">
+			<div class="page-header" id="contact-header">
 				<div class="ws-container">
-					<h1>Upcoming Events</h1>
+					<h2>We would love to hear from you</h2>
+					<p>Are you interested in our ex-students association, its features and events or anything else? send us a message and we would be happy to answer any and all your questions</p>
 				</div>
 			</div>
 			<div class="ws-container">
-				<div class="cs-grid">
-					<div id="event-wrap">
-						<div class="thumbnail">
-							<div class="title">
-								<h2>We are having a meeting at the president's home</h2>
-								<p class="location">
-									<span>Colonel Ndi Roundabout, Pk 10 Douala, Cameroon on Saturday 31 July 2021 at 3pm</span>
-								</p>
+				<div id="contact-wrapper">
+					<div id="contact-form">
+						<form action="#" method="POST">	
+							<h3>Contact us</h3>
+							<p>Please fill in the form completely</p>
+							<div class="form-group">
+								<div><label for="first-name">first name</label><input type="text" class="form-control" id="first-name" name="first-name" required/></div>
+								<div><label for="first-name">last name</label><input type="text" class="form-control" id="last-name" name="last-name" required/></div>
 							</div>
-						</div>
-						<div class="desc">
-							<h3>Event Description</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quis diam erat. Duvelit lecspoe a blandit sit amet, tempor at lorem. Donec ultricies, lorem sed ultrices interdum, leo luctfiiius sem, vel vulputate diam ipsum sed lorem. Donec tempor arcu nisl, et molestie massa hhisque ut. Nunc at rutrum leo. Mauris metus mauris, tridd.</p>
-							<p>Lorem ipsum condimentum ligula. Fusce fringilla magna non sapien dictum, eget faucibus dui maximus. Donec fringilla vel mi consequat tempor. Proin sed ultrices erat. Praesent vdd warius ultricemassa at faucibus. Aenean dignissim, orci sed faucibus pharetra, dui mi dir ssim tortor, sit amet ntum mi ligula sit amet augue. Pellentesqs placerat.</p>
+							<label for="first-name">email</label><input type="email" class="form-control" id="email" name="email" required/>
+							<label for="phone">phone number</label><input type="number" class="form-control" id="phone" name="phone"/>
+							<label for="message">message</label><textarea id="message" name="message" class="form-control" placeholder="We're interested in what you have to say"></textarea>
+							<button type="submit">Submit</button>
+						</form>
+					</div>
+					<div>
+						<div>
+							<h3 style="margin-bottom: 0.5em;">Points of Contact</h3>
+							<p><b><i class="fas fa-location-arrow"style="padding-right: 10px;"></i> Address</b><br/>Pk21, Douala, Cameroon</p>
+							<p><b><i class="fas fa-phone-alt" style="padding-right: 10px;"></i>Phone</b><br/>(+237) 657384876</p>
+							<p><b><i class="fas fa-envelope" style="padding-right: 10px;"></i>Mailbox</b><br/>contact@localhost.cm</p>
+							<p>
+								<b>Follow us</b><br/>
+								<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+								<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+							</p>
 						</div>
 					</div>
-					<aside id="aside_wrap">
-						<section id="schedule">
-							<h3>Event Schedule</h3>
-							<div>
-								<h5>Opening Prayer</h5>
-							</div>
-							<div>
-								<h5>Recall of last meeting</h5>
-							</div>
-							<div class="accordion">
-								<h5>Debate over matters <i class="fas fa-angle-down"></i></h5>
-								<ul class="content">
-									<li>Review of CADEXSA's status</li>
-									<li>Detailed explanation about he mission and vision statement of the association</li>
-									<li>Meeting with the proprietor</li>
-									<li>Discussion on how to handle new and old graduates</li>
-									<li>Discussion on hoow to boost association's coffers</li>
-									<li>Presentation of the advancement of the website and Facebook page</li>
-									<li>A word from the Guest</li>
-								</ul>
-							</div>
-							<div>
-								<h5>Closing remarks</h5>
-							</div>
-						</section>
-					</aside>
+				</div>
+			</div>
+			<div id="contact_footer">
+				<div class="ws-container">
+					<h2>More than just a website</h2>
+					<p>CADEXSA is an association of people who express love for their alma mater and among themselves, join us now and rock along with us through our achievements</p>
+					<a href="/members/register.php" class="button">Become a member</a>
 				</div>
 			</div>
 		</div>
@@ -198,11 +191,6 @@
 				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
 			</div>
 		</footer>
-		<script>
-			let accordions = document.querySelectorAll(".accordion");
-			for (const accordion of accordions) {
-				accordion.classList.add("open");
-			}
-		</script>
+		<script src="/static/dist/js/sticky-header.js"></script>
 	</body>
 </html>

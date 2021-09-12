@@ -3,6 +3,8 @@
  * CSS resets
  */
 
+@use "../abstracts" as *;
+
  %html {
     margin: 0;
     padding: 0;
@@ -110,7 +112,7 @@ input, label, button, select, textarea {
   line-height: inherit;
 }
 
-input, button:focus:not(:focus-visible) {
+textarea:focus-visible, input:focus-visible, button:focus-visible {
     outline: none;
     outline-offset: 0;
 }

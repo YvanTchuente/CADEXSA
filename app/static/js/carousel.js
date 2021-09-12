@@ -72,7 +72,7 @@ class carousel
                 activeElement.classList.add(active); // Display the item
                 this.index = this.index - 1;
                 // Moves the pointer to the next element
-                this._movePointer(NEXT);
+                this._movePointer();
                 break;
             case "prev":
                 this.index = this.index - 1; // Moves the pointer by 1
@@ -86,7 +86,7 @@ class carousel
                 activeElement.classList.add(active); // Display the item
                 this.index = this.index + 1;
                 // Moves the pointer to the next element
-                this._movePointer(NEXT);
+                this._movePointer();
                 break;
         }
     }

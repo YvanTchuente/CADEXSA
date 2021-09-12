@@ -11,12 +11,12 @@
 		<link href="/static/fonts/fontawesome/css/brands.css" rel="stylesheet">
 		<link href="/static/fonts/fontawesome/css/regular.css" rel="stylesheet">
 		<link href="/static/fonts/fontawesome/css/solid.css" rel="stylesheet">
-		<script src="/static/js/jquery.js"></script>
+		<script src="/static/dist/js/jquery.js"></script>
 
 		<!-- Main CSS file -->
-		<link rel="stylesheet" href="/static/css/main.css">
+		<link rel="stylesheet" href="/static/dist/css/main.css">
 		<!-- Main Javascript file -->
-		<script src="/static/js/main.js"></script>
+		<script src="/static/dist/js/main.js"></script>
 
 		<script>
 		document.onreadystatechange = function() 
@@ -62,12 +62,10 @@
 							</ul>
 						</div>
 						<!-- Navigation for mobile-->
-						<div class="m-menu-btn" onclick="nav_drop()">
-							<span id="menu-bar1"></span>
-							<span id="menu-bar2"></span>
-							<span id="menu-bar3"></span>
+						<div class="menu-wrapper" onclick="drop_nav()">
+							<div class="menu"></div>
 						</div>
-						<div class="m-links">
+						<div class="menu-links">
 							<ul class="nav">
 								<li class="active"><a href="/">Home</a></li>
 								<li><a href="/news/">News</a></li>
@@ -293,5 +291,6 @@
 				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
 			</div>
 		</footer>
+		<script src="/static/dist/js/sticky-header.js"></script>
 	</body>
 </html>

@@ -4,6 +4,6 @@
  * Version: 1.0.0
  */
 
-@import "base/base-index";
-@import "layout/layout-index";
-@import "components/components-index";
+@forward "base";
+@forward "layout";
+@forward "components";

@@ -2,6 +2,8 @@
  * Search bar Component
  */ 
 
+@use "../abstracts/" as *;
+
  .filter-area {
 	margin-bottom: 22px;
 	position: relative;

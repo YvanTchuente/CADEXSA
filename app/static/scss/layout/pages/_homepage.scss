@@ -2,6 +2,8 @@
  * Home Page specific styles
  */
 
+@use "../../abstracts/" as *;
+
 /* Headline and Sub-headline statements */
 #headline-wrapper {
     position: relative;
@@ -12,7 +14,7 @@
         }
     
         #headline1 {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("/static/images/gallery/students1.jpg");
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("/static/images/gallery/img.jpg");
         }
 
         .headline {

@@ -2,6 +2,8 @@
  * Events default styles
  */
 
+@use "../abstracts" as *;
+
 .event_thumbnail {
     height: 350px;
     position: relative;

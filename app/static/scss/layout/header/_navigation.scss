@@ -2,6 +2,8 @@
  * Header Navigation Bar
  */
 
+@use "../../abstracts/" as *;
+
 %active {
     content: "";
     width: 100%;

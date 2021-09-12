@@ -3,6 +3,8 @@
  * Specific styles for this page 
  */
 
+ @use "../../abstracts/" as *;
+
 .page-content {
     margin-bottom: 3.2rem;
 }

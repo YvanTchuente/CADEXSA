@@ -107,14 +107,14 @@ function openTab(event, tab)
 /* JS functions to handle nice-select elements */
 function openSelect(event,niceSelect) {
 	// Closes all open nice select dropdowns
-	var dropdowns = document.querySelectorAll(".nice-select .dropdown");
-	for (dropdown of dropdowns) 
+	let dropdowns = document.querySelectorAll(".nice-select .dropdown");
+	for (let dropdown of dropdowns) 
 	{
 		dropdown.style = "";
 	}
 	// Removes the class .opened from all nice-selects
-	var currents = document.querySelectorAll(".nice-select > span");
-	for (current of currents)
+	let currents = document.querySelectorAll(".nice-select > span");
+	for (let current of currents)
 	{
 		current.classList.remove("opened");
 	}
@@ -146,39 +146,17 @@ function toggle_visibility(id) {
 }
 
 /* Mobile nav dropdown function */
-function nav_drop() {
-	var mlinks = document.getElementsByClassName("m-links")[0];
-	var menubtn = document.getElementsByClassName("m-menu-btn")[0];
+function drop_nav() {
+	var mlinks = document.querySelector(".menu-links");
+	var menubtn = document.querySelector(".menu-wrapper .menu");
 
-	/* Get the bars of the nav icon */
-	let bar // For use in loops to refer to any bar below
-	let bar1 = document.querySelector(".m-menu-btn #menu-bar1");
-	let bar2 = document.querySelector(".m-menu-btn #menu-bar2");
-	let bar3 = document.querySelector(".m-menu-btn #menu-bar3");
-	let bars = [bar1, bar2, bar3];
-
-	if(mlinks.classList.contains("open")) 
-	{
+	if(mlinks.classList.contains("open")) {
 		mlinks.classList.remove("open");
-		for(bar of bars) {
-			bar.style = "";
-		}
 	} 
-	else 
-	{
+	else {
 		mlinks.classList.add("open");
-		/*** Animating the menu button ***/
-		for(bar of bars) {
-			bar.style.position = "relative";
-		}
-		bar1.style.transform = "rotate(45deg)"
-		bar1.style.bottom = "-11px";
-
-		bar2.style.display = "none";
-
-		bar3.style.transform = "rotate(-45deg)"; 
-		bar3.style.top = "1px";
 	}
+	menubtn.classList.toggle("open");
 }
 
 /* Timers */

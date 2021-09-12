@@ -3,6 +3,8 @@
  * Styles for page pagination
  */
 
+ @use "../abstracts/" as *;
+
 .pagination-area {
     display: flex;
     justify-content: center;

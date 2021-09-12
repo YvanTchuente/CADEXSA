@@ -2,6 +2,8 @@
  * Event article page styles
  */
 
+@use "../../abstracts/" as *;
+
 #event-wrap {
     .thumbnail {
         width: 100%;
@@ -27,7 +29,7 @@
     }
 
     .desc p {
-        margin-bottom: 0.5em;
+        margin-bottom: 1em;
     }
 }
 

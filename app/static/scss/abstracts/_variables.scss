@@ -3,22 +3,9 @@
  * This file contains all the variables used through out the website
  */
 
-/* Color variables */
-$default-color: black;
-$color-theme1: rgb(89,86,200);
-$color-button-hover: rgb(74, 58, 165);
-$color-theme2: rgb(14,214,188);
-$color-background: rgb(250,250,250);
-$color-body: rgb(208,208,222);
-$color-footer: rgb(30,30,30);
-$color-mychat: rgb(200,200,228); // Background color of the sending user chat
-$color-clientChat: rgb(203,239,234); // Background color of chat of the receiving user
+@use "colors" as *;
 
-/* Social network colors */
-$twitter: #55acee;
-$facebook: #3b5998;
-
-/* Font family related variables */
+ /* Font family related variables */
 $font-general-size: 1rem;
 $font-general-family: roboto, 'Segoe UI', sans-serif;
 $font-general-weight: 400;
@@ -54,3 +41,11 @@ $pagination-font-size: 1.1em;
 $pagination-item-gutter: 15px;
 $pagination-color: $color-theme1;
 $pagination-border-color: lightgray;
+
+/* Grid template starter */
+%grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-flow: column;
+    column-gap: 24px;
+}

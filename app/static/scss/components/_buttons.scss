@@ -3,6 +3,8 @@
  * Styles relative to buttons
  */
 
+ @use "../abstracts" as *;
+
 @mixin button($border-enable:1, $font: Roboto-medium, $back-color: $color-theme1, $border-radius: 5px, $hover: $color-button-hover) {
 	color: white;
     display: inline-block;

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>CADEXSA - Sign Up</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Sign up to CADEXSA and express your love for our alma-mater">
+		<!-- Website Icon -->
+		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
+		<!-- Font Awesome 5.0 -->
+		<link href="/static/fonts/fontawesome/css/all.min.css" rel="stylesheet">
+		<!-- Third party JS libraries -->
+		<script async="true" src="/static/dist/js/jquery.js" async></script>
+		<!-- Main CSS file -->
+		<link rel="stylesheet" href="/static/dist/css/main.css">
+		<!-- Main Javascript file -->
+		<script src="/static/dist/js/main.js"></script>
+	</head>
+	<body id="register-body">
+		<div id="loader"><div><div class="spinner"></div></div></div>
+		<!-- Website Header Section -->
+		<header>
+			<div id="topnav">
+				<div class="ws-container">
+					<div class="content">
+						<div id="contact-us">
+							<div class="contact_info">
+								<span><i class="fas fa-phone-alt"></i> (+237) 657384876</span>
+								<span><i class="fas fa-envelope"></i> info@cadexsa.org</span>
+							</div>
+						</div>
+						<div id="members-space">
+							<a href="/members/login.html" class="header-btn">Login</a>
+							<a href="/members/register.html" class="header-btn">Create account</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-content">
+				<div class="ws-container">
+					<div class="header-grid-container">
+						<div class="logo"><a href="/"><img src="/static/images/logo/Logo.png" alt="logo"/></a></div>
+						<div class="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+							</ul>
+						</div>
+						<!-- Navigation for mobile-->
+						<div class="menu-wrapper">
+							<div class="menu"></div>
+						</div>
+						<div class="menu-links">
+							<ul class="nav">
+								<li class="active"><a href="/">Home</a></li>
+								<li><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+								<li><a href="/members/login.html">Login</a></li>
+								<li><a href="/members/register.html">Create account</a></li>
+							</ul>
+						</div>
+						<!--End-->
+					</div>
+				</div>
+			</div>
+		</header>	
+		<div class="page-content">
+			<div class="ws-container">
+				<div id="register-grid">
+					<form action="register.html" method="post" id="register-form" class="sign_up">
+						<div class="form-grouping form-header"><h1>Sign up</h1></div>
+						<label for="first-name">Name</label>
+						<div class="form-grouping form-group">
+							<div>
+								<input type="text" id="first-name" name="firstname" placeholder="First Name" required/>
+							</div>
+							<div>
+								<input type="text" id="last-name" name="lastname" placeholder="Last Name" required/>
+							</div>
+						</div>
+						<div class="form-grouping">
+							<label for="username">Username</label>
+							<input type="text" id="username" name="username"  required/>
+						</div>
+						<div class="form-grouping">
+							<label for="email">Email</label>
+							<input type="email" id="email" name="email" required/>
+						</div>
+						<div class="form-grouping">
+							<label for="phone">Phone number</label>
+							<input type="number" id="phoneNumber" name="phoneNumber" required/>
+						</div>
+						<div class="form-grouping">
+							<label for="password">Password</label>
+							<div style="position: relative;"><input type="password" id="password" name="password" required/><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
+						</div>
+						<div class="form-grouping">
+							<label for="confirm-password">Confirm Password</label>
+							<div style="position: relative;"><input type="password" id="confirm-password" name="confirm-password" required/><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
+						</div>
+						<div class="form-grouping">
+							<label>School info</label>
+							<div class="form-group">
+								<div>
+									<div class="nice-select" id="nice-select-1">
+										<span class="current" onclick="openSelect(event,'nice-select-1')">Batch year</span>
+										<ul class="dropdown">
+											<li class="selected">Batch year</li>
+											<li>2022</li>
+											<li>2021</li>
+											<li>2019</li>
+											<li>2018</li>
+											<li>2017</li>
+											<li>2016</li>
+										</ul>
+										<select id="select-year" name="year" required>
+											<option value="" selected>Batch Year</option>
+											<option value="2022">2022</option>
+											<option value="2021">2021</option>
+											<option value="2022">2019</option>
+											<option value="2021">2018</option>
+											<option value="2022">2017</option>
+											<option value="2021">2016</option>
+										</select>
+									</div>
+								</div>
+								<div>
+									<div class="nice-select" id="nice-select-2">
+										<span class="current" onclick="openSelect(event,'nice-select-2')">Orientation</span>
+										<ul class="dropdown">
+											<li class="selected">Orientation</li>
+											<li>Science</li>
+											<li>Arts</li>
+										</ul>
+										<select id="select-orientation" name="Orientation" required>
+											<option value="" selected>Orientation</option>
+											<option value="2022">Science</option>
+											<option value="2021">Arts</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-grouping">
+							<label for="city">City of residence</label>
+							<input type="text" id="city" name="city" required/>
+						</div>
+						<div class="form-grouping">
+							<label for="country">Where do you live ?</label>
+							<input type="text" id="country" name="country" placeholder="Cameroon" required/>
+						</div>
+						<div class="form-grouping">
+							<label for="aboutme">Let other ex-students know what you are up to</label>
+							<textarea id="aboutme" name="aboutme" required/></textarea>
+						</div>
+						<button type="submit" name="register" class="form-btn">Create account</button>
+						<p class="form-footer">Already have an account? <a href="login.html">Sign in</a></p>
+					</form>
+					<div id="form-thumbnail">
+						<div><h2>Welcome to our community</h2><p>Show affection for your alma mater and help us make it grow. Please fill out the form</p></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Website Footer Section -->
+		<footer>
+			<div class="ws-container">
+				<div class="footer-grid-container">
+					<div>
+						<h5>Stay in touch</h5>
+						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
+						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
+						<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+					</div>
+					<div>
+						<h5>Recent News</h5>
+							<ul class="list-unstyled">
+							<li><a href="">News from the ex-students</a></li>
+							<li><a href="">News from the Alma Mater</a></li>
+							<li><a href="/events/">Upcoming events</a></li>
+							<li><a href="">Submit News</a></li>
+						</ul>
+					</div>
+					<div>
+						<h5>Get Involved</h5>
+						<ul class="list-unstyled">
+							<li><a href="/members/register.html">Become a member</a></li>
+							<li><a href="">Become a sponsor</a></li>
+							<li><a href="">Make a donation</a></li>
+							<li><a href="">Volunteer</a></li>
+						</ul>
+					</div>
+					<div>
+					<h5>Networking</h5>
+					<ul class="list-unstyled">
+						<li><a href="">Ex-students Directory</a></li>
+						<li><a href="">Ambassadors</a></li>
+						<li><a href="">Testimonials</a></li>
+					</ul>
+					</div>
+					<div>
+						<h5>About Us</h5>
+						<ul class="list-unstyled">
+							<li><a href="">Mission</a></li>
+							<li><a href="">History</a></li>
+							<li><a href="">Administration</a></li>
+							<li><a href="/contact_us/" target="_blank">Contact Us</a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="gotop_btn"><i class="fas fa-angle-up"></i></div>
+			</div>
+			<div id="contact_info">
+				<div class="ws-container">
+					<p>
+						<span><i class="fas fa-phone-alt"></i>(+237) 657384876</span>
+						<span><i class="fas fa-envelope"></i>info@cadexsa.org</span>
+					</p>
+				</div>
+			</div>
+			<div id="copyright">
+				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
+			</div>
+		</footer>
+	</body>
+</html>

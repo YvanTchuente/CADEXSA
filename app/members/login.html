@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>CADEXSA - Sign In</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Sign in to your CADEXSA account">
+		<!-- Website Icon -->
+		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
+		<!-- Font Awesome 5.0 -->
+		<link href="/static/fonts/fontawesome/css/all.min.css" rel="stylesheet">
+		<!-- Third party JS libraries -->
+		<script async="true" src="/static/dist/js/jquery.js"></script>
+		<!-- Main CSS file -->
+		<link rel="stylesheet" href="/static/dist/css/main.css">
+		<!-- Main Javascript file -->
+		<script src="/static/dist/js/main.js"></script>
+	</head>
+	<body id="login-body">
+		<div id="loader"><div><div class="spinner"></div></div></div>
+		<!-- Website Header Section -->
+		<header>
+			<div id="topnav">
+				<div class="ws-container">
+					<div class="content">
+						<div id="contact-us">
+							<div class="contact_info">
+								<span><i class="fas fa-phone-alt"></i> (+237) 657384876</span>
+								<span><i class="fas fa-envelope"></i> info@cadexsa.org</span>
+							</div>
+						</div>
+						<div id="members-space">
+							<a href="/members/login.html" class="header-btn">Login</a>
+							<a href="/members/register.html" class="header-btn">Create account</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-content">
+				<div class="ws-container">
+					<div class="header-grid-container">
+						<div class="logo"><a href="/"><img src="/static/images/logo/Logo.png" alt="logo"/></a></div>
+						<div class="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+							</ul>
+						</div>
+						<!-- Navigation for mobile-->
+						<div class="menu-wrapper">
+							<div class="menu"></div>
+						</div>
+						<div class="menu-links">
+							<ul class="nav">
+								<li class="active"><a href="/">Home</a></li>
+								<li><a href="/news/">News</a></li>
+								<li><a href="/events/">Events</a></li>
+								<li><a href="/gallery/">Gallery</a></li>
+								<li><a href="/about_us/">About Us</a></li>
+								<li><a href="/contact_us/">Contact Us</a></li>
+								<li><a href="/members/login.html">Login</a></li>
+								<li><a href="/members/register.html">Create account</a></li>
+							</ul>
+						</div>
+						<!--End-->
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="page-content">
+			<div class="ws-container">
+				<div id="login-grid">
+					<div id="login-thumb">
+						<div id="login-thumb-content">
+							<h2>Welcome Back</h2>
+							<p>To keep connected with us please login with your personal informations and keep showing love for our alma mater</p>
+						</div>
+					</div>
+					<form action="login.html" method="post" id="login-form">
+						<div class="form-header"><h2>Sign in</h2></div>
+						<div class="form-grouping">
+							<label for="username">Username</label>
+							<div><i class="fas fa-user"></i><input type="text" id="username" name="username" placeholder="Type your username" required/></div>
+						</div>
+						<div class="form-grouping">
+							<label for="password">Password</label>
+							<div><i class="fas fa-lock"></i><input type="password" id="password" name="password" placeholder="Type your password" required/><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
+						</div>
+						<a href="recover_password.html" id="forgot-pass">Forgot Password ?</a>
+						<button name="login" type="submit" class="form-btn">Sign in</button>
+						<p class="form-footer">Not yet a member? <a href="register.html">Sign up</a></p>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Website Footer Section -->
+		<footer>
+			<div class="ws-container">
+				<div class="footer-grid-container">
+					<div>
+						<h5>Stay in touch</h5>
+						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
+						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
+						<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+					</div>
+					<div>
+						<h5>Recent News</h5>
+							<ul class="list-unstyled">
+							<li><a href="">News from the ex-students</a></li>
+							<li><a href="">News from the Alma Mater</a></li>
+							<li><a href="/events/">Upcoming events</a></li>
+							<li><a href="">Submit News</a></li>
+						</ul>
+					</div>
+					<div>
+						<h5>Get Involved</h5>
+						<ul class="list-unstyled">
+							<li><a href="/members/register.html">Become a member</a></li>
+							<li><a href="">Become a sponsor</a></li>
+							<li><a href="">Make a donation</a></li>
+							<li><a href="">Volunteer</a></li>
+						</ul>
+					</div>
+					<div>
+					<h5>Networking</h5>
+					<ul class="list-unstyled">
+						<li><a href="">Ex-students Directory</a></li>
+						<li><a href="">Ambassadors</a></li>
+						<li><a href="">Testimonials</a></li>
+					</ul>
+					</div>
+					<div>
+						<h5>About Us</h5>
+						<ul class="list-unstyled">
+							<li><a href="">Mission</a></li>
+							<li><a href="">History</a></li>
+							<li><a href="">Administration</a></li>
+							<li><a href="/contact_us/" target="_blank">Contact Us</a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="gotop_btn"><i class="fas fa-angle-up"></i></div>
+			</div>
+			<div id="contact_info">
+				<div class="ws-container">
+					<p>
+						<span><i class="fas fa-phone-alt"></i>(+237) 657384876</span>
+						<span><i class="fas fa-envelope"></i>info@cadexsa.org</span>
+					</p>
+				</div>
+			</div>
+			<div id="copyright">
+				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
+			</div>
+		</footer>
+	</body>
+</html>

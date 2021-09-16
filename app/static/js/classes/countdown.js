@@ -41,9 +41,16 @@ class countdown {
         // Get the time difference
         let time_diff = this._diff();
 
-        day_label.innerText = time_diff.day;
-        hour_label.innerText = time_diff.hour;
-        minute_label.innerText = time_diff.minute;
-        second_label.innerText = time_diff.second;
+        if (time_diff) {
+            day_label.innerText = time_diff.day;
+            hour_label.innerText = time_diff.hour;
+            minute_label.innerText = time_diff.minute;
+            second_label.innerText = time_diff.second; 
+        } else {
+            day_label.innerText = 0;
+            hour_label.innerText = 0;
+            minute_label.innerText = 0;
+            second_label.innerText = 0;
+        }
     }
 }

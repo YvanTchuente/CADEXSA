@@ -70,22 +70,6 @@
 }
 
 // Animations 
-@mixin fadein($time:0.5) {
-    animation: fadein #{$time}s;
-}
-
-@mixin spin($time: 0.5) {
-    animation: spin #{$time}s linear infinite;
-}
-
-@mixin slidein($time) {
-    animation: slidein #{$time}s ease-in-out;
-}
-
-@mixin expand($time:0.5) {
-	animation: expand #{$time}s linear;
-}
-
-@mixin shrink($time:0.5) {
-	animation: shrink #{$time}s linear;
+@mixin animation($name, $duration:0.5, $timing-function:ease-in-out, $delay:0, $iteration-count:1) {
+    animation: #{$name} #{$duration}s #{$timing-function} #{$delay}s #{$iteration-count};
 }

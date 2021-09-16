@@ -12,7 +12,7 @@
 }
 
 html {
-    font-size: 16px;
+    font-size: 100%;
     box-sizing: border-box;
     @extend %html;
 }
@@ -27,7 +27,7 @@ body {
     line-height: 1.5;
     background-color: white;
     font: {
-        size: 1rem;
+        size: inherit;
         family: $font-general-family;
         style: normal;
     }
@@ -40,7 +40,7 @@ header, nav, section, blockquote, footer {
 
 %heading {
     margin-top: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5rem;
     font-style: $headings-font-style;
     font-weight: $headings-font-weight;
     line-height: $headings-line-height;
@@ -51,6 +51,10 @@ h1 {
     @extend %heading;
     $font: Inter-semibold, sans-serif;
     @include font($font, $h1-font-size);
+ 
+    @include max-responsify($device-mobile) {
+        @include font($font, 2em);
+    }
 }
 
 h2 {
@@ -75,12 +79,20 @@ h5 {
     @extend %heading;
     $font: Inter-medium, sans-serif;
     @include font($font, $h5-font-size);
+
+    @include max-responsify($device-extra-small) {
+        @include font($font, $h5-mobile-size);
+    }
 }
 
 h6 {
     @extend %heading;
     $font: Inter-medium, sans-serif;
     @include font($font, $h6-font-size);
+
+    @include max-responsify($device-extra-small) {
+        @include font($font, $h6-mobile-size);
+    }
 }
 
 p {
@@ -107,6 +119,7 @@ img, svg, figure {
 
 input, label, button, select, textarea {
   @extend %html;
+  text-transform: none;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -115,16 +128,17 @@ input, label, button, select, textarea {
 textarea:focus-visible, input:focus-visible, button:focus-visible {
     outline: none;
     outline-offset: 0;
-}
-
-button, select {
-  text-transform: none;
+    box-shadow: 0 0 0.75rem rgba(0,0,0,10%);
 }
 
 button, [role="button"], [role="submit"], [role="reset"] {
     appearance: none;
     cursor: pointer;
     background-color: transparent;
+}
+
+textarea {
+    resize: vertical; // Always and only resize vertically
 }
 
 select {
@@ -139,10 +153,6 @@ table {
 
 thead, tbody, tfoot {
     @extend %html;
-}
-
-textarea {
-    resize: vertical; // Always and only rezsize vertically
 }
 
 iframe {

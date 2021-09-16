@@ -4,10 +4,6 @@
 
 @use "../../abstracts/" as *;
 
-#contact_page.page-content {
-    margin: 0;
-}
-
 #contact-wrapper {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -66,9 +62,7 @@
         }
     
         input, textarea {
-            margin-bottom: 10px;
-            border-radius: 0px;
-            background-color: rgb(240,240,240);
+            margin-bottom: 0.75rem;
         }
     
         textarea {
@@ -78,8 +72,8 @@
         button {
             width: 100%;
             margin-top: 20px;
-            border-radius: 0px;
-            padding: 0.7em 0em;
+            border-radius: 5px;
+            padding: 0.5em 0em;
         }
     }
 }

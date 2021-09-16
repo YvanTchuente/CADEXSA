@@ -11,7 +11,7 @@
     margin: auto;
 
     @include max-responsify($device-small) {
-        padding: 0 12px;
+        padding: 0 0.75rem;
     }
     @include min-responsify($device-small) {
         max-width: 540px;

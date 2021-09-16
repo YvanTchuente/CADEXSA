@@ -4,23 +4,75 @@
 
 @use "../../abstracts/" as *;
 
+#event-article {
+    .page-content {
+        margin-bottom: 3rem;
+    }
+}
+
 #event-wrap {
     .thumbnail {
         width: 100%;
-        height: 350px;
+        height: 29rem;
         display: flex;
-        margin-bottom: 1em;
-        align-items:flex-end;
-        background-image: url("/static/images/gallery/students.jpg"); 
-        background-position: center;
-        background-size: cover;    
+        margin-bottom: 12rem;
+        align-items:flex-end;  
+        position: relative; 
+
+        .timer {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            color: white;
+            padding: 1rem 0;
+            @include center;
+            background-color: rgba($color: $color-footer, $alpha: 0.5);
+
+            @include min-responsify($device-extra-small) {
+                backdrop-filter: blur(0.5rem);
+            }
+
+            div.timer_second {
+                margin-right: 0;
+            }
+
+            div::before, div::after {
+                display: none;
+            }
+        }
+
+        img {
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @include max-responsify($device-mobile+10) {
+            height: auto;
+        }
+
+        @include min-responsify($device-mobile+10) {
+            margin-bottom: 11rem;
+        }
+
+        @include min-responsify($device-medium) {
+            margin-bottom: 1rem;
+        }
         
         .title {
             width: 100%;
             color: white;
-            padding: 25px 20px;
-            background-color: rgba(30,30,30,0.8);
-            backdrop-filter: blur(8px);
+            padding: 1.55rem 1.25rem;
+            backdrop-filter: blur(0.5rem);
+            background-color: rgba($color: $color-footer, $alpha: 0.8);
+            position: absolute;
+            top: 100%;
+
+            @include min-responsify($device-medium) {
+                top: unset;
+                bottom: 0;
+            }
 
             h2 {
                 margin-bottom: 0.3em;
@@ -57,18 +109,17 @@
                 cursor: pointer;
 
                 &.open .content {
-                    display: block;
-                }
-
-                &.closed .content {
-                    @include shrink(); // Shrink animation
+                    height: auto;
+                    padding: 1em;
+                    opacity: 1;
                 }
 
                 .content {
-                    display: none;
-                    padding: 1em;
-                    background-color: $color-background;
-                    @include expand(); // Expand animation
+                    background-color: #fafafa;
+                    overflow: hidden;
+                    opacity: 0;
+                    height: 0;
+                    transition: height 1s ease-in-out, padding-top 0.5s ease-in-out;
                     
                     li {
                         &:not(:last-child) {

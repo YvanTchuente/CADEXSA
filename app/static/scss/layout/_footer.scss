@@ -16,7 +16,6 @@ footer
     }
 
     h5 {
-        font-size: 1.15em;
 	    margin-bottom: 1em;
 	    padding-bottom: 1em;
 	    color: white;
@@ -46,20 +45,24 @@ footer
     }
 
     /* Footer newsletter section */
+    form {
+        margin-bottom: 1em;
+    }
+
     #newsletter-input {
-        width: 90%;
+        width: 100%;
         color: inherit;
         border: none;
         border-radius: 0px;
-        margin-bottom: 1em;
         background-color: rgb(20,20,20);
     }
 
     #newsletter-input + button {
         position: absolute;
-        top: 0px;
-        right: 10%;
-        padding: 4px 10px;
+        top: 0;
+        right: 0;
+        height: 100%;
+        padding: 0 10px;
         border-radius: 0;
         background-color: $color-theme1;
 
@@ -90,8 +93,8 @@ footer
 
     /* Go to top button */
     #gotop_btn {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         display: flex;
         color: white;
         cursor: pointer;
@@ -102,7 +105,30 @@ footer
         background: $color-theme1;
         position: absolute;
         right: 0;
-        top: 95%;
+
+        @include max-responsify($device-mobile) {
+            top: 25%;
+            right: 2%;
+        }
+
+        @include max-responsify($device-medium) {
+            top: 37%;
+        }
+
+        @include min-responsify($device-semi-large) {
+            top: -63%;
+            background: $color-footer;
+        }
+
+        @include min-responsify($device-extra-large) {
+            top: -63%;
+            right: -60px;
+            background: $color-footer;
+        }
+
+        @include range-responsify($device-mobile, $device-small) {
+            right: 2%;
+        }
     }
 
     #copyright {
@@ -111,11 +137,5 @@ footer
         padding: 10px 0px 10px 0px;
         background-color: $color-theme1;
         text-align: center;
-    }
-
-    @include max-responsify ($device-small) {
-        #gotop_btn {
-            right: 1em;
-        }
     }
 }

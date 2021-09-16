@@ -3,32 +3,20 @@
 	<head>
 		<title>CADEXSA - News Article</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initialscale=1.0">
-		<!-- Icon displayed on browser toolbar -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Yvan Tchuente">
+		<!-- Website Icon -->
 		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
 		<!-- Font Awesome 5.0 -->
-		<link href="/static/fonts/fontawesome/css/fontawesome.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/brands.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/regular.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/solid.css" rel="stylesheet">
-		<script src="/static/dist/js/jquery.js"></script>
-
+		<link href="/static/fonts/fontawesome/css/all.min.css" rel="stylesheet">
+		<!-- Third party JS libraries -->
+		<script async="true" src="/static/dist/js/jquery.js"></script>
 		<!-- Main CSS file -->
 		<link rel="stylesheet" href="/static/dist/css/main.css">
 		<!-- Main Javascript file -->
 		<script src="/static/dist/js/main.js"></script>
-
-		<script>
-		document.onreadystatechange = function() 
-		{
-			var loader = document.querySelector("#loader");
-    		if (document.readyState == "complete") {
-				fadeOut(loader,400);
-			}
-		}
-		</script>
 	</head>
-	<body id="news_dir">
+	<body id="news_article">
 		<div id="loader"><div><div class="spinner"></div></div></div>
 		<header>
 			<div id="topnav">
@@ -41,8 +29,8 @@
 							</div>
 						</div>
 						<div id="members-space">
-							<a href="#" class="header-btn">Login</a>
-							<a href="#" class="header-btn">Create account</a>
+							<a href="/members/login.html" class="header-btn">Login</a>
+							<a href="/members/register.html" class="header-btn">Create account</a>
 						</div>
 					</div>
 				</div>
@@ -62,7 +50,7 @@
 							</ul>
 						</div>
 						<!-- Navigation for mobile-->
-						<div class="menu-wrapper" onclick="drop_nav()">
+						<div class="menu-wrapper">
 							<div class="menu"></div>
 						</div>
 						<div class="menu-links">
@@ -73,8 +61,8 @@
 								<li><a href="/gallery/">Gallery</a></li>
 								<li><a href="/about_us/">About Us</a></li>
 								<li><a href="/contact_us/">Contact Us</a></li>
-								<li><a href="/members/login.php">Login</a></li>
-								<li><a href="/members/register.php">Create account</a></li>
+								<li><a href="/members/login.html">Login</a></li>
+								<li><a href="/members/register.html">Create account</a></li>
 							</ul>
 						</div>
 						<!--End-->
@@ -94,7 +82,7 @@
 					<div id="article-wrap">
 						<div class="article-content-header">
 							<h2>Several ex-students became ministers of the cameroonian government</h2>
-							<h6><span><img src="/static/images/graphics/profile-placeholder.png" alt="article_author"/>by Admin</span><span><i class="fas fa-clock"></i>Sep 5, 2021</span></h6>
+							<h6><span>by</span><span><img src="/static/images/graphics/profile-placeholder.png" alt="article_author"/>Webmaster</span><span><i class="fas fa-calendar"></i>Sep 5, 2021</span></h6>
 						</div>
 						<div class="article-content">
 							<div class="article-thumb"><img src="/static/images/gallery/group.jpg" alt="news thumbnail"></div>
@@ -112,14 +100,14 @@
 					</div>
 					<aside id="aside_wrap">
 						<section class="aside_box">
-							<h3>Search</h3>
-							<form action="/search" method="get">
+							<h4>Search</h4>
+							<form id="search_articles" action="/search" method="get">
 								<input type="text" class="form-control" name="search" id="search_article" placeholder="Search articles">
-								<button type="submit"><i class="fas fa-search"></i> Search</button>
+								<button type="submit"><i class="fas fa-search"></i></button>
 							</form>
 						</section>
 						<section class="aside_box">
-							<h3>Categories</h3>
+							<h4>Categories</h4>
 							<ul class="list-unstyled">
 								<li><a href="#">Alumni</a></li>
 								<li><a href="#">Events</a></li>
@@ -140,8 +128,8 @@
 						<h5>Stay in touch</h5>
 						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
 						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
-						<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
-						<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+						<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
 					</div>
 					<div>
 						<h5>Recent News</h5>
@@ -155,7 +143,7 @@
 					<div>
 						<h5>Get Involved</h5>
 						<ul class="list-unstyled">
-							<li><a href="/members/register.php">Become a member</a></li>
+							<li><a href="/members/register.html">Become a member</a></li>
 							<li><a href="">Become a sponsor</a></li>
 							<li><a href="">Make a donation</a></li>
 							<li><a href="">Volunteer</a></li>
@@ -179,7 +167,7 @@
 						</ul>
 					</div>
 				</div>
-				<div id="gotop_btn" onclick="gotop()"><i class="fas fa-angle-up"></i></div>
+				<div id="gotop_btn"><i class="fas fa-angle-up"></i></div>
 			</div>
 			<div id="contact_info">
 				<div class="ws-container">

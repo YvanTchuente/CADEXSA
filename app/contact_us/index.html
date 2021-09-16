@@ -1,32 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>CADEXSA - Contact Us</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initialscale=1.0">
-		<!-- Icon displayed on browser toolbar -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="contact, form, phone">
+		<meta name="description" content="We would love to hear from you, send us a message or request and we'll gladly answer back">
+		<meta name="author" content="Yvan Tchuente">
+		<!-- Website Icon -->
 		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
 		<!-- Font Awesome 5.0 -->
-		<link href="/static/fonts/fontawesome/css/fontawesome.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/brands.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/regular.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/solid.css" rel="stylesheet">
-		<script src="/static/dist/js/jquery.js"></script>
-
+		<link href="/static/fonts/fontawesome/css/all.min.css" rel="stylesheet">
+		<!-- Third party JS libraries -->
+		<script async="true" src="/static/dist/js/jquery.js"></script>
 		<!-- Main CSS file -->
 		<link rel="stylesheet" href="/static/dist/css/main.css">
 		<!-- Main Javascript file -->
 		<script src="/static/dist/js/main.js"></script>
-
-		<script>
-			document.onreadystatechange = function() 
-			{
-				var loader = document.querySelector("#loader");
-				if (document.readyState == "complete") {
-					fadeOut(loader,500);
-				}
-			}
-		</script>
 	</head>
 	<body>
 		<div id="loader"><div><div class="spinner"></div></div></div>
@@ -42,8 +32,8 @@
 							</div>
 						</div>
 						<div id="members-space">
-							<a href="#" class="header-btn">Login</a>
-							<a href="#" class="header-btn">Create account</a>
+							<a href="/members/login.html" class="header-btn">Login</a>
+							<a href="/members/register.html" class="header-btn">Create account</a>
 						</div>
 					</div>
 				</div>
@@ -63,7 +53,7 @@
 							</ul>
 						</div>
 						<!-- Navigation for mobile-->
-						<div class="menu-wrapper" onclick="drop_nav()">
+						<div class="menu-wrapper">
 							<div class="menu"></div>
 						</div>
 						<div class="menu-links">
@@ -74,8 +64,8 @@
 								<li><a href="/gallery/">Gallery</a></li>
 								<li><a href="/about_us/">About Us</a></li>
 								<li><a href="/contact_us/">Contact Us</a></li>
-								<li><a href="/members/login.php">Login</a></li>
-								<li><a href="/members/register.php">Create account</a></li>
+								<li><a href="/members/login.html">Login</a></li>
+								<li><a href="/members/register.html">Create account</a></li>
 							</ul>
 						</div>
 						<!--End-->
@@ -99,10 +89,10 @@
 							<p>Please fill in the form completely</p>
 							<div class="form-group">
 								<div><label for="first-name">first name</label><input type="text" class="form-control" id="first-name" name="first-name" required/></div>
-								<div><label for="first-name">last name</label><input type="text" class="form-control" id="last-name" name="last-name" required/></div>
+								<div><label for="last-name">last name</label><input type="text" class="form-control" id="last-name" name="last-name" required/></div>
 							</div>
-							<label for="first-name">email</label><input type="email" class="form-control" id="email" name="email" required/>
-							<label for="phone">phone number</label><input type="number" class="form-control" id="phone" name="phone"/>
+							<div class="form-grouping"><label for="email">email</label><input type="email" class="form-control" id="email" name="email" required/></div>
+							<div class="form-grouping"><label for="phoneNumber">phone number</label><input type="number" class="form-control" id="phoneNumber" name="phoneNumber"/></div>
 							<label for="message">message</label><textarea id="message" name="message" class="form-control" placeholder="We're interested in what you have to say"></textarea>
 							<button type="submit">Submit</button>
 						</form>
@@ -115,8 +105,8 @@
 							<p><b><i class="fas fa-envelope" style="padding-right: 10px;"></i>Mailbox</b><br/>contact@localhost.cm</p>
 							<p>
 								<b>Follow us</b><br/>
-								<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
-								<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+								<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+								<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
 							</p>
 						</div>
 					</div>
@@ -126,7 +116,7 @@
 				<div class="ws-container">
 					<h2>More than just a website</h2>
 					<p>CADEXSA is an association of people who express love for their alma mater and among themselves, join us now and rock along with us through our achievements</p>
-					<a href="/members/register.php" class="button">Become a member</a>
+					<a href="/members/register.html" class="button">Become a member</a>
 				</div>
 			</div>
 		</div>
@@ -138,8 +128,8 @@
 						<h5>Stay in touch</h5>
 						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
 						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
-						<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
-						<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+						<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
 					</div>
 					<div>
 						<h5>Recent News</h5>
@@ -153,7 +143,7 @@
 					<div>
 						<h5>Get Involved</h5>
 						<ul class="list-unstyled">
-							<li><a href="/members/register.php">Become a member</a></li>
+							<li><a href="/members/register.html">Become a member</a></li>
 							<li><a href="">Become a sponsor</a></li>
 							<li><a href="">Make a donation</a></li>
 							<li><a href="">Volunteer</a></li>
@@ -177,7 +167,7 @@
 						</ul>
 					</div>
 				</div>
-				<div id="gotop_btn" onclick="gotop()"><i class="fas fa-angle-up"></i></div>
+				<div id="gotop_btn"><i class="fas fa-angle-up"></i></div>
 			</div>
 			<div id="contact_info">
 				<div class="ws-container">
@@ -191,6 +181,5 @@
 				<div class="ws-container"><div>&copy; Copyrights 2022-2023. Cadenelle Ex-Students Association.</div></div>
 			</div>
 		</footer>
-		<script src="/static/dist/js/sticky-header.js"></script>
 	</body>
 </html>

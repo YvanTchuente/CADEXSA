@@ -7,8 +7,10 @@
     .carousel-item {
         width: 100%;
         display: none;
+        float: left;
+        margin-right: -100%;
         position: relative;
-        @include fadein();
+        backface-visibility: hidden;
     }
 
     + .carousel-nav {
@@ -23,6 +25,10 @@
             align-items: center;
             justify-content: center;
             background-color: transparent;
+
+            @include max-responsify($device-mobile) {
+                align-items: flex-end;
+            }
     
             &:hover, &:focus {
                 color: white;
@@ -50,5 +56,23 @@
 
     .f_active {
         display: flex !important;
+    }
+
+    // Next and Previous classes for next button
+    .next {
+        @include animation(slide_right_center,0.5);
+    }
+
+    .previous {
+        @include animation(slide_center_left,0.5);
+    }
+
+    // Next and Previous classes for previous button
+    .next-prev {
+        @include animation(slide_left_center,0.5);
+    }
+
+    .previous-next {
+        @include animation(slide_center_right,0.5);
     }
 }

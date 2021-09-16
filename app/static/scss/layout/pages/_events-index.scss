@@ -14,8 +14,7 @@
 	grid-column: 1 / span 12;
 	display: grid;
     grid-template-columns: repeat(12, 1fr);
-    border: 1px solid $shadow-color;
-    box-shadow: 0 0 $shadow-blur-width $shadow-color;
+    border: 1px solid $color-control-border;
 
     @include min-responsify($device-medium) {
         column-gap: 45px;
@@ -36,22 +35,28 @@
     }
 
     .event_thumbnail {
-        height: 50vh;
+        height: 20rem;
         @include min-responsify($device-medium) {
-            height: 65vh;
+            height: 25rem;
         }
     }
 
     .event-link {
         color: white !important;
+        border-radius: 3px;
         background-color: $color-theme1 !important;
     }
 
     .display-table {
         padding: 24px;
+
         @include min-responsify($device-medium) {
             padding: 0;
             padding-right: 24px;
+        }
+
+        .event-text p {
+            margin: 1rem 0;
         }
     }
 }
@@ -67,19 +72,46 @@
             margin-left: -5px;
         }
 
-        &:not(:last-child) {
+        &.timer_day, &.timer_hour, &.timer_minute, &.timer_second {
             margin-right: 1em;
+            position: relative;
+
+            &::before, &::after {
+                position: absolute;
+                bottom: 26%;
+                content: "";
+                width: 5px;
+                height: 5px;
+                z-index: 1;
+                background-color: white;
+                border-radius: 50%;
+            }
+
+            &::before {
+                left: -4.5%;
+            }
+
+            &::after {
+                right: -4.5%;
+            }
 
             span:last-of-type {
                 padding: 10px 12px;
                 color: white;
                 line-height: 1;
-                font-weight: bold;
-                background-color: $color-theme1;
+                text-align: center;
+                position: relative;
+                border-radius: 3px;
+                background-color: black;
+                box-shadow: 0 0.2rem 2px rgb(0,0,0,0.3);
             }
         }
 
-        &:last-child {
+        &:nth-child(5) {
+            @include max-responsify($device-small) {
+                margin: 0;
+            }
+
             span {
                 font-size: 1.2em;
                 font-family: roboto-medium;
@@ -92,6 +124,7 @@
             
             &:first-of-type {
                 margin-bottom: 0.2em;
+                text-align: center;
             }
         }
     }

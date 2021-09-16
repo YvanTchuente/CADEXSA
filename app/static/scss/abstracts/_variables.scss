@@ -11,16 +11,20 @@ $font-general-family: roboto, 'Segoe UI', sans-serif;
 $font-general-weight: 400;
 $font-general-style: normal;
 
-/* Headings */
-$h1-font-size: calc(2rem + 0.3vw);
-$h2-font-size: calc(1.5rem + 0.3vw);
-$h3-font-size: calc(1.35rem + 0.3vw);
-$h4-font-size: calc(1.3rem + 0.1vw);
-$h5-font-size: 1.2rem;
-$h6-font-size: 1rem;
+/* Heading sizes */
+$h1-font-size: calc(1.8rem + 0.3vw);
+$h2-font-size: calc(1.35rem + 0.3vw);
+$h3-font-size: calc(1.25rem + 0.3vw);
+$h4-font-size: calc(1.15rem + 0.3vw);
+$h5-font-size: calc(0.91rem + 0.3vw);
+$h6-font-size: 1.05rem;
 $headings-font-style: normal;
 $headings-line-height: 1.2;
 $headings-font-weight: 400;
+
+/* Heading sizes for mobiles */
+$h5-mobile-size: calc(0.91rem + 0.8vw);
+$h6-mobile-size: 1.05rem;
 
 /* Visual style */
 $border-thickness: 2px;
@@ -29,23 +33,22 @@ $shadow-blur-width: 10px;
 $shadow-color: rgba(0,0,0,25%);
 
 // Media query breakpoints
+$device-mobile: 375px;
 $device-extra-small: 500px;
 $device-small: 600px;
 $device-medium: 768px;
 $device-large: 992px;
 $device-semi-large: 1200px; 
-$device-extra-large: 1400px;
+$device-extra-large: 1440px;
 
 // Pagination
 $pagination-font-size: 1.1em;
-$pagination-item-gutter: 15px;
+$pagination-item-gutter: 1rem;
 $pagination-color: $color-theme1;
 $pagination-border-color: lightgray;
 
-/* Grid template starter */
-%grid-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-flow: column;
-    column-gap: 24px;
-}
+// Hamburger menu btn
+$menu-bar-width: 35px;
+$menu-bar-height: 5px;
+$menu-bar-spacing: 10px;
+$menu-border-radius: 10px;

@@ -1,2 +1,4 @@
 # Directories
+vendor/*
+.vscode/*
 node_modules/*

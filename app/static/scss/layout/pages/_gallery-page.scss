@@ -2,12 +2,22 @@
  * Gallery Page Styles
  */
 
+ @use "../../abstracts/" as *;
+
  .gallery-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-template-rows: repeat(3, 300px);
+    grid-template-rows: span 12;
+    grid-template-rows: repeat(3, 350px);
     grid-auto-flow: dense;
     gap: 0.7em;
+
+    @include min-responsify($device-mobile) {
+        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+    }
+
+    @include min-responsify($device-medium) {
+        grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+    }
 
     .gallery-item {
         position: relative;

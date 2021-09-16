@@ -30,19 +30,35 @@
 	animation: slidein 0.5s;
 }
 
-@keyframes expand {
-	from {
-		height: 0;
-		overflow: hidden;
-	}
+@keyframes slide_center_left {
 	to {
-		height: auto;
+		transform: translateX(-100%);
 	}
 }
 
-@keyframes shrink {
+@keyframes slide_center_right {
+	from {
+		transform: translateX(0%);
+	}
 	to {
-		height: 0;
-		overflow: hidden;
+		transform: translateX(100%);
+	}
+}
+
+@keyframes slide_right_center {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0%);
+	}
+}
+
+@keyframes slide_left_center {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0%);
 	}
 }

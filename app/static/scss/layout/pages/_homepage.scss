@@ -10,7 +10,7 @@
 
     #head-carousel {
         #headline2 {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("/static/images/gallery/img11.jpg");
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("/static/images/gallery/img8.jpg");
         }
     
         #headline1 {
@@ -22,12 +22,15 @@
             position: relative;
             align-items: center;
             justify-content: center;
-            height: calc(100vh - 123px);
-            background:
-            {
+            height: calc(100vh - 110px);
+            background:  {
                 repeat: no-repeat;
                 position: center;
                 size: cover;
+            }
+
+            @include min-responsify($device-large) {
+                height: calc(100vh - 123px);
             }
 
             .container_box {
@@ -39,14 +42,17 @@
                     width: 90vw;
                 }
 
+                a.button:focus {
+                    border-color: white;
+                }
+
                 h1 {
                     color: inherit;
-                    font-size: 3em;
 	                line-height: 1;
 	                margin-bottom: 1rem;
 
                     @include min-responsify($device-large) {
-                        font-size: 3.5em;
+                        font-size: 2.5em;
                     }
                 }
 
@@ -65,8 +71,7 @@
         padding: 50px 0px 90px 0px;
     }
 
-    h2 {
-        font-size: 2.5em;
+    h1 {
         text-align: center;
         margin-bottom: 55px;
 
@@ -96,15 +101,11 @@
     h1 {
         width: 100%;
         margin: auto;
-        font-size: 2.5em;
+        font-size: 2.5rem;
         text-align: center;
 
-        @include min-responsify($device-large) {
-            width: 65%;
-        }
-
-        @include max-responsify($device-extra-small) {
-            font-size: 2em;
+        @include max-responsify($device-medium) {
+            font-size: 1.8em;
         }
     }
 
@@ -173,6 +174,11 @@
             right: 67%;
             backface-visibility: hidden;
 
+            @include max-responsify($device-mobile) {
+                top: -30px !important;
+                right: 14% !important;
+            }
+
             @include max-responsify($device-medium) {
                 top: -30px;
 	            right: 19%;
@@ -188,7 +194,7 @@
                 color: black;
                 background: white;
                 padding: 15px 30px;
-                box-shadow: 0px 0px 50px $color-footer;
+                box-shadow: 0 0 3rem rgba(0,0,0,0.4);
             }
         }
 
@@ -202,6 +208,12 @@
 
                     @include range-responsify($device-medium, $device-large) {
                         margin: 10px 0px 0px;
+                    }
+
+                    .event-text .timer div {
+                        &::before, &::after {
+                            background-color: $color-theme1;
+                        }
                     }
                 }
 
@@ -217,11 +229,11 @@
             color: white;
             position: absolute;
             bottom: 34%;
-            right: -4%;
+            right: -2%;
 
             @include max-responsify($device-extra-small) {
-                left: 36%;
-		        bottom: 1.5% !important;
+                left: 30%;
+		        bottom: 2% !important;
             }
 
             @include max-responsify($device-medium) {
@@ -230,12 +242,13 @@
             }
 
             @include range-responsify($device-medium, $device-large) {
-                bottom: 10%;
+                bottom: 2%;
+                right: 12%;
             }
 
             .event_btn {
                 color: inherit;
-                width: 60px;
+                width: 0;
                 height: 60px;
                 display: flex;
                 align-items: center;
@@ -246,8 +259,16 @@
                 background-color: transparent;
                 transition: 0.5s;
 
+                @include max-responsify($device-large) {
+                    display: inline-flex;
+                    margin: 0 1em 0 0;
+
+                    &:last-child {
+                        margin: 0;
+                    }
+                }
+
                 &:hover {
-                    border: transparent;
                     background: white;
 
                     i {
@@ -256,7 +277,7 @@
                 }
 
                 &:last-child {
-                    margin-right:0px;
+                    margin: 0;
                 }
 
                 i {
@@ -312,10 +333,14 @@
 
 #gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
     grid-template-rows: repeat(2, 200px);
     grid-auto-rows: 200px;
     grid-auto-flow: dense;
+
+    @include min-responsify($device-mobile) {
+        grid-template-columns: repeat(auto-fit, minmax(25%, 1fr));
+    }
 
     > div {
         img {

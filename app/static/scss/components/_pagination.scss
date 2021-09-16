@@ -11,13 +11,14 @@
 	margin: 50px 0px 70px 0px;
 
     .pagination {
-        display: block;
+        @include center;
+        flex-wrap: wrap;
 
         .page-item {
-            display: inline-block;
+            display: inline-flex;
 
             @include max-responsify($device-extra-small) {
-                margin-bottom: 2em;
+                margin-bottom: 1em;
             }
 
             &:first-child .page-link {
@@ -31,7 +32,6 @@
             &:not(.active) .page-link:hover {
                 color: white;
                 background-color: $pagination-color;
-                box-shadow: 0 0 $shadow-blur-width $shadow-color;
             }
 
             &:not(:last-child) {

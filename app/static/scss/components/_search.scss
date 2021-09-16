@@ -1,10 +1,10 @@
-/* 
+/**
  * Search bar Component
  */ 
 
 @use "../abstracts/" as *;
 
- .filter-area {
+ .filter-area{
 	margin-bottom: 22px;
 	position: relative;
 	text-align: center;
@@ -15,9 +15,14 @@
 
     button[type="submit"] {
         padding: 7px 24px;
-        border-radius: 0;
         position: relative;
+        margin-left: 1.25rem;
+        border-radius: 0;
         text-transform: uppercase;
+
+        @include range-responsify($device-extra-small, $device-medium) {
+            margin: 0.5em 0 0;
+        }
 
         &:after {
             content: "";
@@ -44,104 +49,107 @@
 		    margin-top: 5px;
         }
     }
+}
 
-    .nice-select {
-        position: relative;
-        display: inline-block;
-        margin-right: 20px;
-        cursor: pointer;
+.nice-select {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 
-        @include max-responsify($device-extra-small) {
-            margin-right: 0px;
-        }
+    &:not(:last-of-type) {
+        margin-right: 1.25rem;
+    }
 
-        &:nth-child(3) {
-            @include max-responsify($device-extra-small) {
-                display: block;
-                margin-top: 0.4em;
-            }
+    &:not(:first-of-type) {
+        margin-left: -5px;
+    }
 
-            .current {
-                @include max-responsify($device-extra-small) {
-                    width: 90%;
-                }
-            }
-
-            .dropdown {
-                @include max-responsify($device-extra-small) {
-                    left: 0%;
-                }
-            }
-        }
+    @include max-responsify($device-extra-small) {
+        display: block;
+        margin: 0.4rem 0 0 0 !important;
 
         .current {
-            display:block;
-            color: rgb(70, 69, 119);
-            background-color: white;
-            text-transform: uppercase;
-            padding: 8px 48px 8px 24px;
-            border: 1px solid $color-theme1;
-
-            @include max-responsify($device-extra-small) {
-                font-size: 0.9em;
-    	        display: inline-block;
-    	        padding: 6px 32px 6px 12px;
-            }
-
-            &.opened {
-                &:after {
-                    transform: rotate(225deg);
-                    top: 45%;
-                }
-            }
-
-            &:after {
-                content: "";
-	            display: block;
-	            position:absolute;
-	            top: 35%;
-	            right: 15px;
-	            width: 10px;
-	            height: 10px;
-	            border-bottom: 3px solid rgb(70, 69, 119);
-	            border-right: 3px solid rgb(70, 69, 119);
-	            transform: rotate(45deg);
-	            transition: all 0.3s;
-
-                @include max-responsify($device-extra-small) {
-                    width: 8px;
-    	            height: 8px;
-    	            top: 35%;
-    	            right: 10%;
-    	            border-bottom: 2px solid rgb(70, 69, 119);
-	                border-right: 2px solid rgb(70, 69, 119);
-                }
-            }
-        }
-
-        select {
-            display: none;
-        }
-        
-        .selected {
-            color: white;
-            background-color: $color-theme1;
+            width: 100%;
         }
 
         .dropdown {
-            width: 100%;
-            top: 150%;
-	        left: -0.2px;
+            left: 0%;
+        }
+    }
 
-            li {
-                padding: 0.5em 2em 0.5em 1.5em;
-                text-transform: capitalize;
-                transition: 0.3s;
+    .current {
+        display:block;
+        color: rgb(70, 69, 119);
+        background-color: white;
+        text-transform: uppercase;
+        padding: 8px 48px 8px 24px;
+        border: 1px solid $color-theme1;
 
-                &:hover {
-                    color: white;
-	                background-color: $color-theme1;
-                }
+        @include max-responsify($device-extra-small) {
+            font-size: 0.9em;
+            display: inline-block;
+            padding: 6px 32px 6px 12px;
+        }
+
+        &.opened {
+            &:after {
+                transform: rotate(225deg);
+                top: 45%;
+            }
+        }
+
+        &:after {
+            content: "";
+            display: block;
+            position:absolute;
+            top: 35%;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            border-bottom: 3px solid rgb(70, 69, 119);
+            border-right: 3px solid rgb(70, 69, 119);
+            transform: rotate(45deg);
+            transition: all 0.3s;
+
+            @include max-responsify($device-extra-small) {
+                width: 8px;
+                height: 8px;
+                top: 35%;
+                right: 5%;
+                border-bottom: 2px solid rgb(70, 69, 119);
+                border-right: 2px solid rgb(70, 69, 119);
+            }
+        }
+    }
+
+    select {
+        display: none;
+    }
+    
+    .selected {
+        color: white;
+        background-color: $color-theme1;
+    }
+
+    .dropdown {
+        max-width: 100%;
+        top: 150%;
+        left: -0.2px;
+
+        &.opened {
+            top: 105%;
+	        opacity: 1;
+	        visibility: visible;
+        }
+
+        li {
+            padding: 0.5em 2em 0.5em 1.5em;
+            text-transform: capitalize;
+            transition: 0.3s;
+
+            &:hover {
+                color: white;
+                background-color: $color-theme1;
             }
         }
     }

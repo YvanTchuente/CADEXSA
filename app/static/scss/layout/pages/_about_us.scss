@@ -4,6 +4,12 @@
 
 @use "../../abstracts" as *;
 
+#aboutus_page {
+    .page-content {
+        margin: 0 0 3.125rem;
+    }
+}
+
 #intro {
     text-align: center;
     margin-bottom: 1em;
@@ -33,6 +39,6 @@
     }
 }
 
-#info_box {
+#aboutus_page #info_box {
     background: $color-theme1;
 }

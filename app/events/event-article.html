@@ -3,32 +3,20 @@
 	<head>
 		<title>CADEXSA Event: We are having a meeting at the president's home</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initialscale=1.0">
-		<!-- Icon displayed on browser toolbar -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Yvan Tchuente">
+		<!-- Website Icon -->
 		<link rel="icon" type="images/x-icon" href="/static/images/logo/logo7.jpg">
 		<!-- Font Awesome 5.0 -->
-		<link href="/static/fonts/fontawesome/css/fontawesome.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/brands.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/regular.css" rel="stylesheet">
-		<link href="/static/fonts/fontawesome/css/solid.css" rel="stylesheet">
-		<script src="/static/dist/js/jquery.js"></script>
-
+		<link href="/static/fonts/fontawesome/css/all.min.css" rel="stylesheet">
+		<!-- Third party JS libraries -->
+		<script async="true" src="/static/dist/js/jquery.js"></script>
 		<!-- Main CSS file -->
 		<link rel="stylesheet" href="/static/dist/css/main.css">
 		<!-- Main Javascript file -->
 		<script src="/static/dist/js/main.js"></script>
-
-		<script>
-			document.onreadystatechange = function() 
-			{
-				var loader = document.querySelector("#loader");
-				if (document.readyState == "complete") {
-					fadeOut(loader,500);
-				}
-			}
-		</script>
 	</head>
-	<body>
+	<body id="event-article">
 		<div id="loader"><div><div class="spinner"></div></div></div>
 		<!-- Website Header Section -->
 		<header>
@@ -42,8 +30,8 @@
 							</div>
 						</div>
 						<div id="members-space">
-							<a href="#" class="header-btn">Login</a>
-							<a href="#" class="header-btn">Create account</a>
+							<a href="/members/login.html" class="header-btn">Login</a>
+							<a href="/members/register.html" class="header-btn">Create account</a>
 						</div>
 					</div>
 				</div>
@@ -63,7 +51,7 @@
 							</ul>
 						</div>
 						<!-- Navigation for mobile-->
-						<div class="menu-wrapper" onclick="drop_nav()">
+						<div class="menu-wrapper">
 							<div class="menu"></div>
 						</div>
 						<div class="menu-links">
@@ -74,8 +62,8 @@
 								<li><a href="/gallery/">Gallery</a></li>
 								<li><a href="/about_us/">About Us</a></li>
 								<li><a href="/contact_us/">Contact Us</a></li>
-								<li><a href="/members/login.php">Login</a></li>
-								<li><a href="/members/register.php">Create account</a></li>
+								<li><a href="/members/login.html">Login</a></li>
+								<li><a href="/members/register.html">Create account</a></li>
 							</ul>
 						</div>
 						<!--End-->
@@ -95,6 +83,25 @@
 				<div class="cs-grid">
 					<div id="event-wrap">
 						<div class="thumbnail">
+							<div class="timer" data-date="2022-01-27 21:00:00">
+								<div class="timer_day">
+									<span>Days</span>
+									<span>00</span>
+								</div>
+								<div class="timer_hour">
+									<span>Hours</span>
+									<span>00</span>
+								</div>
+								<div class="timer_minute">
+									<span>Min</span>
+									<span>00</span>
+								</div>
+								<div class="timer_second">
+									<span>Sec</span>
+									<span>00</span>
+								</div>
+							</div>
+							<img src="/static/images/gallery/students.jpg" alt="event-thumbnail"/>
 							<div class="title">
 								<h2>We are having a meeting at the president's home</h2>
 								<p class="location">
@@ -145,8 +152,8 @@
 						<h5>Stay in touch</h5>
 						<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
 						<form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
-						<a href="#" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
-						<a href="#" class="btn-twitter"><span class="fab fa-twitter"></span></a>
+						<a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
+						<a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
 					</div>
 					<div>
 						<h5>Recent News</h5>
@@ -160,7 +167,7 @@
 					<div>
 						<h5>Get Involved</h5>
 						<ul class="list-unstyled">
-							<li><a href="/members/register.php">Become a member</a></li>
+							<li><a href="/members/register.html">Become a member</a></li>
 							<li><a href="">Become a sponsor</a></li>
 							<li><a href="">Make a donation</a></li>
 							<li><a href="">Volunteer</a></li>
@@ -184,7 +191,7 @@
 						</ul>
 					</div>
 				</div>
-				<div id="gotop_btn" onclick="gotop()"><i class="fas fa-angle-up"></i></div>
+				<div id="gotop_btn"><i class="fas fa-angle-up"></i></div>
 			</div>
 			<div id="contact_info">
 				<div class="ws-container">
@@ -200,9 +207,11 @@
 		</footer>
 		<script>
 			let accordions = document.querySelectorAll(".accordion");
-			for (const accordion of accordions) {
-				accordion.classList.add("open");
-			}
+			setTimeout(() => {
+				for(const accordion of accordions)
+					accordion.click();
+				console.log("done");
+			}, 1000); 
 		</script>
 	</body>
 </html>

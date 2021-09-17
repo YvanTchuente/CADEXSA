@@ -14,12 +14,6 @@
     .page-content {
         margin: 1.5rem 0;
     }
-
-    footer #gotop_btn {
-        @include max-responsify($device-extra-large) {
-            right: -55px;
-        }
-    }
 }
 
 /* Form grid */

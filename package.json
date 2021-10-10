@@ -20,5 +20,7 @@
         "postcss": "^8.3.6",
         "sass": "^1.38.2"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.4"
+    }
 }

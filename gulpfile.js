@@ -8,11 +8,10 @@ const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
-const browsersync = require('browser-sync').create();
+// const browsersync = require('browser-sync').create();
 
 // File path variables
 const sourceFiles = {
-    htmlPath: "app/**/*.html",
     sassPath: "app/static/scss/**/*.scss",
     jsPath: "app/static/js/**/*.js"
 }
@@ -44,34 +43,32 @@ function minifyJs() {
         .pipe(dest(destination.jsPath, { sourcemaps: "." }));
 }
 
-// Browser synchronization task
-function browsersyncServe(done) {
-    browsersync.init({
-        server: {
-            baseDir: './app'
-        }
-    });
-    done();
-}
+// // Browser synchronization task
+// function browsersyncServe(done) {
+//     browsersync.init({
+//         server: {
+//             baseDir: './app'
+//         }
+//     });
+//     done();
+// }
 
-// Reload browser Task
-function browsersyncReload(done) {
-    browsersync.reload();
-    done();
-}
+// // Reload browser Task
+// function browsersyncReload(done) {
+//     browsersync.reload();
+//     done();
+// }
 
 // Watch task
 function watchTask() {
-    watch(sourceFiles.htmlPath,browsersyncReload);
-    watch(sourceFiles.sassPath,series(buildCSS, browsersyncReload));
-    watch(sourceFiles.jsPath,series(JsConcatTask, browsersyncReload));
+    watch(sourceFiles.sassPath,series(buildCSS));
+    watch(sourceFiles.jsPath,series(JsConcatTask));
 }
 
 // Default Task
 exports.default = series(
     buildCSS, 
     JsConcatTask,
-    browsersyncServe,
     watchTask
 );
 

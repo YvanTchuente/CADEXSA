@@ -1,4 +1,5 @@
 # Directories
+app/logs/*
 vendor/*
 .vscode/*
 node_modules/*

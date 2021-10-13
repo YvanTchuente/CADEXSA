@@ -1,6 +1,7 @@
 const pathname = window.location.pathname; // Location of the executing script
 const path_to_signup = new RegExp("^\/members/register\.(html|php)+$");
-const path_to_profile = new RegExp("^\/members\/profile\.(html|php)+\?\w*$");
+const path_to_profile = new RegExp("^\/members/profile\.(html|php)+\?\w*$");
+const path_to_recoveryACC = new RegExp("^\/members/recover_account\.(html|php)+\?\w*$");
 const sticky_header_enabled_pages = ["/","/news/","/events/","/gallery/","/about_us/","/contact_us/"];
 
 document.onreadystatechange = function() 
@@ -157,7 +158,7 @@ window.onload = function()
 
 			if(value) {
 				event.currentTarget.setAttribute("value",value);
-				if(path_to_signup.test(pathname)) {
+				if(path_to_signup.test(pathname) || path_to_recoveryACC.test(pathname)) {
 					if(!validatePassword(value)) {
 						if(!target.nextElementSibling.nextElementSibling) {
 							const msg = element("div","error","Password should contain a minimum of 8 characters");

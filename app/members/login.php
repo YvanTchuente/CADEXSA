@@ -66,7 +66,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<label for="password">Password</label>
 						<div><i class="fas fa-lock"></i><input type="password" id="password" name="password" placeholder="Type your password" required /><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
 					</div>
-					<a href="recover_password.php" id="forgot-pass">Forgot Password ?</a>
+					<a href="recover_account.php" id="forgot-pass">Forgot Password ?</a>
 					<button name="login" type="submit" class="form-btn">Sign in</button>
 					<p class="form-footer">Not yet a member? <a href="register.php">Sign up</a></p>
 				</form>

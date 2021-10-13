@@ -45,6 +45,21 @@ window.onload = function()
 		}
 	})
 
+	/* Always display User panel */
+	let userPanel;
+	if (userPanel = document.querySelector(".user-panel")) {
+		document.getElementById("topnav").style.display = "block";
+		if (window.matchMedia("screen and (max-width: 992px)").matches) {
+			document.getElementById("contact-us").style.display = "none";
+		}
+		window.matchMedia("screen and (max-width: 992px)").onchange = (event) => {
+			if(event.matches)
+				document.getElementById("contact-us").style.display = "none";
+			else 
+				document.getElementById("contact-us").style.display = "flex";
+		}
+	}
+
 	/* Main page Counters JS functions */
 	const counters = document.querySelectorAll(".counter");
 	const regexp = new RegExp("\/about_us$");

@@ -1,3 +1,33 @@
+<?php
+
+require_once dirname(__DIR__) . '/config/index.php';
+
+use Classes\MiddleWare\{
+	Request,
+	Constants,
+	TextStream,
+	ServerRequest
+};
+
+if ($member->is_logged_in()) {
+	header("Location: /members/login.php");
+}
+
+$incoming = new ServerRequest();
+$incoming->initialize();
+$outgoing = new Request();
+
+if ($incoming->getMethod() == Constants::METHOD_POST) {
+	$body = new TextStream(json_encode($incoming->getParsedBody()));
+	$response = $member->validate($outgoing->withBody($body));
+	if (is_array($response)) {
+		$response = $member->signup($response);
+		if ($response === true) {
+			header('Location: login.php');
+		}
+	}
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +53,7 @@
 					<div class="form-grouping form-header">
 						<h1>Sign up</h1>
 					</div>
+					<?php if (isset($response)) : ?><p class="error"><?php echo $response; ?></p><?php endif ?>
 					<label for="first-name">Name</label>
 					<div class="form-grouping form-group">
 						<div>

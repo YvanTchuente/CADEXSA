@@ -19,9 +19,12 @@ function drop_menu() {
 	const menu_links = document.querySelector("header div.menu-links");
 	const menubtn = document.querySelector("header div.menu-wrapper div.menu");
 
-	if(menu_links.classList.contains("open"))
+	if(menu_links.classList.contains("open")) {
 		menu_links.classList.remove("open");
-	else
+		if (document.querySelector(".user-panel")) menu_links.removeAttribute("style");
+	} else {
 		menu_links.classList.add("open");
+		if (document.querySelector(".user-panel")) menu_links.style.top = "100px";
+	}
 	menubtn.classList.toggle("open");
 }

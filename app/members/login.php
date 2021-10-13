@@ -1,3 +1,31 @@
+<?php
+
+require_once dirname(__DIR__) . '/config/index.php';
+
+use Classes\MiddleWare\{
+	Request,
+	Constants,
+	TextStream,
+	ServerRequest
+};
+
+if ($member->is_logged_in()) {
+	$member->logout();
+	$response = "You are logged out";
+}
+
+$incoming = new ServerRequest();
+$incoming->initialize();
+$outgoing = new Request();
+
+if ($incoming->getMethod() == Constants::METHOD_POST) {
+	$body = new TextStream(json_encode($incoming->getParsedBody()));
+	$response = $member->login($outgoing->withBody($body));
+	if ($response === true) {
+		header('Location: profile.php?id=' . $_SESSION['id']);
+	}
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,6 +57,7 @@
 					<div class="form-header">
 						<h2>Sign in</h2>
 					</div>
+					<?php if (isset($response)) : ?><p class="error"><?php echo $response; ?></p><?php endif ?>
 					<div class="form-grouping">
 						<label for="username">Username</label>
 						<div><i class="fas fa-user"></i><input type="text" id="username" name="username" placeholder="Type your username" required /></div>

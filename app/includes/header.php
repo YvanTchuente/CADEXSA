@@ -1,4 +1,10 @@
 <!-- Website Header Section -->
+<?php
+require_once dirname(__DIR__) . '/config/index.php';
+if ($member->is_logged_in()) {
+    $profilePicture = $member->getInfo($_SESSION['id'])['picture'];
+}
+?>
 <?php $url = parse_url($_SERVER['PHP_SELF']); ?>
 <header>
     <div id="topnav">
@@ -12,23 +18,45 @@
                 </div>
                 <div id="members-space">
                     <?php
-                    switch (true) {
-                        case (preg_match("/\/login\.php$/", $url['path'])):
+                    if ($member->is_logged_in()) {
                     ?>
-                            <a href="/members/register.php" class="header-btn">Create account</a>
+                        <div class="user-panel">
+                            <span>Hello <?php echo $_SESSION['firstname']; ?></span>
+                            <img class="dropbtn" src="<?= $profilePicture; ?>" alt="user" />
+                            <ul class="dropdown">
+                                <li>
+                                    <img src="<?= $profilePicture; ?>" />
+                                    <div>
+                                        <span><?= $_SESSION['firstname']; ?> <?php echo $_SESSION['lastname']; ?></span>
+                                        <span><?= $_SESSION['username']; ?></span>
+                                    </div>
+                                </li>
+                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>"><i class="fas fa-user"></i>My Profile</a></li>
+                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>&tab=chats"><i class="fas fa-envelope"></i>My Messages</a></li>
+                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>&tab=settings"><i class="fas fa-user-cog"></i>Account Settings</a></li>
+                                <li><a href="/members/login.php"><i class="fas fa-sign-out-alt"></i>Log out</a></li>
+                            </ul>
+                        </div>
                         <?php
-                            break;
-                        case (preg_match("/\/register\.php$/", $url['path'])):
+                    } else {
+                        switch (true) {
+                            case (preg_match("/\/login\.php$/", $url['path'])):
                         ?>
-                            <a href="/members/login.php" class="header-btn">Login</a>
-                        <?php
-                            break;
-                        default:
-                        ?>
-                            <a href="/members/login.php" class="header-btn">Login</a>
-                            <a href="/members/register.php" class="header-btn">Create account</a>
+                                <a href="/members/register.php" class="header-btn">Create account</a>
+                            <?php
+                                break;
+                            case (preg_match("/\/register\.php$/", $url['path'])):
+                            ?>
+                                <a href="/members/login.php" class="header-btn">Login</a>
+                            <?php
+                                break;
+                            default:
+                            ?>
+                                <a href="/members/login.php" class="header-btn">Login</a>
+                                <a href="/members/register.php" class="header-btn">Create account</a>
                     <?php
-                            break;
+                                break;
+                        }
                     }
                     ?>
                 </div>
@@ -61,10 +89,16 @@
                         <li><a href="/gallery/">Gallery</a></li>
                         <li><a href="/about_us/">About Us</a></li>
                         <li><a href="/contact_us/">Contact Us</a></li>
-                        <?php if (!preg_match("/^\/members\/?/", $url['path'])) { ?>
-                            <li><a href="/members/login.php">Login</a></li>
-                            <li><a href="/members/register.php">Create account</a></li>
-                        <?php } ?>
+                        <?php
+                        if (!preg_match("/^\/members\/?/", $url['path'])) {
+                            if (!$member->is_logged_in()) {
+                        ?>
+                                <li><a href="/members/login.php">Login</a></li>
+                                <li><a href="/members/register.php">Create account</a></li>
+                        <?php
+                            }
+                        }
+                        ?>
                     </ul>
                 </div>
                 <!--End-->

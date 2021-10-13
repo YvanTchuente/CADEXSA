@@ -45,6 +45,21 @@ window.onload = function()
 		}
 	})
 
+	/* Always display User panel */
+	let userPanel;
+	if (userPanel = document.querySelector(".user-panel")) {
+		document.getElementById("topnav").style.display = "block";
+		if (window.matchMedia("screen and (max-width: 992px)").matches) {
+			document.getElementById("contact-us").style.display = "none";
+		}
+		window.matchMedia("screen and (max-width: 992px)").onchange = (event) => {
+			if(event.matches)
+				document.getElementById("contact-us").style.display = "none";
+			else 
+				document.getElementById("contact-us").style.display = "flex";
+		}
+	}
+
 	/* Main page Counters JS functions */
 	const counters = document.querySelectorAll(".counter");
 	const regexp = new RegExp("\/about_us$");
@@ -767,10 +782,13 @@ function drop_menu() {
 	const menu_links = document.querySelector("header div.menu-links");
 	const menubtn = document.querySelector("header div.menu-wrapper div.menu");
 
-	if(menu_links.classList.contains("open"))
+	if(menu_links.classList.contains("open")) {
 		menu_links.classList.remove("open");
-	else
+		if (document.querySelector(".user-panel")) menu_links.removeAttribute("style");
+	} else {
 		menu_links.classList.add("open");
+		if (document.querySelector(".user-panel")) menu_links.style.top = "100px";
+	}
 	menubtn.classList.toggle("open");
 }
 /**

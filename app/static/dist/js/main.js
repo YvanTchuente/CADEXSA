@@ -610,250 +610,6 @@ window.onload = function () {
 };
 
 /**
- * Carousel Class
- */
-
-// Constants
-const PREV = "prev";
-const NEXT = "next";
-
-/*
- ******************************************************
- ***** Class Definition                           *****
- ******************************************************
- */
-
-class carousel {
-  constructor(element) {
-    this.element = element;
-    this.items = element.children; // Carousel items
-    this.length = element.children.length;
-    this.index = 0; // Internal Pointer
-    this.duration = 10000; // Carousel duration time in miliseconds
-    this.ACTIVE_CLASSNAME = "active";
-    this.special_carousels = ["head-carousel"]; // special carousels
-  }
-
-  // Public methods
-
-  start() {
-    this._slide(NEXT);
-    // setInterval(() => {
-    //     this._slide(NEXT);
-    // }, this.duration);
-  }
-
-  prev() {
-    this._slide(PREV);
-  }
-
-  next() {
-    this._slide(NEXT);
-  }
-
-  // Private methods
-
-  _movePointer() {
-    this.index = this.index + 1;
-  }
-
-  _slide(element) {
-    if (this.index > this.length - 1) {
-      this.index = 0;
-    }
-
-    let index, activeElement, previousElement;
-    let active = this.ACTIVE_CLASSNAME;
-    if (this.special_carousels.includes(this.element.id)) {
-      this.ACTIVE_CLASSNAME = "f_active";
-      active = this.ACTIVE_CLASSNAME;
-    }
-
-    switch (element) {
-      case "next":
-        for (const item of this.items) {
-          if (
-            item.classList.contains("previous") ||
-            item.classList.contains("next")
-          ) {
-            break;
-          } else {
-            this.index = this.index + 1; // Moves the pointer by 1
-            index = this.index - 1; // Get the pointer to the active element
-            activeElement = this.items[index];
-            // Get the previous element
-            if (index > 0) previousElement = this.items[index - 1];
-            else if (index <= 0) previousElement = this.items[this.length - 1];
-
-            activeElement.classList.add(active, "next");
-            previousElement.classList.add("previous");
-
-            setTimeout(() => {
-              for (const item of this.items) {
-                item.classList.remove(active, "previous", "next");
-              }
-              activeElement.classList.add(active);
-              this.index = this.index - 1;
-              // Moves the pointer to the next element
-              this._movePointer();
-            }, 500);
-            break;
-          }
-        }
-        break;
-      case "prev":
-        for (const item of this.items) {
-          if (
-            item.classList.contains("previous") ||
-            item.classList.contains("next")
-          ) {
-            break;
-          } else {
-            this.index = this.index - 1; // Moves the pointer by 1
-            index = this.index + 1; // Get the pointer to active element
-            activeElement = this.items[index];
-            // Get the previous element
-            if (index > 0) previousElement = this.items[index - 1];
-            else if (index <= 0) previousElement = this.items[this.length - 1];
-
-            activeElement.classList.add(active, "next-prev");
-            previousElement.classList.add("previous-next");
-
-            setTimeout(() => {
-              // Removes the class "active" from all items
-              for (const item of this.items) {
-                item.classList.remove(active, "previous-next", "next-prev");
-              }
-              activeElement.classList.add(active); // Display the item
-              this.index = this.index + 1;
-              // Moves the pointer to the next element
-              this._movePointer();
-            }, 500);
-            break;
-          }
-        }
-        break;
-    }
-  }
-}
-
-/*
- * Timer Countdown Class
- */
-
-/*
- ******************************************************
- ***** Class Definition                           *****
- ******************************************************
- */
-
-class countdown {
-  constructor(element, event_date) {
-    this.date = new Date(event_date);
-    this.element = element;
-  }
-
-  // Public
-
-  start() {
-    // Starting the timer
-    setInterval(() => {
-      this._update();
-    }, 1000);
-  }
-
-  // Private
-
-  _diff() {
-    // Calculate the difference of time with the current date
-    let datediff = new date_diff(this.date);
-    return datediff.diff();
-  }
-
-  _update() {
-    // Update the timer labels
-    let day_label = this.element.children[0].children[1];
-    let hour_label = this.element.children[1].children[1];
-    let minute_label = this.element.children[2].children[1];
-    let second_label = this.element.children[3].children[1];
-
-    // Get the time difference
-    let time_diff = this._diff();
-
-    if (time_diff) {
-      day_label.innerText = time_diff.day;
-      hour_label.innerText = time_diff.hour;
-      minute_label.innerText = time_diff.minute;
-      second_label.innerText = time_diff.second;
-    } else {
-      day_label.innerText = 0;
-      hour_label.innerText = 0;
-      minute_label.innerText = 0;
-      second_label.innerText = 0;
-    }
-  }
-}
-
-/*
- * Date Difference Class
- */
-
-// Constant
-const toSec = 1000;
-const toMin = toSec * 60;
-const toHour = toMin * 60;
-const toDay = toHour * 24;
-
-/*
- ******************************************************
- ***** Class Definition                           *****
- ******************************************************
- */
-
-class date_diff {
-  constructor(date) {
-    this.date = date;
-  }
-
-  done() {
-    if (!this.diff()) {
-      return true;
-    }
-  }
-
-  diff() {
-    let currentDate = new Date();
-    let diff = this.date.getTime() - currentDate.getTime();
-
-    let time_diff = false;
-
-    if (diff > 0) {
-      // Computation of the time difference
-      let day = Math.floor(diff / toDay);
-      diff = diff - day * toDay; // Remove the number of days from the difference.
-
-      let hour = Math.floor(diff / toHour);
-      diff = diff - hour * toHour; // Remove the number of hours from the difference
-
-      let minute = Math.floor(diff / toMin);
-      diff = diff - minute * toMin; // Remove the number of minutes from the difference
-
-      let second = Math.floor(diff / toSec);
-
-      // Stores the result in an object and is returned by the method
-      time_diff = {
-        second: second,
-        minute: minute,
-        hour: hour,
-        day: day,
-      };
-    }
-
-    return time_diff;
-  }
-}
-
-/**
  * FUNCTIONS LIBRARY
  * HEADER SECTION FUNCTIONS
  *
@@ -942,7 +698,7 @@ function openTab(event, tab) {
   document.getElementById(tab).style.display = "block";
   event.currentTarget.parentElement.classList.add("active");
   if (tab == "chats") {
-    if (chats_socket.readyState == 1) {
+    if (isset(chats_socket) && chats_socket.readyState == 1) {
       let users = document.querySelectorAll(".chatbox ul.list_users li.user");
       if (users.length > 0) {
         users[0].click();
@@ -1480,5 +1236,249 @@ function validateSignUp(formData, formId) {
   if (!validateText(formData.textInputs[3].value, 5))
     msg.push("Invalid city name");
   return msg.length > 0 ? msg : null;
+}
+
+/**
+ * Carousel Class
+ */
+
+// Constants
+const PREV = "prev";
+const NEXT = "next";
+
+/*
+ ******************************************************
+ ***** Class Definition                           *****
+ ******************************************************
+ */
+
+class carousel {
+  constructor(element) {
+    this.element = element;
+    this.items = element.children; // Carousel items
+    this.length = element.children.length;
+    this.index = 0; // Internal Pointer
+    this.duration = 10000; // Carousel duration time in miliseconds
+    this.ACTIVE_CLASSNAME = "active";
+    this.special_carousels = ["head-carousel"]; // special carousels
+  }
+
+  // Public methods
+
+  start() {
+    this._slide(NEXT);
+    // setInterval(() => {
+    //     this._slide(NEXT);
+    // }, this.duration);
+  }
+
+  prev() {
+    this._slide(PREV);
+  }
+
+  next() {
+    this._slide(NEXT);
+  }
+
+  // Private methods
+
+  _movePointer() {
+    this.index = this.index + 1;
+  }
+
+  _slide(element) {
+    if (this.index > this.length - 1) {
+      this.index = 0;
+    }
+
+    let index, activeElement, previousElement;
+    let active = this.ACTIVE_CLASSNAME;
+    if (this.special_carousels.includes(this.element.id)) {
+      this.ACTIVE_CLASSNAME = "f_active";
+      active = this.ACTIVE_CLASSNAME;
+    }
+
+    switch (element) {
+      case "next":
+        for (const item of this.items) {
+          if (
+            item.classList.contains("previous") ||
+            item.classList.contains("next")
+          ) {
+            break;
+          } else {
+            this.index = this.index + 1; // Moves the pointer by 1
+            index = this.index - 1; // Get the pointer to the active element
+            activeElement = this.items[index];
+            // Get the previous element
+            if (index > 0) previousElement = this.items[index - 1];
+            else if (index <= 0) previousElement = this.items[this.length - 1];
+
+            activeElement.classList.add(active, "next");
+            previousElement.classList.add("previous");
+
+            setTimeout(() => {
+              for (const item of this.items) {
+                item.classList.remove(active, "previous", "next");
+              }
+              activeElement.classList.add(active);
+              this.index = this.index - 1;
+              // Moves the pointer to the next element
+              this._movePointer();
+            }, 500);
+            break;
+          }
+        }
+        break;
+      case "prev":
+        for (const item of this.items) {
+          if (
+            item.classList.contains("previous") ||
+            item.classList.contains("next")
+          ) {
+            break;
+          } else {
+            this.index = this.index - 1; // Moves the pointer by 1
+            index = this.index + 1; // Get the pointer to active element
+            activeElement = this.items[index];
+            // Get the previous element
+            if (index > 0) previousElement = this.items[index - 1];
+            else if (index <= 0) previousElement = this.items[this.length - 1];
+
+            activeElement.classList.add(active, "next-prev");
+            previousElement.classList.add("previous-next");
+
+            setTimeout(() => {
+              // Removes the class "active" from all items
+              for (const item of this.items) {
+                item.classList.remove(active, "previous-next", "next-prev");
+              }
+              activeElement.classList.add(active); // Display the item
+              this.index = this.index + 1;
+              // Moves the pointer to the next element
+              this._movePointer();
+            }, 500);
+            break;
+          }
+        }
+        break;
+    }
+  }
+}
+
+/*
+ * Timer Countdown Class
+ */
+
+/*
+ ******************************************************
+ ***** Class Definition                           *****
+ ******************************************************
+ */
+
+class countdown {
+  constructor(element, event_date) {
+    this.date = new Date(event_date);
+    this.element = element;
+  }
+
+  // Public
+
+  start() {
+    // Starting the timer
+    setInterval(() => {
+      this._update();
+    }, 1000);
+  }
+
+  // Private
+
+  _diff() {
+    // Calculate the difference of time with the current date
+    let datediff = new date_diff(this.date);
+    return datediff.diff();
+  }
+
+  _update() {
+    // Update the timer labels
+    let day_label = this.element.children[0].children[1];
+    let hour_label = this.element.children[1].children[1];
+    let minute_label = this.element.children[2].children[1];
+    let second_label = this.element.children[3].children[1];
+
+    // Get the time difference
+    let time_diff = this._diff();
+
+    if (time_diff) {
+      day_label.innerText = time_diff.day;
+      hour_label.innerText = time_diff.hour;
+      minute_label.innerText = time_diff.minute;
+      second_label.innerText = time_diff.second;
+    } else {
+      day_label.innerText = 0;
+      hour_label.innerText = 0;
+      minute_label.innerText = 0;
+      second_label.innerText = 0;
+    }
+  }
+}
+
+/*
+ * Date Difference Class
+ */
+
+// Constant
+const toSec = 1000;
+const toMin = toSec * 60;
+const toHour = toMin * 60;
+const toDay = toHour * 24;
+
+/*
+ ******************************************************
+ ***** Class Definition                           *****
+ ******************************************************
+ */
+
+class date_diff {
+  constructor(date) {
+    this.date = date;
+  }
+
+  done() {
+    if (!this.diff()) {
+      return true;
+    }
+  }
+
+  diff() {
+    let currentDate = new Date();
+    let diff = this.date.getTime() - currentDate.getTime();
+
+    let time_diff = false;
+
+    if (diff > 0) {
+      // Computation of the time difference
+      let day = Math.floor(diff / toDay);
+      diff = diff - day * toDay; // Remove the number of days from the difference.
+
+      let hour = Math.floor(diff / toHour);
+      diff = diff - hour * toHour; // Remove the number of hours from the difference
+
+      let minute = Math.floor(diff / toMin);
+      diff = diff - minute * toMin; // Remove the number of minutes from the difference
+
+      let second = Math.floor(diff / toSec);
+
+      // Stores the result in an object and is returned by the method
+      time_diff = {
+        second: second,
+        minute: minute,
+        hour: hour,
+        day: day,
+      };
+    }
+
+    return time_diff;
+  }
 }
 //# sourceMappingURL=main.js.map

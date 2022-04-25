@@ -23,6 +23,21 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `chats`
+--
+
+CREATE TABLE `chats` (
+  `ID` int(11) NOT NULL,
+  `senderID` int(11) NOT NULL,
+  `receiverID` int(11) NOT NULL,
+  `messageText` text NOT NULL,
+  `message_key` varchar(255) NOT NULL,
+  `iv` varchar(255) NOT NULL COMMENT 'Initialization Vector',
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('0','1') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Members'' conversations chats';
+
+--
 -- Table structure for table `members`
 --
 
@@ -51,6 +66,12 @@ CREATE TABLE `members` (
 --
 
 --
+-- Indexes for table `chats`
+--
+ALTER TABLE `chats`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
@@ -59,6 +80,12 @@ ALTER TABLE `members`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `members`

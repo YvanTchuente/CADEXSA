@@ -11,14 +11,23 @@ $incoming = new ServerRequest();
 $incoming->initialize();
 $outgoing = new Request();
 
-if (!$member->is_logged_in() || !$incoming->getParsedBody()) {
+if (!$member->is_logged_in()) {
 	header("Location: /members/login.php");
 }
 
-$params = $incoming->getParsedBody();
-$memberInfo = $member->getInfo($params['id']);
-if (!isset($params['id']) || !$memberInfo) {
-	header("Location: login.php");
+$memberInfo = $member->getInfo();
+
+if ($incoming->getParsedBody()) {
+	$params = $incoming->getParsedBody();
+	if (isset($params['id']) && $params['id'] !== $_SESSION['ID']) {
+		$visitor = true;
+		$memberID = $params['id'];
+		$memberInfo = $member->getInfo((int) $memberID);
+	}
+}
+
+if (!isset($memberInfo)) {
+	header("Location: /members/login.php");
 }
 ?>
 <!DOCTYPE html>
@@ -51,9 +60,9 @@ if (!isset($params['id']) || !$memberInfo) {
 						<nav>
 							<ul>
 								<li class="tablink"><span onclick="openTab(event,'profile-info')" id="tabBtn1"><i class="fas fa-user"></i>Profile</span></li>
-								<li class="tablink"><span onclick="openTab(event,'chats')" id="tabBtn2"><i class="fas fa-envelope"></i>Messages</span></li>
+								<?php if (!isset($visitor) || !$visitor) : ?><li class="tablink"><span onclick="openTab(event,'chats')" id="tabBtn2"><i class="fas fa-envelope"></i>Messages</span></li><?php endif; ?>
 								<li class="tablink"><span onclick="openTab(event,'activities')" id="tabBtn3"><i class="fas fa-calendar-alt"></i>Timeline</span></li>
-								<li class="tablink"><span onclick="openTab(event,'settings')" id="tabBtn4"><i class="fas fa-user-cog"></i>Account Settings</span></li>
+								<?php if (!isset($visitor) || !$visitor) : ?><li class="tablink"><span onclick="openTab(event,'settings')" id="tabBtn4"><i class="fas fa-user-cog"></i>Account Settings</span></li><?php endif; ?>
 							</ul>
 						</nav>
 					</div>
@@ -76,7 +85,7 @@ if (!isset($params['id']) || !$memberInfo) {
 									<p><label>Email</label><span><?= $memberInfo['email']; ?></span></p>
 								</div>
 								<div>
-									<p><label>Country</label><span><?= $memberInfo['country']; ?></span></p>
+									<p><label>Residing Country</label><span><?= $memberInfo['country']; ?></span></p>
 								</div>
 								<div>
 									<p><label>City</label><span><?= $memberInfo['city']; ?></span></p>
@@ -117,69 +126,68 @@ if (!isset($params['id']) || !$memberInfo) {
 						</div>
 					</div>
 					<!-- Chats tab -->
-					<div class="tabcontent" id="chats">
-						<div class="panel">
-							<!-- Chat box wrapper -->
-							<div class="chatbox">
-								<!-- Chat users -->
-								<div class="chat_users">
-									<div class="user_search">
-										<input type="text" name="user_search" placeholder="Search Ex-students" />
+					<?php if (!isset($visitor) || !$visitor) : ?>
+						<div class="tabcontent" id="chats">
+							<div class="panel">
+								<!-- Chat box wrapper -->
+								<div class="chatbox">
+									<!-- Chat users -->
+									<div class="chat_users">
+										<div class="user_search">
+											<input type="text" id="user_search" placeholder="Search Ex-students by names" />
+										</div>
+										<ul class="list_users">
+											<?php
+											foreach ($member->getMembers() as $chatUser) :
+												if ($memberInfo['ID'] == $chatUser['ID']) {
+													continue;
+												}
+												$state = $member->getState((int) $chatUser['ID']);
+											?>
+												<li class="user" onclick="openChatTab(event,<?= $chatUser['ID']; ?>,<?= $memberInfo['ID']; ?>)">
+													<img src="<?= $chatUser['picture']; ?>" />
+													<div>
+														<span class="user_name"><?= $chatUser['firstname'] . " " . $chatUser['lastname']; ?></span>
+														<span class="time"><?= $state['lastSeen']; ?></span>
+													</div>
+													<span class="status <?= $state['status']; ?>"></span>
+												</li>
+											<?php endforeach; ?>
+										</ul>
 									</div>
-									<ul class="list_users">
-										<li class="user open" onclick="openChatContent(event,2,1)">
-											<img src="/static/images/graphics/profile-placeholder.png" />
-											<div>
-												<span class="user_name">Mbake Collins</span>
-												<span class="time">6 days</span>
-											</div>
-											<span class="status online"></span>
-										</li>
-									</ul>
-								</div>
-								<!-- Chat box contents -->
-								<div class="chat_content">
-									<!-- Chat Correspondent -->
-									<div class="chat_correspondent">
-										<div class="correspondent_info">
-											<div class="menu-wrapper">
-												<div class="menu"></div>
-											</div>
-											<img src="/static/images/graphics/profile-placeholder.png" />
-											<div>
-												<span id="correspondent_name">Mbake Collins</span>
-												<span class="status" id="correspondent_status">Online</span>
+									<!-- Chat box contents -->
+									<div class="chat_content">
+										<!-- Chat Correspondent -->
+										<div class="chat_correspondent">
+											<div class="correspondent_info">
+												<div class="menu-wrapper">
+													<div class="menu"></div>
+												</div>
+												<img src="/static/images/graphics/profile-placeholder.png" />
+												<div>
+													<span id="correspondent_name"></span>
+													<span class="status" id="correspondent_status"></span>
+												</div>
 											</div>
 										</div>
-									</div>
-									<!-- Main Chat Section -->
-									<div class="chats_area">
-										<div class="my_chat">
-											<div>
-												<p>Hi collins</p><span class="time">08:37 AM | Saturday</span>
-											</div>
-											<img src="/static/images/graphics/profile-placeholder.png">
+										<!-- Main Chat Section -->
+										<div class="chat_window">
+											<div id="chat_alert"><span>No conversation</span></div>
 										</div>
-										<div class="client_chat">
-											<img src="/static/images/graphics/profile-placeholder.png">
-											<div>
-												<p>Hi, how are you doing?</p><span class="time">11:46 AM | Saturday</span>
-											</div>
+										<!-- Chat Input field-->
+										<div class="input_field">
+											<form id="send_chat"></form>
+											<input type="hidden" name="action" value="postChat" form="send_chat" />
+											<input type="hidden" name="chat_sender" id="chat_sender" value="<?= $memberInfo['ID']; ?>" form="send_chat" />
+											<input type="hidden" name="chat_receiver" id="chat_receiver" value="" form="send_chat" />
+											<textarea name="chat_msg" placeholder="Type a message" id="chat_msg" form="send_chat"></textarea>
+											<button class="send_btn" onclick="sendChat()"></button>
 										</div>
-									</div>
-									<!-- Chat Input field-->
-									<div class="input_field">
-										<form id="send_chat"></form>
-										<input type="hidden" name="sendChat" value="sendChat" form="send_chat" />
-										<input type="hidden" name="chat_sender" value="<?= $memberInfo['ID']; ?>" form="send_chat" />
-										<input type="hidden" name="chat_receiver" id="chat_receiver" value="" form="send_chat" />
-										<textarea name="chat_msg" id="chat_msg" form="send_chat"></textarea>
-										<button class="send_btn" onclick="send_chat()"></button>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					<?php endif; ?>
 					<!-- Activities tab -->
 					<div class="tabcontent" id="activities">
 						<div class="panel">
@@ -193,53 +201,61 @@ if (!isset($params['id']) || !$memberInfo) {
 						</div>
 					</div>
 					<!-- Account settings tab -->
-					<div class="tabcontent" id="settings">
-						<div class="panel">
-							<h5><i class="fas fa-cog"></i> Update Profile</h5>
-							<button onclick="toggle_visibility('b1')">Update Profile picture</button>
-							<form action="updateProfile.php" method="post" id="updateProfile">
-								<div><label for="first-name">First name</label><input type="text" id="first-name" name="firstname" class="form-control" /></div>
-								<div><label for="last-name">Last name</label><input type="text" id="lastname" name="lastname" class="form-control" /></div>
-								<div><label for="username">Username</label><input type="text" id="username" name="username" class="form-control" disabled /></div>
-								<div><label for="email">Email</label><input type="email" id="email" name="email" class="form-control" disabled /></div>
-								<div><label for="country">Country</label><input type="text" id="country" name="country" class="form-control" disabled /></div>
-								<div><label for="city">City</label><input type="text" id="city" name="city" class="form-control" /></div>
-								<div><label for="phone">Phone number</label><input type="number" id="phoneNumber" name="phoneNumber" class="form-control" /></div>
-								<div><label for="batch_year">Batch year</label><input type="number" id="batch_year" name="batch_year" class="form-control" disabled /></div>
-								<div><label for="aboutme">About me</label><textarea id="aboutme" name="aboutme" class="form-control"></textarea></div>
-								<div><button type="submit" name="update" class="form-btn">Update Profile</button></div>
-							</form>
+					<?php if (!isset($visitor) || !$visitor) : ?>
+						<div class="tabcontent" id="settings">
+							<div class="panel">
+								<h5><i class="fas fa-cog"></i> Update Profile</h5>
+								<button onclick="toggle_visibility('b1')">Update Profile picture</button>
+								<form action="/members/profile/actions/profile.php" method="POST" id="updateProfile">
+									<div><label for="firstname">First name</label><input type="text" id="first-name" name="firstname" class="form-control" disabled /></div>
+									<div><label for="lastname">Last name</label><input type="text" id="lastname" name="lastname" class="form-control" disabled /></div>
+									<div><label for="username">Username</label><input type="text" id="username" name="username" class="form-control" /></div>
+									<div><label for="email">Email</label><input type="email" id="email" name="email" class="form-control" /></div>
+									<div><label for="country">Country</label><input type="text" id="country" name="country" class="form-control" disabled /></div>
+									<div><label for="city">City</label><input type="text" id="city" name="city" class="form-control" /></div>
+									<div><label for="contact">Phone number</label><input type="number" id="phoneNumber" name="contact" class="form-control" /></div>
+									<div><label for="batch_year">Batch year</label><input type="number" id="batch_year" name="batch_year" class="form-control" disabled /></div>
+									<div><label for="aboutme">About me</label><textarea id="aboutme" name="aboutme" class="form-control"></textarea></div>
+									<input type="hidden" name="memberID" value="<?= $memberInfo['ID']; ?>" />
+									<input type="hidden" name="action" value="updateProfile" />
+									<div><button type="submit" class="form-btn">Update Profile</button></div>
+								</form>
+							</div>
 						</div>
-					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 	</div>
 	<?php require_once dirname(__DIR__, 2) . "/includes/footer.php"; ?>
-	<!-- Upload profile picture -->
-	<div class="blur_background" id="b1">
-		<div id="update_picture">
-			<div id="head">
-				<h3>Change Profile Picture</h3>
-				<p>The picture will be scaled down and cropped</p>
-				<button id="upload_btn">Upload</button>
-			</div>
-			<!-- Preview thumbnail of picture -->
-			<div id="picture_preview"></div>
-			<div id="footer">
-				<form id="profile_picture"></form>
-				<input type="file" accept=".jpg, .jpeg, .png" id="input_picture" name="input_picture" form="profile_picture" />
-				<label for="input_picture">Select a picture</label>
-				<span id="input_text"></span>
-				<input type="hidden" name="userid" id="userid" value="<?= $memberInfo['ID']; ?>" form="profile_picture" />
-				<input type="hidden" name="username" value="<?= $memberInfo['username']; ?>" form="profile_picture" />
-				<button id="cancel_btn">Cancel</button>
+	<?php if (!isset($visitor) || !$visitor) : ?>
+		<!-- Upload profile picture -->
+		<div class="blur_background" id="b1">
+			<div id="update_picture">
+				<span class="fas fa-times" id="exit"></span>
+				<div id="head">
+					<h3>Change Profile Picture</h3>
+					<p>The picture will be scaled down and cropped</p>
+					<button id="upload_btn">Upload</button>
+				</div>
+				<!-- Preview thumbnail of picture -->
+				<div id="picture_preview"></div>
+				<div id="footer">
+					<form id="profile_picture"></form>
+					<input type="file" accept=".jpg, .jpeg, .png" id="input_picture" name="input_picture" form="profile_picture" />
+					<label for="input_picture">Select a picture</label>
+					<span id="input_text"></span>
+					<input type="hidden" name="action" id="action" value="updateAvatar" form="profile_picture" />
+					<input type="hidden" name="memberID" id="memberID" value="<?= $memberInfo['ID']; ?>" form="profile_picture" />
+					<input type="hidden" name="username" value="<?= $memberInfo['username']; ?>" form="profile_picture" />
+					<button id="cancel_btn">Cancel</button>
+				</div>
 			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<!-- End -->
 	<script>
-		<?php if (isset($_GET['tab'])) {
+		<?php if (isset($params['tab'])) {
 			switch ($_GET['tab']) {
 				case "chats":
 					echo "document.getElementById(\"tabBtn2\").click();";
@@ -256,8 +272,6 @@ if (!isset($params['id']) || !$memberInfo) {
 			// Open default tab
 			document.getElementById("tabBtn1").click();
 		<?php } ?>
-		let users = document.querySelectorAll(".chatbox ul.list_users li.user");
-		users[0].click();
 	</script>
 </body>
 

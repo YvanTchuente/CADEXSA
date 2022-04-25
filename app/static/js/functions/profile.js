@@ -24,7 +24,7 @@ function openTab(event, tab) {
   document.getElementById(tab).style.display = "block";
   event.currentTarget.parentElement.classList.add("active");
   if (tab == "chats") {
-    if (chats_socket.readyState == 1) {
+    if (isset(chats_socket) && chats_socket.readyState == 1) {
       let users = document.querySelectorAll(".chatbox ul.list_users li.user");
       if (users.length > 0) {
         users[0].click();

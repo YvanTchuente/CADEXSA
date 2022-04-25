@@ -23,7 +23,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 	$body = new TextStream(json_encode($incoming->getParsedBody()));
 	$response = $member->login($outgoing->withBody($body));
 	if ($response === true) {
-		header('Location: profile/?id=' . $_SESSION['id']);
+		header('Location: profile/?id=' . $_SESSION['ID']);
 	}
 }
 ?>

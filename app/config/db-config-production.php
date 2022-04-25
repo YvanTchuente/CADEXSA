@@ -2,9 +2,8 @@
 // Database Configuration settings
 $params = [
     'driver' => 'mysql',
-    'host' => 'localhost',
+    'host' => 'cadexsa-db',
     'user' => 'root',
-    'password' => '',
+    'password' => 'PRODUCTION_PASSWORD',
     'dbname' => 'cadexsa_db',
 ];
-?>

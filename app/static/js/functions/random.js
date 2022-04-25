@@ -81,7 +81,7 @@ function start_carousels() {
  */
 function toggle_visibility(id) {
   const elem = document.getElementById(id);
-  const child = elem.firstElementChild;
+  const child = elem.children[1];
   let display = elem.style.display;
   if (display == "flex") {
     child.classList.remove("open");
@@ -118,7 +118,7 @@ function toggleOpen() {
  * Starts all countdowns of events
  */
 function start_countdowns() {
-  let countdowns = document.querySelectorAll(".timer");
+  let countdowns = document.querySelectorAll(".countdown");
   for (const t_countdown of countdowns) {
     let date = t_countdown.getAttribute("data-date");
     // Initialization of an instance of the countdown
@@ -154,4 +154,32 @@ function element(type, class_list = NULL, innertext) {
   element.classList.value = class_list;
   element.innerText = innertext;
   return element;
+}
+
+/**
+ * Feeds element's input value with the value of src attribute of target
+ * @param {Event} event
+ * @param {string} elementID ID of the element
+ */
+function selectPicture(event, inputID) {
+  const input = document.getElementById(inputID);
+  const target = event.target;
+  input.value = target.src;
+}
+
+function previewPicture(elem1_id, elem2_id, elem3_id) {
+  const elem1 = document.getElementById(elem1_id);
+  const elem2 = document.getElementById(elem2_id);
+  const elem3 = document.getElementById(elem3_id);
+
+  if (isset(elem1.value)) {
+    elem3.value = elem1.value;
+    const img = document.createElement("img");
+    img.src = elem3.value;
+
+    const firstChild = elem2.children[0];
+    elem2.replaceChild(img, firstChild);
+    elem1.value = "";
+    toggle_visibility("bc1");
+  }
 }

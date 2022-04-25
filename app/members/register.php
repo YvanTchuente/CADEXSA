@@ -8,23 +8,27 @@ use Application\MiddleWare\{
 	TextStream,
 	ServerRequest
 };
-use Application\Validation\Validator;
+use PHPMailer\PHPMailer\PHPMailer;
+use Application\Membership\Validator;
+use Application\Membership\MemberManager;
 
-if ($member->is_logged_in()) {
-	header("Location: /members/login.php");
+if (MemberManager::Instance()->is_logged_in()) {
+	header("Location: /members/login");
 }
 
-$incoming = new ServerRequest();
-$incoming->initialize();
+$incoming = (new ServerRequest())->initialize();
 $outgoing = new Request();
 
 if ($incoming->getMethod() == Constants::METHOD_POST) {
 	$body = new TextStream(json_encode($incoming->getParsedBody()));
 	$response = Validator::validateRegistration($outgoing->withBody($body));
+	$outgoing = $outgoing->withBody($body);
+	$response = Validator::validateRegistration($outgoing);
 	if (is_array($response)) {
-		$response = $member->signup($response);
+		$mailer = new PHPMailer(true);
+		$response = MemberManager::Instance()->signup($response, $mailer);
 		if ($response === true) {
-			header('Location: login.php');
+			header('Location: login');
 		}
 	}
 }
@@ -36,7 +40,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Sign up to CADEXSA and express your love for our alma-mater">
-	<title>CADEXSA - Sign Up</title>
+	<title>Sign Up - CADEXSA</title>
 	<?php require_once dirname(__DIR__) . "/includes/head_tag_includes.php"; ?>
 </head>
 
@@ -50,7 +54,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 	<div class="page-content">
 		<div class="ws-container">
 			<div id="register-grid">
-				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="register-form" class="sign_up">
+				<form action="register" method="post" id="register-form" class="sign_up">
 					<div class="form-grouping form-header">
 						<h1>Sign up</h1>
 					</div>
@@ -142,12 +146,12 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<textarea id="aboutme" name="aboutme" required /></textarea>
 					</div>
 					<button type="submit" class="form-btn">Create account</button>
-					<p class="form-footer">Already have an account? <a href="login.php">Sign in</a></p>
+					<p class="form-footer">Already have an account? <a href="login">Sign in</a></p>
 				</form>
 				<div id="form-thumbnail">
 					<div>
 						<h2>Welcome to our community</h2>
-						<p>Show affection for your alma mater and help us make it grow. Please fill out the form</p>
+						<p>Show affection for your alma-mater and help us make it grow. Please fill out the form</p>
 					</div>
 				</div>
 			</div>

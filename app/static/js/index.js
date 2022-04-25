@@ -1,15 +1,12 @@
 const pathname = window.location.pathname; // Location of the executing script
-const path_to_signup = new RegExp("^/members/register.(html|php)+$");
-const path_to_profile = new RegExp("^/members/profile/?w*$");
+const path_to_signup = new RegExp("^/members/register$");
+const path_to_profile = new RegExp("^/members/profiles/\w+");
 const path_to_recoveryACC = new RegExp(
   "^/members/recover_account.(html|php)+?w*$"
 );
 const sticky_header_enabled_pages = [
   "/",
-  "/news/",
-  "/events/",
   "/gallery/",
-  "/about_us/",
   "/contact_us/",
 ];
 // socket var for socket connection with chat servers
@@ -452,8 +449,7 @@ window.onload = function () {
     const input_text = document.getElementById("input_text");
     const preview = document.getElementById("picture_preview");
     const upload_btn = document.getElementById("upload_btn");
-    const cancel_btn = document.getElementById("cancel_btn");
-    const exit_btn = document.querySelector("#update_picture #exit");
+    const exit_btn = document.querySelector(".background-cover #exit");
     const memberID = document.getElementById("memberID");
     const chat_msg = document.getElementById("chat_msg");
     const user_search = document.getElementById("user_search");
@@ -524,8 +520,7 @@ window.onload = function () {
     // Add an event listener to the menu button of the chat section
     chats_menu_btn.addEventListener("click", () => toggleOpen());
 
-    cancel_btn.addEventListener("click", () => toggle_visibility("b1"));
-    exit_btn.addEventListener("click", () => toggle_visibility("b1"));
+    exit_btn.addEventListener("click", () => toggle_visibility("bc1"));
     chat_msg.addEventListener("focus", () => {
       intervalID = setInterval(() => {
         typing(1);
@@ -544,7 +539,6 @@ window.onload = function () {
 
       reader.onloadstart = () => {
         for (child of preview.childNodes) child.remove();
-
         const loading = element("span", null, "Loading thumbnail...");
         loading.id = "loading";
         preview.appendChild(loading);
@@ -573,7 +567,7 @@ window.onload = function () {
           if (response.ok) {
             const reply = await response.text();
             if (reply == "Successful") {
-              cancel_btn.click();
+              exit_btn.click();
               setTimeout(() => refreshPicture(memberID.value), 1000);
             }
           }

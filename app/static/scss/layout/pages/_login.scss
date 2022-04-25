@@ -5,7 +5,10 @@
 @use "../../abstracts/" as *;
 
 #login-body {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(/static/images/gallery/img3.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 
   .page-content {
     margin: 3rem 0px;

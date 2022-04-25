@@ -16,11 +16,14 @@ use Application\Security\{
     SecurerAware,
     SecurerAwareTrait
 };
+use Application\CMS\Manager;
+use Application\CMS\DeleteItemTrait;
+use Application\CMS\ItemExistsTrait;
 
 /**
  * Manages chat messages
  */
-class ChatManager implements ConnectionAware, SecurerAware
+class ChatManager implements ConnectionAware, SecurerAware, Manager
 {
     private const TABLE = "chats";
 
@@ -107,32 +110,47 @@ class ChatManager implements ConnectionAware, SecurerAware
         return $conversation;
     }
 
-    /**
-     * Deletes a chat
-     * 
-     * @param int $ID The ID of the chat
-     * 
-     * @return bool
-     * 
-     * @throws \RuntimeException If the chat referenced by the ID does not exist
-     **/
-    public function delete(int $ID)
-    {
-        $exists = $this->exists($ID);
-        if (!$exists) {
-            throw new \RuntimeException(sprintf("The chat referenced by ID of %d does not exit", $ID));
-        }
-        $delete_sql = "DELETE FROM " . self::TABLE . " WHERE ID = '$ID'";
-        $has_deleted = (bool) $this->connector->getConnection()->query($delete_sql);
-        return $has_deleted;
-    }
-
-    public function exists(int $ID)
+    public function get(int $ID): Chat
     {
         $query = $this->connector->getConnection()->query("SELECT * FROM " . self::TABLE . " WHERE ID = '$ID'");
-        $item_exists = (bool) $query->fetch();
-        return $item_exists;
+        $data = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$data) {
+            throw new \RuntimeException(sprintf("The item identified by ID %d does not exist", $ID));
+        }
+        $message = $this->decrypter->decrypt($data['messageText'], $data['message_key'], $data['iv']);
+        $chat = new Chat($data['ID'], $data['senderID'], $data['receiverID'], $message, $data['timestamp'], ChatStatus::from((int)$data['status']));
+        return $chat;
     }
+
+    /**
+     * @return Chat[]
+     */
+    public function list(int $n = 0, int $offset = null, bool $sort = true)
+    {
+        $chats = [];
+        $sql = "SELECT ID FROM " . self::TABLE;
+        if ($sort) {
+            $sql .= " ORDER BY timestamp DESC";
+        }
+        if ($n > 0) {
+            $sql .= " LIMIT $n";
+        }
+        if (isset($offset)) {
+            $sql .= " OFFSET $offset";
+        }
+        $query = $this->connector->getConnection()->query($sql);
+        $res = $query->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($res as $row) {
+            foreach ($row as $column) {
+                $chats[] = $this->get((int)$column);
+            }
+        }
+        return $chats;
+    }
+
+    use ItemExistsTrait;
+
+    use DeleteItemTrait;
 
     /**
      * Marks a chat as being already read

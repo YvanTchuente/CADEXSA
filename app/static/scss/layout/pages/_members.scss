@@ -1,0 +1,118 @@
+/*
+ * Members list page specific styles
+ */
+
+@use "../../abstracts/" as *;
+
+#members-list {
+  #head {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    div:first-child {
+      font-weight: 600;
+
+      i {
+        padding-right: 0.5rem;
+      }
+    }
+
+    div#search {
+      width: 30%;
+      position: relative;
+
+      > input {
+        + button {
+          @include center;
+          width: 2em;
+          color: black;
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          height: calc(100% - 4px);
+          background-color: white;
+
+          &:focus,
+          &:focus-visible {
+            box-shadow: none;
+            border-color: transparent;
+          }
+        }
+      }
+    }
+  }
+  table {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    .label {
+      font-size: 0.7rem;
+      background-color: lightgray;
+      border-radius: 5px;
+      display: inline-block;
+      padding: 4px 8px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    thead {
+      font-weight: 600;
+      border-top: 2px solid $color-footer;
+      border-bottom: 2px solid $color-footer;
+
+      tr {
+        background-color: rgb(240, 240, 240);
+
+        td {
+          padding: 0.6rem;
+          text-align: center;
+
+          &:first-child {
+            width: 55%;
+            text-align: unset;
+          }
+
+          i {
+            padding-right: 0.5rem;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid $color-footer;
+
+        &:nth-child(2n) {
+          background-color: rgb(240, 240, 240);
+        }
+
+        &:last-child {
+          border: none;
+        }
+
+        td {
+          padding: 1rem 0.5rem;
+          text-align: center;
+
+          &:first-child {
+            text-align: unset;
+          }
+
+          a {
+            font-family: roboto-medium;
+          }
+
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -30,10 +30,12 @@ class Connection implements Connector
      */
     private $connection;
 
+    private static $instance;
+
     /**
      * @param string[] $params Database credentials
      */
-    public function __construct(array $params)
+    private function __construct(array $params)
     {
         if (
             empty($params['driver']) or
@@ -47,6 +49,15 @@ class Connection implements Connector
         $this->dsn = $this->makeDsn($params);
         $this->params = $params;
         $this->connect();
+    }
+
+    public static function Instance(): self
+    {
+        if (!isset(self::$instance)) {
+            require dirname(__DIR__, 2) . '/config/db-config-development.php';
+            self::$instance = new self($params);
+        }
+        return self::$instance;
     }
 
     /**

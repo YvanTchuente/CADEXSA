@@ -31,11 +31,7 @@
     padding: 50px 0px 60px 0px;
     text-align: center;
     position: relative;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
-      url("/static/images/gallery/img12.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.2);
 
     > div:first-of-type {
       position: relative;
@@ -46,7 +42,7 @@
       }
 
       p {
-        width: 100%;
+        width: 50%;
         font-size: 1em;
         margin: auto;
       }

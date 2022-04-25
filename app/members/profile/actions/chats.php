@@ -13,8 +13,9 @@ require_once dirname(__DIR__, 3) . "/config/index.php";
 set_time_limit(0);
 ob_implicit_flush();
 
-use Application\Membership\Member;
+use Application\Database\Connection;
 use Application\Network\WebSocketServer;
+use Application\Membership\MemberManager;
 use Application\Membership\Chats\{Chat, ChatManager};
 
 $address = gethostbyname("localhost");
@@ -68,21 +69,21 @@ while (true) {
             $received_text = $server->decode($buffer); // Decode data from the client
             $msg = json_decode($received_text);
             $action = $msg->action;
-            $chatManager = new ChatManager($conn);
+            $chatManager = new ChatManager(Connection::Instance());
             // Depending on the value of $actions, switch to correct actions to be done
             switch ($action) {
                 case 'get_chat_user':
                     $requestedUser = $msg->requestedUser;
                     $requester = $msg->requester;
                     // Retrieve the requested chat user's infos and conversation with the requester
-                    $chatUser = $member->getInfo((int) $requestedUser);
-                    $status = Member::getStatus($conn, $chatUser['ID']);
+                    $chatUser = MemberManager::Instance()->getMember((int) $requestedUser);
+                    $status = MemberManager::Instance()->getStatus($chatUser->getID());
                     $conversation = get_chat_conversation($chatManager, $requestedUser, $requester);
                     // Encapsulate the results into an array
                     $chat_user_info = array(
                         'type' => 'chat_user_info',
-                        'avatar' => $chatUser['picture'],
-                        'username' => '<a href="/members/profile/?id=' . $chatUser['ID'] . '" target="_blank">' . $chatUser['firstname'] . ' ' . $chatUser['lastname'] . '</a>',
+                        'avatar' => $chatUser->getPicture(),
+                        'username' => '<a href="/members/profiles/' . strtolower($chatUser->getUserName()) . '" target="_blank">' . $chatUser->getName() . '</a>',
                         'status' => $status,
                         'conversation' => $conversation
                     );
@@ -102,7 +103,7 @@ while (true) {
                     // Stores the chat in the database and returns it for display 
                     $chatID = $chatManager->save($chat);
                     $chat->setID($chatID);
-                    $avatar = $member->getInfo($chat->getSenderID())['picture'];
+                    $avatar = MemberManager::Instance()->getMember($chat->getSenderID())->getPicture();
                     $timestamp = date("H:i A", strtotime($chat->getTimestamp())) . " | " . date("l", strtotime($chat->getTimestamp()));
                     $newChat = array(
                         'type' => 'new_chat',
@@ -122,14 +123,13 @@ while (true) {
                     break;
 
                 case 'update_last_activity':
-                    $pdo = $conn->getConnection();
+                    $connection = Connection::Instance()->getConnection();
                     $memberID = $msg->member;
                     $query = "UPDATE online_members SET last_activity = current_timestamp() WHERE memberID='$memberID'";
-                    $pdo->query($query);
+                    $connection->query($query);
                     break;
 
                 case 'update_typing_status':
-                    $pdo = $conn->getConnection();
                     $memberID = $msg->member;
                     $correspondentID = $msg->correspondent;
                     $value = (int) $msg->value;
@@ -182,12 +182,11 @@ function get_chat_conversation(ChatManager $ChatManager, int $user2, int $user1)
     if ($user1 == $user2) {
         throw new InvalidArgumentException("User1 ID and User2 ID parameters are the same");
     }
-    global $member;
     $conversation = [];
     $chats = $ChatManager->getConversation($user2, $user1);
     if (isset($chats) && count($chats) > 0) {
         foreach ($chats as $chat) {
-            $avatar = $member->getInfo($chat->getSenderID())['picture'];
+            $avatar = MemberManager::Instance()->getMember($chat->getSenderID())->getPicture();
             $message = $chat->getMessage();
             $timestamp = date("H:i A", strtotime($chat->getTimestamp())) . " | " . date("l", strtotime($chat->getTimestamp()));
             if ($user1 == $chat->getSenderID()) {

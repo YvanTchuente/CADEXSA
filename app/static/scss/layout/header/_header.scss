@@ -151,8 +151,10 @@ header {
                   vertical-align: middle;
 
                   span {
+                    display: block;
+
                     &:first-child {
-                      font-family: Inter-medium;
+                      font-family: Inter-semiBold;
                     }
 
                     &:last-child {

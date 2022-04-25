@@ -21,6 +21,7 @@
     padding: 25px;
 
     h5 {
+      font-family: RedHat-bold;
       margin: 0px 0px 0.7em 0px !important;
     }
 
@@ -45,8 +46,12 @@
         color: white;
         padding: 7px 15px;
         border: 2px solid transparent;
-        background-color: rgb(89, 86, 200);
+        background-color: $color-theme1;
         transition: 0.3s;
+
+        &:not(:last-of-type) {
+          margin-right: 0.5rem;
+        }
 
         &:hover {
           color: $color-theme1;

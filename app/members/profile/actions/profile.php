@@ -2,6 +2,8 @@
 // Handles profile related tasks
 require_once dirname(__DIR__, 3) . '/config/index.php';
 
+use Application\Database\Connection;
+use Application\Membership\MemberManager;
 use Application\MiddleWare\{
     Constants,
     ServerRequest
@@ -9,8 +11,7 @@ use Application\MiddleWare\{
 
 define('STANDARD_FILES', array('limitSize' => 3 * (1024 * 1024), 'allowedTypes' => ['image/jpeg' => 'jpg']));
 
-$incoming = new ServerRequest();
-$incoming->initialize();
+$incoming = (new ServerRequest())->initialize();
 
 switch ($incoming->getMethod()) {
     case Constants::METHOD_GET:
@@ -19,7 +20,7 @@ switch ($incoming->getMethod()) {
         switch ($action) {
             case 'fetchPicture':
                 $memberID = $param['memberID'];
-                $picture = $member->getInfo($memberID)['picture'];
+                $picture = MemberManager::Instance()->getMember($memberID)->getPicture();
                 echo $picture;
                 break;
         }
@@ -49,15 +50,15 @@ switch ($incoming->getMethod()) {
                             $content = $uploadedfile->getStream()->getContents();
                             $filename = sha1($content);
                             $ext = STANDARD_FILES['allowedTypes'][$fileType];
-                            $targetpath = dirname(__DIR__, 3) . "/members/profile_pictures/" . $filename . "." . $ext;
+                            $targetpath = dirname(__DIR__, 3) . "/static/images/profile_pictures/" . $filename . "." . $ext;
                             // Query statements
                             $fetch_sql = "SELECT * FROM profile_pictures WHERE memberID='$memberID'";
                             $insert_sql = "INSERT INTO profile_pictures (memberID, name) VALUES ('$memberID','$filename')";
                             $update_sql = "UPDATE profile_pictures SET name = '$filename' WHERE memberID='$memberID'";
 
-                            $query = $conn->getConnection()->query($fetch_sql);
+                            $query = Connection::Instance()->getConnection()->query($fetch_sql);
                             if (!($row = $query->fetch(\PDO::FETCH_ASSOC))) {
-                                if ($conn->getConnection()->query($insert_sql)) {
+                                if (Connection::Instance()->getConnection()->query($insert_sql)) {
                                     if ($uploadedfile->moveTo($targetpath)) {
                                         imagedestroy($img_php);
                                         echo "Successful";
@@ -68,10 +69,10 @@ switch ($incoming->getMethod()) {
                                     throw new RuntimeException("Error Processing INSERT query request");
                                 }
                             } else {
-                                $previousName = dirname(__DIR__, 3) . "/members/profile_pictures/" . $row['name'] . ".jpg";
+                                $previousName = dirname(__DIR__, 3) . "/static/images/profile_pictures/" . $row['name'] . ".jpg";
                                 $previousName = str_replace("/", "\\", $previousName);
                                 if (unlink($previousName)) {
-                                    if ($conn->getConnection()->query($update_sql)) {
+                                    if (Connection::Instance()->getConnection()->query($update_sql)) {
                                         if ($uploadedfile->moveTo($targetpath)) {
                                             imagedestroy($img_php);
                                             echo "Successful";
@@ -97,7 +98,7 @@ switch ($incoming->getMethod()) {
                 break;
 
             case 'updateProfile':
-                $conn = $conn->getConnection();
+                $connection = Connection::Instance()->getConnection();
                 $memberID = $param['memberID'];
                 $fields = [];
                 $referer = $_SERVER['HTTP_REFERER'];
@@ -127,7 +128,7 @@ switch ($incoming->getMethod()) {
                 }
                 $update_sql = substr($update_sql, 0, -2);
                 $update_sql .= " WHERE ID = '$memberID'";
-                $stmt = $conn->prepare($update_sql);
+                $stmt = $connection->prepare($update_sql);
                 if ($stmt->execute($fields)) {
                     header('Location: ' . $referer);
                 }

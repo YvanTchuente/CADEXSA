@@ -1,4 +1,14 @@
-<?php require_once dirname(__DIR__) . '/config/index.php'; ?>
+<?php
+
+require_once dirname(__DIR__) . '/config/index.php';
+
+use Application\DateTime\Constants;
+use Application\Database\Connection;
+use Application\CMS\Gallery\PictureManager;
+
+$PictureManager = new PictureManager(Connection::Instance());
+$pictures = $PictureManager->list(12);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +17,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="CADEXSA Gallery pictures">
 	<meta name="author" content="Yvan Tchuente">
-	<title>CADEXSA - Gallery</title>
+	<title>Gallery - CADEXSA</title>
 	<?php require_once dirname(__DIR__) . "/includes/head_tag_includes.php"; ?>
 </head>
 
@@ -33,33 +43,23 @@
 						<span class="current" onclick="openSelect(event,'nice-select-1')">month</span>
 						<ul class="dropdown">
 							<li class="selected">month</li>
-							<li>January</li>
-							<li>February</li>
-							<li>March</li>
-							<li>April</li>
-							<li>May</li>
-							<li>June</li>
-							<li>July</li>
-							<li>August</li>
-							<li>September</li>
-							<li>October</li>
-							<li>November</li>
-							<li>December</li>
+							<?php
+							foreach (Constants::MONTH_NAMES as $month) {
+							?>
+								<li><?= $month; ?></li>
+							<?php
+							}
+							?>
 						</ul>
 						<select id="select-month" name="month" required>
 							<option value="" selected>Month</option>
-							<option value="January">January</option>
-							<option value="February">February</option>
-							<option value="March">March</option>
-							<option value="April">April</option>
-							<option value="May">May</option>
-							<option value="June">June</option>
-							<option value="July">July</option>
-							<option value="August">August</option>
-							<option value="September">September</option>
-							<option value="October">October</option>
-							<option value="November">November</option>
-							<option value="December">December</option>
+							<?php
+							foreach (Constants::MONTH_NAMES as $month) {
+							?>
+								<option value="<?= $month; ?>"><?= $month; ?></option>
+							<?php
+							}
+							?>
 						</select>
 					</div>
 					<div class="nice-select" id="nice-select-2">
@@ -80,126 +80,24 @@
 			</div>
 			<!-- Gallery article search end -->
 			<div class="gallery-wrapper">
-				<div class="gallery-item">
-					<img src="/static/images/gallery/student.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
+				<?php
+				foreach ($pictures as $picture) {
+					$pictureID = $picture->getID();
+					$location = $picture->getLocation();
+					$desc = substr($picture->getDescription(), 0, 50);
+					$date = date('d M Y', strtotime($picture->getPublicationDate()));
+				?>
+					<div class="gallery-item">
+						<img src="<?= $location; ?>" alt="" />
+						<div class="gallery-hvr-wrap">
+							<div class="gallery-hvr-desc">
+								<h6><?= $desc; ?></h6>
+								<p><?= $date; ?></p>
+							</div>
+							<a href="pictures/<?= $pictureID; ?>" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
 						</div>
-						<a href="/static/images/gallery/student.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
 					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img12.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/12.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img9.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/im9.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/students.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img5.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img7.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img7.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img14.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img14.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img11.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/im11.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/group.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img8.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img2.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img8.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img10.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/img10.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
-				<div class="gallery-item">
-					<img src="/static/images/gallery/img15.jpg" alt="" />
-					<div class="gallery-hvr-wrap">
-						<div class="gallery-hvr-desc">
-							<h6>Lorem ipsm dolor sitg amet</h6>
-							<p>27 Dec 2021</p>
-						</div>
-						<a href="/static/images/gallery/im15.jpg" class="btn-zoom"><img src="/static/images/graphics/zoom-icon.png" /></a>
-					</div>
-				</div>
+				<?php } ?>
 			</div>
 			<div class="pagination-area">
 				<ul class="pagination">

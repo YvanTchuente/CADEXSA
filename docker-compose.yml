@@ -16,9 +16,11 @@ services:
       - back-end
     volumes:
       - type: volume
-        source: app-logs
+        source: app_logs
         target: /var/www/html/logs
-  db:
+    depends_on:
+      - db
+  database:
     image: mariadb
     container_name: cadexsa-db
     restart: always
@@ -27,18 +29,33 @@ services:
         published: 3306
     networks:
       - back-end
-    env_file: .env
     environment:
       MARIADB_DATABASE: cadexsa_db
+    env_file: db.env
     volumes:
       - type: volume
-        source: mysql-data
+        source: mysql_data
         target: /var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - target: 80
+        published: 8080
+    networks:
+      - back-end
+    environment:
+      - PMA_HOST=cadexsa-db
+    env_file: myadmin.env
+    depends_on:
+      - db
+      - web
 
 networks:
-  front-end:
-  back-end:
+  front_end:
+  back_end:
 
 volumes:
-  app-logs:
-  mysql-data:
+  app_logs:
+  mysql_data:

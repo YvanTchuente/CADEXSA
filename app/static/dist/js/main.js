@@ -1,15 +1,12 @@
 const pathname = window.location.pathname; // Location of the executing script
-const path_to_signup = new RegExp("^/members/register.(html|php)+$");
-const path_to_profile = new RegExp("^/members/profile/?w*$");
+const path_to_signup = new RegExp("^/members/register$");
+const path_to_profile = new RegExp("^/members/profiles/\w+");
 const path_to_recoveryACC = new RegExp(
   "^/members/recover_account.(html|php)+?w*$"
 );
 const sticky_header_enabled_pages = [
   "/",
-  "/news/",
-  "/events/",
   "/gallery/",
-  "/about_us/",
   "/contact_us/",
 ];
 // socket var for socket connection with chat servers
@@ -452,8 +449,7 @@ window.onload = function () {
     const input_text = document.getElementById("input_text");
     const preview = document.getElementById("picture_preview");
     const upload_btn = document.getElementById("upload_btn");
-    const cancel_btn = document.getElementById("cancel_btn");
-    const exit_btn = document.querySelector("#update_picture #exit");
+    const exit_btn = document.querySelector(".background-cover #exit");
     const memberID = document.getElementById("memberID");
     const chat_msg = document.getElementById("chat_msg");
     const user_search = document.getElementById("user_search");
@@ -524,8 +520,7 @@ window.onload = function () {
     // Add an event listener to the menu button of the chat section
     chats_menu_btn.addEventListener("click", () => toggleOpen());
 
-    cancel_btn.addEventListener("click", () => toggle_visibility("b1"));
-    exit_btn.addEventListener("click", () => toggle_visibility("b1"));
+    exit_btn.addEventListener("click", () => toggle_visibility("bc1"));
     chat_msg.addEventListener("focus", () => {
       intervalID = setInterval(() => {
         typing(1);
@@ -544,7 +539,6 @@ window.onload = function () {
 
       reader.onloadstart = () => {
         for (child of preview.childNodes) child.remove();
-
         const loading = element("span", null, "Loading thumbnail...");
         loading.id = "loading";
         preview.appendChild(loading);
@@ -573,7 +567,7 @@ window.onload = function () {
           if (response.ok) {
             const reply = await response.text();
             if (reply == "Successful") {
-              cancel_btn.click();
+              exit_btn.click();
               setTimeout(() => refreshPicture(memberID.value), 1000);
             }
           }
@@ -1037,7 +1031,7 @@ function start_carousels() {
  */
 function toggle_visibility(id) {
   const elem = document.getElementById(id);
-  const child = elem.firstElementChild;
+  const child = elem.children[1];
   let display = elem.style.display;
   if (display == "flex") {
     child.classList.remove("open");
@@ -1074,7 +1068,7 @@ function toggleOpen() {
  * Starts all countdowns of events
  */
 function start_countdowns() {
-  let countdowns = document.querySelectorAll(".timer");
+  let countdowns = document.querySelectorAll(".countdown");
   for (const t_countdown of countdowns) {
     let date = t_countdown.getAttribute("data-date");
     // Initialization of an instance of the countdown
@@ -1110,6 +1104,34 @@ function element(type, class_list = NULL, innertext) {
   element.classList.value = class_list;
   element.innerText = innertext;
   return element;
+}
+
+/**
+ * Feeds element's input value with the value of src attribute of target
+ * @param {Event} event
+ * @param {string} elementID ID of the element
+ */
+function selectPicture(event, inputID) {
+  const input = document.getElementById(inputID);
+  const target = event.target;
+  input.value = target.src;
+}
+
+function previewPicture(elem1_id, elem2_id, elem3_id) {
+  const elem1 = document.getElementById(elem1_id);
+  const elem2 = document.getElementById(elem2_id);
+  const elem3 = document.getElementById(elem3_id);
+
+  if (isset(elem1.value)) {
+    elem3.value = elem1.value;
+    const img = document.createElement("img");
+    img.src = elem3.value;
+
+    const firstChild = elem2.children[0];
+    elem2.replaceChild(img, firstChild);
+    elem1.value = "";
+    toggle_visibility("bc1");
+  }
 }
 
 /**

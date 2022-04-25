@@ -178,9 +178,9 @@
   grid-template-columns: repeat(12, 1fr);
   row-gap: 20px;
 
-  @include min-responsify($device-small) {
-    column-gap: 50px;
-  }
+  // @include min-responsify($device-small) {
+  //   column-gap: 50px;
+  // }
 
   > div:first-child {
     grid-column: 1 / span 12;
@@ -192,7 +192,7 @@
   > aside {
     grid-column: 1 / span 12;
     @include min-responsify($device-large) {
-      grid-column: 9 / span 4;
+      grid-column: 10 / span 3;
     }
   }
 }

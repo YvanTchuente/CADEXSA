@@ -63,11 +63,12 @@ while (true) {
             $memberID = array_search($client, $clients);
             $states = [];
             $n = 0;
-            foreach ($member->getMembers() as $chatUser) {
-                if ($memberID == $chatUser['ID']) {
+            foreach (MemberManager::Instance()->getMembers() as $chatUser) {
+                if ($memberID == $chatUser->getID()) {
                     continue;
                 }
-                $state = $member->getState($chatUser['ID']);
+                $timeDuration = new ChatTimeDuration();
+                $state = MemberManager::Instance()->getState($chatUser->getID(), $timeDuration);
                 $users_states[] = array('n' => $n, 'status' => $state['status'], 'lastSeen' => $state['lastSeen']);
                 $n++;
             }

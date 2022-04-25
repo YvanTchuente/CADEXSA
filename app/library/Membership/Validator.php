@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Application\Validation;
+namespace Application\Membership;
 
 use Application\MiddleWare\Stream;
 use Psr\Http\Message\RequestInterface;

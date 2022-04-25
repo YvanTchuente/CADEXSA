@@ -59,7 +59,7 @@ footer {
 
 h1 {
   @extend %heading;
-  $font: Inter-semibold, sans-serif;
+  $font: Inter-bold, sans-serif;
   @include font($font, $h1-font-size);
 
   @include max-responsify($device-mobile) {
@@ -69,25 +69,25 @@ h1 {
 
 h2 {
   @extend %heading;
-  $font: Inter-semibold, sans-serif;
+  $font: Inter-bold, sans-serif;
   @include font($font, $h2-font-size);
 }
 
 h3 {
   @extend %heading;
-  $font: Inter-semibold, sans-serif;
+  $font: Inter-bold, sans-serif;
   @include font($font, $h3-font-size);
 }
 
 h4 {
   @extend %heading;
-  $font: Inter-medium, sans-serif;
+  $font: Inter-semiBold, sans-serif;
   @include font($font, $h4-font-size);
 }
 
 h5 {
   @extend %heading;
-  $font: Inter-medium, sans-serif;
+  $font: Inter-semiBold, sans-serif;
   @include font($font, $h5-font-size);
 
   @include max-responsify($device-extra-small) {
@@ -97,7 +97,7 @@ h5 {
 
 h6 {
   @extend %heading;
-  $font: Inter-medium, sans-serif;
+  $font: Inter-semiBold, sans-serif;
   @include font($font, $h6-font-size);
 
   @include max-responsify($device-extra-small) {
@@ -109,6 +109,7 @@ p {
   margin: 0;
   padding: 0;
   font-size: 1rem;
+  line-height: 1.8rem;
 }
 
 a {

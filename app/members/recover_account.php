@@ -7,13 +7,14 @@ use Application\MiddleWare\{
 	ServerRequest
 };
 use Application\Security\Securer;
+use Application\Database\Connection;
+use Application\Membership\MemberManager;
 
-if ($member->is_logged_in()) {
+if (MemberManager::Instance()->is_logged_in()) {
 	header('Location: profile.php');
 }
 
-$incoming = new ServerRequest();
-$incoming->initialize();
+$incoming = (new ServerRequest())->initialize();
 $outgoing = new Request();
 $param = $incoming->getParsedBody();
 
@@ -21,8 +22,8 @@ $step = 1;
 if (!empty($param)) {
 	if (isset($param['username'])) {
 		$username = $param['username'];
-		if ($member->check_user_exist($username)) {
-			$res = $conn->getConnection()->query("SELECT ID FROM members WHERE username = '" . $username . "'");
+		if (MemberManager::Instance()->check_member_exist($username)) {
+			$res = Connection::Instance()->getConnection()->query("SELECT ID FROM members WHERE username = '" . $username . "'");
 			$memberID = $res->fetch(\PDO::FETCH_ASSOC)['ID'];
 			$step = 2;
 		} else {
@@ -32,7 +33,7 @@ if (!empty($param)) {
 	if (isset($param['email']) && isset($param['memberID']) && isset($param['username'])) {
 		extract($param);
 		$key = sha1($username . $memberID . '2Y@#&$');
-		$link = "http://localhost/members/recover_account.php?id=" . $memberID . "&key=" . $key;
+		$link = "http://localhost/members/recover?id=" . $memberID . "&key=" . $key;
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$tomail = $email;
 			$from = "From: team@cadexsa.org" . "\r\n";
@@ -50,7 +51,7 @@ if (!empty($param)) {
 	}
 	if (isset($param['id']) && isset($param['key'])) {
 		extract($param);
-		$username = $member->getInfo($id)['username'];
+		$username = MemberManager::Instance()->getMember($id)->getUserName();
 		if ($key == sha1($username . $id . '2Y@#&$')) {
 			$step = 3;
 		}
@@ -59,9 +60,9 @@ if (!empty($param)) {
 		extract($param);
 		if (ctype_alnum($password) && strlen($password) >= 8) {
 			$encryption = (new Securer())->encrypt($password);
-			$stmt = $conn->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = '$id'");
+			$stmt = Connection::Instance()->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = '$id'");
 			if ($stmt->execute([$encryption['cipher'], $encryption['key'], $encryption['iv']])) {
-				header('Location: login.php');
+				header('Location: login');
 			}
 		} else {
 			$step = 3;
@@ -77,7 +78,7 @@ if (!empty($param)) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Recover your password and sign in back">
-	<title>CADEXSA - Account Recovery</title>
+	<title>Account Recovery - CADEXSA</title>
 	<?php require_once dirname(__DIR__) . "/includes/head_tag_includes.php"; ?>
 </head>
 
@@ -91,7 +92,7 @@ if (!empty($param)) {
 	<div class="page-content">
 		<div class="ws-container">
 			<div class="password-recovery-form-wrapper">
-				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="post">
+				<form action="recover" method="post">
 					<div class="form-header">
 						<h2>Account Recovery</h2>
 					</div>
@@ -128,7 +129,7 @@ if (!empty($param)) {
 								<div><i class="fas fa-user"></i><input type="text" id="username" name="username" placeholder="Enter your username" required /></div>
 							</div>
 							<button type="submit" class="form-btn">Continue</button>
-							<p class="form-footer">Remember your password? <a href="login.php">Sign in</a></p>
+							<p class="form-footer">Remember your password? <a href="login">Sign in</a></p>
 					<?php
 							break;
 					endswitch;

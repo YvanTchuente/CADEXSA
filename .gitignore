@@ -1,13 +1,12 @@
 # Static files
-cadexsa_db.sql
-*.ps1
-*.sh
 *.env
+cadexsa_db_with_data.sql
 
 # Directories
-app/logs/*
-app/static/database/data/*
-app/members/profile_pictures/*
-vendor/*
+scripts/*
 .vscode/*
 node_modules/*
+vendor/*
+app/logs/*
+app/static/database/tmp/*
+app/static/images/profile_pictures/*

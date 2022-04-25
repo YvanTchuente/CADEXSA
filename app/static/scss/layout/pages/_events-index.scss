@@ -61,21 +61,17 @@
   }
 }
 
-.timer {
+.countdown {
   margin-bottom: 1rem;
 
   > div {
     display: inline-block;
-    vertical-align: bottom;
 
     &:not(:first-child) {
       margin-left: -5px;
     }
 
-    &.timer_day,
-    &.timer_hour,
-    &.timer_minute,
-    &.timer_second {
+    &.timer {
       margin-right: 1em;
       position: relative;
 
@@ -100,9 +96,11 @@
       }
 
       span:last-of-type {
-        padding: 10px 12px;
+        width: 3rem;
+        display: block;
         color: white;
         line-height: 1;
+        padding: 10px 0px;
         text-align: center;
         position: relative;
         border-radius: 3px;

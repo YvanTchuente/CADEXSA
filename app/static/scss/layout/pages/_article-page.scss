@@ -10,7 +10,14 @@
 }
 
 .article-content-header {
-  margin-bottom: 1.3em;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid lightgray;
+
+  h2 {
+    font-family: RedHat-bold;
+    font-size: calc(1.5rem + 0.3vw);
+  }
 
   h3 {
     margin-bottom: 0.5em;
@@ -18,6 +25,16 @@
 
   h6 {
     margin: 0;
+    font-family: roboto-medium;
+
+    div {
+      margin-top: 0.7rem;
+
+      @include min-responsify($device-extra-large) {
+        margin: 0;
+        float: right;
+      }
+    }
 
     span {
       &:not(:last-child) {
@@ -27,10 +44,22 @@
       i {
         margin-right: 10px;
       }
+
+      &.label {
+        font-size: 0.8rem;
+        background: lightgray;
+        padding: 5px 10px;
+        border-radius: 5px;
+
+        @include min-responsify($device-large) {
+          margin-left: 0.5rem;
+        }
+      }
     }
 
     img {
       width: 30px;
+      height: 30px;
       border-radius: 50%;
       margin-right: 10px;
     }
@@ -42,7 +71,7 @@
 
   .article-thumb {
     height: 50vh;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
 
     @include max-responsify($device-mobile) {
       height: auto;
@@ -57,14 +86,15 @@
 
   p {
     margin-bottom: 1em;
+    text-align: justify;
   }
 }
 
-#aside_wrap {
-  section.aside_box {
+#news-article-aside {
+  section {
     padding: 30px 45px;
-    border-radius: 10px;
-    box-shadow: 0 0 ($shadow-blur-width + 10) rgba(0, 0, 0, 15%);
+    border-radius: 5px;
+    background-color: $color-control-border;
 
     &:not(:last-child) {
       margin-bottom: 2rem;
@@ -77,15 +107,11 @@
 
     ul li {
       padding: 10px 0px;
-      border-bottom: 1px solid $shadow-color;
+      border-bottom: 1px solid gray;
 
       &:last-child {
         border: none;
       }
-    }
-
-    a {
-      color: black;
     }
 
     form#search_articles {

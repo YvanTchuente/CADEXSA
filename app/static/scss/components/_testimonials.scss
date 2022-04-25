@@ -3,15 +3,14 @@
  * Related styles
  */
 
+@use "../abstracts" as *;
+
 #testimonials {
   z-index: 1;
   color: white;
   position: relative;
   padding: 50px 0px 70px 0px;
-  background-image: linear-gradient(rgb(0, 0, 0, 0.6), rgb(0, 0, 0, 0.6)),
-    url("/static/images/gallery/img9.jpg");
-  background-position: 0% 70%;
-  background-size: cover;
+  background-color: $color-theme1;
 
   h2 {
     color: inherit;

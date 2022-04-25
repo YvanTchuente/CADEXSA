@@ -10,23 +10,28 @@ use Application\Database\{
     ConnectionAware
 };
 use Application\Authentication\Authenticator;
-use Application\MiddleWare\{Stream, Textstream, Response};
+use Application\MiddleWare\{Textstream, Response};
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
+use Application\Security\{Decrypter, Encrypter, Securer, SecurerAware, SecurerAwareTrait};
 
-class Member implements Authenticator, ConnectionAware
+class Member implements Authenticator, ConnectionAware, SecurerAware
 {
     protected string $dbtable = 'members'; // Members' database table
     protected array $sessionData; // Stores logged-in member's data
 
-    public function __construct(Connector $connector)
+    public function __construct(Connector $connector, Encrypter $encrypter = new Securer(), Decrypter $decrypter = new Securer())
     {
         $this->setConnector($connector);
         $this->sessionData = $_SESSION;
+        $this->encrypter = $encrypter;
+        $this->decrypter = $decrypter;
     }
 
     use ConnectionTrait;
 
-    public function Authenticate(RequestInterface $request): ResponseInterface
+    use SecurerAwareTrait;
+
+    public function Authenticate(RequestInterface $request, Decrypter $decrypter = null): ResponseInterface
     {
         $code = 401;
         $body = new TextStream('Authentication credentials incorrect');
@@ -35,13 +40,19 @@ class Member implements Authenticator, ConnectionAware
         $response = new Response();
         $username = $params->username ?? false;
         if ($username) {
-            $sql = 'SELECT * FROM ' . $this->table . ' WHERE username = ?';
+            $sql = 'SELECT * FROM ' . $this->dbtable . ' WHERE username = ?';
             $stmt = $this->connector->getConnection()->prepare($sql);
             $stmt->execute([$username]);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             if ($row) {
-                if (password_verify($params->password, $row['password'])) {
+                if (!isset($decrypter)) {
+                    throw new \RuntimeException("Authenticatiion process needs to decrypt some data");
+                }
+                $db_password = $decrypter->decrypt($row['password'], $row['password_key'], $row['iv']);
+                if ($params->password === $db_password) {
                     unset($row['password']);
+                    unset($row['password_key']);
+                    unset($row['iv']);
                     $body = new TextStream(json_encode($row));
                     $response = $response->withBody($body);
                     $code = 200;
@@ -87,7 +98,7 @@ class Member implements Authenticator, ConnectionAware
      **/
     public function login(RequestInterface $request)
     {
-        $response = $this->Authenticate($request); // Authenticates the user 
+        $response = $this->Authenticate($request, $this->decrypter); // Authenticates the user 
         if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             $userInfo = json_decode($response->getBody()->getContents());  // Stores the member in an object
             // Checks online members records 
@@ -133,39 +144,6 @@ class Member implements Authenticator, ConnectionAware
         }
     }
 
-    public function validate(RequestInterface $request)
-    {
-        $userInfo = [];
-        $params = json_decode($request->getBody()->getContents());
-        $iterator = new \ArrayIterator($params);
-        foreach ($iterator as $key => $value) {
-            $userInfo[$key] = $value;
-        }
-        if (filter_var($userInfo['email'], FILTER_VALIDATE_EMAIL)) {
-            if ($this->validateCountry($userInfo['country'])) {
-                if ($this->validatePassword($userInfo['password'])) {
-                    if ($userInfo['password'] == $userInfo['confirm-password']) {
-                        foreach ($userInfo as $key => $value) {
-                            if ($key == "confirm-password"  || $value == "") {
-                                continue;
-                            }
-                            $userInfo1[$key] = $value;
-                        }
-                        return $userInfo1;
-                    } else {
-                        return "Passwords mismatch";
-                    }
-                } else {
-                    return "Invalid password";
-                }
-            } else {
-                return "Invalid country";
-            }
-        } else {
-            return "Invalid email address";
-        }
-    }
-
     /**
      * Creates a new member account for a visitor
      * 
@@ -176,16 +154,23 @@ class Member implements Authenticator, ConnectionAware
     public function signup(array $userInfo)
     {
         if (!$this->check_user_exist($userInfo['username'])) {
-            $data = [];
-            $password = $userInfo['password'];
+            $encryption = $this->encrypter->encrypt($userInfo['password']);
             foreach ($userInfo as $key => $value) {
                 if ($key == 'password') {
-                    $value = password_hash($userInfo['password'], PASSWORD_DEFAULT);
+                    $data[$key] = $encryption['cipher'];
+                    $data['password_key'] = $encryption['key'];
+                    $data['iv'] = $encryption['iv'];
+                    continue;
                 }
-                $data[] = $value;
+                $data[$key] = $value;
             }
-            $fields = ['firstname', 'lastname', 'username', 'email', 'contact', 'password', 'batch_year', 'orientation', 'city', 'country', 'aboutme'];
-            $sql = "INSERT INTO `" . $this->table . "` (`" . implode("`,`", $fields) . "`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+
+            $fields = ['firstname', 'lastname', 'username', 'email', 'contact', 'password', 'password_key', 'iv', 'batch_year', 'orientation', 'city', 'country', 'aboutme'];
+            foreach ($fields as $value) {
+                $placeholders[] = ":$value";
+            }
+
+            $sql = "INSERT INTO `" . $this->dbtable . "` (`" . implode("`,`", $fields) . "`) VALUES (" . implode(",", $placeholders) . ")";
             $stmt = $this->connector->getConnection()->prepare($sql);
 
             if ($stmt->execute($data)) {
@@ -219,7 +204,7 @@ class Member implements Authenticator, ConnectionAware
         $res = $res->fetchAll(\PDO::FETCH_ASSOC);
         foreach ($res as $row) {
             foreach ($row as $key => $value) {
-                if ($key == "password") {
+                if ($key == 'password' || $key == 'password_key' || $key == 'iv') {
                     continue;
                 }
                 $userInfo[$key] = $value;
@@ -329,31 +314,5 @@ class Member implements Authenticator, ConnectionAware
             $status = "Online";
         }
         return $status;
-    }
-
-    protected function validatePassword(string $password): bool
-    {
-        $validity = false;
-        if (strlen($password) >= 8) {
-            $validity = true;
-        }
-        return $validity;
-    }
-
-    protected function validateCountry(string $country): bool
-    {
-        $validity = false;
-        $stream = new Stream(dirname(__DIR__, 2) . '/static/database/valid_countries.json');
-        $valid_countries = json_decode($stream->getContents());
-        $iterator = new \ArrayIterator($valid_countries);
-        foreach ($iterator as $key) {
-            foreach ($key as $value) {
-                if ($value == $country) {
-                    $validity = true;
-                    break;
-                }
-            }
-        }
-        return $validity;
     }
 }

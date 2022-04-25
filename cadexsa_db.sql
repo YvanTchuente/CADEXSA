@@ -33,6 +33,8 @@ CREATE TABLE `members` (
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `password_key` varchar(255) NOT NULL,
+  `iv` varchar(255) NOT NULL COMMENT 'Initialization Vector',
   `contact` int(11) NOT NULL,
   `country` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,

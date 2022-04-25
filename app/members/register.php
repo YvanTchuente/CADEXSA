@@ -8,6 +8,7 @@ use Application\MiddleWare\{
 	TextStream,
 	ServerRequest
 };
+use Application\Validation\Validator;
 
 if ($member->is_logged_in()) {
 	header("Location: /members/login.php");
@@ -19,7 +20,7 @@ $outgoing = new Request();
 
 if ($incoming->getMethod() == Constants::METHOD_POST) {
 	$body = new TextStream(json_encode($incoming->getParsedBody()));
-	$response = $member->validate($outgoing->withBody($body));
+	$response = Validator::validateRegistration($outgoing->withBody($body));
 	if (is_array($response)) {
 		$response = $member->signup($response);
 		if ($response === true) {

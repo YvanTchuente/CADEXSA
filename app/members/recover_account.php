@@ -6,6 +6,7 @@ use Application\MiddleWare\{
 	Request,
 	ServerRequest
 };
+use Application\Security\Securer;
 
 if ($member->is_logged_in()) {
 	header('Location: profile.php');
@@ -56,10 +57,10 @@ if (!empty($param)) {
 	}
 	if (isset($param['password']) && isset($param['id'])) {
 		extract($param);
-		if (strlen($password) >= 8) {
-			$password = password_hash($password, PASSWORD_DEFAULT);
-			$stmt = $conn->getConnection()->prepare('UPDATE members SET password = ? WHERE ID = ?');
-			if ($stmt->execute([$password, $id])) {
+		if (ctype_alnum($password) && strlen($password) >= 8) {
+			$encryption = (new Securer())->encrypt($password);
+			$stmt = $conn->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = '$id'");
+			if ($stmt->execute([$encryption['cipher'], $encryption['key'], $encryption['iv']])) {
 				header('Location: login.php');
 			}
 		} else {

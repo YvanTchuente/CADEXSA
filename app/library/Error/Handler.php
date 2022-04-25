@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Classes\Error;
+namespace Application\Error;
 
 /**
  * Application Exception and Error handler

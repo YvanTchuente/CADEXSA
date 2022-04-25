@@ -5,40 +5,40 @@
 @use "../../abstracts" as *;
 
 #aboutus_page {
-    .page-content {
-        margin: 0 0 3.125rem;
-    }
+  .page-content {
+    margin: 0 0 3.125rem;
+  }
 }
 
 #intro {
-    text-align: center;
-    margin-bottom: 1em;
+  text-align: center;
+  margin-bottom: 1em;
 }
 
 #objectives {
-    h3 {
-        text-align: center;
-        margin-bottom: 1em;
-    }
+  h3 {
+    text-align: center;
+    margin-bottom: 1em;
+  }
 
+  ol {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 0.7em 2.5em;
+    list-style-type: decimal;
+
+    li {
+      display: block;
+    }
+  }
+
+  @include max-responsify($device-small) {
     ol {
-        display: grid;
-        grid-template-columns: repeat(auto-fit,minmax(400px,1fr));
-        gap: 0.7em 2.5em;
-        list-style-type: decimal;
-
-        li {
-            display: block;
-        }
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     }
-
-    @include max-responsify($device-small) {
-        ol {
-            grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
-        }
-    }
+  }
 }
 
 #aboutus_page #info_box {
-    background: $color-theme1;
+  background: $color-theme1;
 }

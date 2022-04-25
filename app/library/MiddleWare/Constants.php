@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes\MiddleWare;
+namespace Application\MiddleWare;
 
 abstract class Constants
 {

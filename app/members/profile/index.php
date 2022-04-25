@@ -1,8 +1,8 @@
 <?php
 // Membership profile page
-require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/config/index.php';
 
-use Classes\MiddleWare\{
+use Application\MiddleWare\{
 	Request,
 	ServerRequest,
 };
@@ -28,7 +28,7 @@ if (!isset($params['id']) || !$memberInfo) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>CADEXSA - Member Profile</title>
-	<?php require_once dirname(__DIR__) . "/includes/head_tag_includes.php"; ?>
+	<?php require_once dirname(__DIR__, 2) . "/includes/head_tag_includes.php"; ?>
 </head>
 
 <body id="profile-page">
@@ -37,7 +37,7 @@ if (!isset($params['id']) || !$memberInfo) {
 			<div class="spinner"></div>
 		</div>
 	</div>
-	<?php require_once dirname(__DIR__) . "/includes/header.php"; ?>
+	<?php require_once dirname(__DIR__, 2) . "/includes/header.php"; ?>
 	<div class="page-content">
 		<div class="ws-container">
 			<div id="profile-grid">
@@ -215,63 +215,50 @@ if (!isset($params['id']) || !$memberInfo) {
 			</div>
 		</div>
 	</div>
-	</div>
-	<?php require_once dirname(__DIR__) . "/includes/header.php"; ?>
-	<div class="page-content">
-		<div class="ws-container">
-			<div id="profile-grid">
-				<div>
-					<div class="profile-nav">
-						<div class="user-heading">
-							<a href="#" onclick="toggle_visibility('update_picture')"><img src="/static/images/graphics/profile-placeholder.png" alt="user" /></a>
-							<h5>Webmaster</h5>
-							<p>yvantchuente@gmail.com</p>
-						</div>
-						<nav>
-							<ul>
-								<li class="tablink"><span onclick="openTab(event,'profile-info')" id="tabBtn1"><i class="fas fa-user"></i>Profile</span></li>
-								<li class="tablink"><span onclick="openTab(event,'chats')" id="tabBtn2"><i class="fas fa-envelope"></i>Messages</span></li>
-								<li class="tablink"><span onclick="openTab(event,'activities')" id="tabBtn3"><i class="fas fa-calendar-alt"></i>Timeline</span></li>
-								<li class="tablink"><span onclick="openTab(event,'settings')" id="tabBtn4"><i class="fas fa-user-cog"></i>Account Settings</span></li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-				<!-- Preview thumbnail of picture -->
-				<div id="picture_preview"></div>
-				<div id="footer">
-					<form id="profile_picture"></form>
-					<input type="file" accept=".jpg, .jpeg, .png" id="input_picture" name="input_picture" form="profile_picture" />
-					<label for="input_picture">Select a picture</label>
-					<span id="input_text"></span>
-					<input type="hidden" name="userid" id="userid" value="<?= $memberInfo['ID']; ?>" form="profile_picture" />
-					<input type="hidden" name="username" value="<?= $memberInfo['username']; ?>" form="profile_picture" />
-					<button id="cancel_btn">Cancel</button>
-				</div>
+	<?php require_once dirname(__DIR__, 2) . "/includes/footer.php"; ?>
+	<!-- Upload profile picture -->
+	<div class="blur_background" id="b1">
+		<div id="update_picture">
+			<div id="head">
+				<h3>Change Profile Picture</h3>
+				<p>The picture will be scaled down and cropped</p>
+				<button id="upload_btn">Upload</button>
+			</div>
+			<!-- Preview thumbnail of picture -->
+			<div id="picture_preview"></div>
+			<div id="footer">
+				<form id="profile_picture"></form>
+				<input type="file" accept=".jpg, .jpeg, .png" id="input_picture" name="input_picture" form="profile_picture" />
+				<label for="input_picture">Select a picture</label>
+				<span id="input_text"></span>
+				<input type="hidden" name="userid" id="userid" value="<?= $memberInfo['ID']; ?>" form="profile_picture" />
+				<input type="hidden" name="username" value="<?= $memberInfo['username']; ?>" form="profile_picture" />
+				<button id="cancel_btn">Cancel</button>
 			</div>
 		</div>
-		<!-- End -->
-		<script>
-			<?php if (isset($_GET['tab'])) {
-				switch ($_GET['tab']) {
-					case "chats":
-						echo "document.getElementById(\"tabBtn2\").click();";
-						break;
-					case "activities":
-						echo "document.getElementById(\"tabBtn3\").click();";
-						break;
-					case "settings":
-						echo "document.getElementById(\"tabBtn4\").click();";
-						break;
-				}
-			?>
-			<?php } else { ?>
-				// Open default tab
-				document.getElementById("tabBtn1").click();
-			<?php } ?>
-			let users = document.querySelectorAll(".chatbox ul.list_users li.user");
-			users[0].click();
-		</script>
+	</div>
+	<!-- End -->
+	<script>
+		<?php if (isset($_GET['tab'])) {
+			switch ($_GET['tab']) {
+				case "chats":
+					echo "document.getElementById(\"tabBtn2\").click();";
+					break;
+				case "activities":
+					echo "document.getElementById(\"tabBtn3\").click();";
+					break;
+				case "settings":
+					echo "document.getElementById(\"tabBtn4\").click();";
+					break;
+			}
+		?>
+		<?php } else { ?>
+			// Open default tab
+			document.getElementById("tabBtn1").click();
+		<?php } ?>
+		let users = document.querySelectorAll(".chatbox ul.list_users li.user");
+		users[0].click();
+	</script>
 </body>
 
 </html>

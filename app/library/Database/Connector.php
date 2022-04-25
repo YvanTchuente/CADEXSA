@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Classes\Database;
+namespace Application\Database;
 
 /**
  * Represents an instance that interacts with a database server

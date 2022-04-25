@@ -1,141 +1,140 @@
 /*
  * Footer SCSS
  * Footer styles
- */ 
+ */
 
- @use "../abstracts/" as *;
+@use "../abstracts/" as *;
 
-footer 
-{
+footer {
+  color: white;
+  background-color: $color-footer;
+  padding: 80px 0px 0px 0px;
+
+  * {
+    position: relative;
+  }
+
+  h5 {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
     color: white;
-    background-color: $color-footer;
-    padding: 80px 0px 0px 0px;
 
-    * {
-        position: relative;
+    &::after {
+      content: "";
+      width: 60px;
+      position: absolute;
+      left: 0%;
+      bottom: 0%;
+      border-bottom: 5px solid $color-theme1;
+    }
+  }
+
+  p {
+    margin-bottom: 1.3em;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  a {
+    &::hover {
+      color: $color-theme1;
+    }
+  }
+
+  /* Footer newsletter section */
+  form {
+    margin-bottom: 1em;
+  }
+
+  #newsletter-input {
+    width: 100%;
+    color: inherit;
+    border: none;
+    border-radius: 0px;
+    background-color: rgb(20, 20, 20);
+  }
+
+  #newsletter-input + button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    padding: 0 10px;
+    border-radius: 0;
+    background-color: $color-theme1;
+
+    &:focus {
+      color: unset;
+      border: 2px solid $color-theme1;
+    }
+  }
+
+  #contact_info {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 50px;
+
+    span {
+      padding-right: 20px;
+
+      &:last-child {
+        padding: 0;
+      }
+
+      i {
+        padding-right: 10px;
+        color: $color-theme1;
+      }
+    }
+  }
+
+  /* Go to top button */
+  #gotop_btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    color: white;
+    cursor: pointer;
+    font-size: 2em;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    background: $color-theme1;
+    position: absolute;
+    right: 0;
+
+    @include max-responsify($device-mobile) {
+      top: 25%;
+      right: 2%;
     }
 
-    h5 {
-	    margin-bottom: 1em;
-	    padding-bottom: 1em;
-	    color: white;
-
-        &::after {
-            content: "";
-	        width: 60px;
-	        position: absolute;
-	        left: 0%;
-	        bottom: 0%;
-	        border-bottom: 5px solid $color-theme1;
-        }
+    @include max-responsify($device-medium) {
+      top: 37%;
     }
 
-    p {
-        margin-bottom: 1.3em;
+    @include min-responsify($device-semi-large) {
+      top: -63%;
+      background: $color-footer;
     }
 
-    li {
-        margin-bottom: 10px;
+    @include min-responsify($device-extra-large) {
+      top: -63%;
+      right: -60px;
+      background: $color-footer;
     }
 
-    a {
-        &::hover {
-            color: $color-theme1;
-        }
+    @include range-responsify($device-mobile, $device-small) {
+      right: 2%;
     }
+  }
 
-    /* Footer newsletter section */
-    form {
-        margin-bottom: 1em;
-    }
-
-    #newsletter-input {
-        width: 100%;
-        color: inherit;
-        border: none;
-        border-radius: 0px;
-        background-color: rgb(20,20,20);
-    }
-
-    #newsletter-input + button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        padding: 0 10px;
-        border-radius: 0;
-        background-color: $color-theme1;
-
-        &:focus {
-            color: unset;
-            border: 2px solid $color-theme1;
-        }
-    }
-
-    #contact_info {
-        text-align: center;
-        font-weight: 500;
-        margin-top: 50px;
-
-        span {
-            padding-right: 20px;
-
-            &:last-child {
-                padding: 0;
-            }
-
-            i {
-                padding-right: 10px;
-                color: $color-theme1;
-            }
-        }
-    }
-
-    /* Go to top button */
-    #gotop_btn {
-        width: 50px;
-        height: 50px;
-        display: flex;
-        color: white;
-        cursor: pointer;
-        font-size: 2em;
-        border-radius: 5px;
-        align-items: center;
-        justify-content: center;
-        background: $color-theme1;
-        position: absolute;
-        right: 0;
-
-        @include max-responsify($device-mobile) {
-            top: 25%;
-            right: 2%;
-        }
-
-        @include max-responsify($device-medium) {
-            top: 37%;
-        }
-
-        @include min-responsify($device-semi-large) {
-            top: -63%;
-            background: $color-footer;
-        }
-
-        @include min-responsify($device-extra-large) {
-            top: -63%;
-            right: -60px;
-            background: $color-footer;
-        }
-
-        @include range-responsify($device-mobile, $device-small) {
-            right: 2%;
-        }
-    }
-
-    #copyright {
-        color: white;
-        font-weight: 500;
-        padding: 10px 0px 10px 0px;
-        background-color: $color-theme1;
-        text-align: center;
-    }
+  #copyright {
+    color: white;
+    font-weight: 500;
+    padding: 10px 0px 10px 0px;
+    background-color: $color-theme1;
+    text-align: center;
+  }
 }

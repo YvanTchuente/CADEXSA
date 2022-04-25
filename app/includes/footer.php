@@ -5,13 +5,13 @@
             <div>
                 <h5>Stay in touch</h5>
                 <p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
-                <form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email"/><button type="submit"><span class="far fa-paper-plane"></span></button></form>
+                <form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email" /><button type="submit"><span class="far fa-paper-plane"></span></button></form>
                 <a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
                 <a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
             </div>
             <div>
                 <h5>Recent News</h5>
-                    <ul class="list-unstyled">
+                <ul class="list-unstyled">
                     <li><a href="#">News from the ex-students</a></li>
                     <li><a href="#">News from the Alma Mater</a></li>
                     <li><a href="/events/">Upcoming events</a></li>
@@ -28,12 +28,12 @@
                 </ul>
             </div>
             <div>
-            <h5>Networking</h5>
-            <ul class="list-unstyled">
-                <li><a href="#">Ex-students Directory</a></li>
-                <li><a href="#">Ambassadors</a></li>
-                <li><a href="#">Testimonials</a></li>
-            </ul>
+                <h5>Networking</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Ex-students Directory</a></li>
+                    <li><a href="#">Ambassadors</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                </ul>
             </div>
             <div>
                 <h5>About Us</h5>
@@ -56,6 +56,8 @@
         </div>
     </div>
     <div id="copyright">
-        <div class="ws-container"><div>&copy; Copyrights 2020-<?php echo date("Y"); ?>. Cadenelle Ex-Students Association.</div></div>
+        <div class="ws-container">
+            <div>&copy; Copyrights 2020-<?= date("Y"); ?>. Cadenelle Ex-Students Association.</div>
+        </div>
     </div>
 </footer>

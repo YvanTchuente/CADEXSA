@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/index.php';
 
-use Classes\MiddleWare\{
+use Application\MiddleWare\{
 	Request,
 	ServerRequest
 };

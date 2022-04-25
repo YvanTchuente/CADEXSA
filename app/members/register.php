@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/index.php';
 
-use Classes\MiddleWare\{
+use Application\MiddleWare\{
 	Request,
 	Constants,
 	TextStream,
@@ -49,7 +49,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 	<div class="page-content">
 		<div class="ws-container">
 			<div id="register-grid">
-				<form action="register.php" method="post" id="register-form" class="sign_up">
+				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="register-form" class="sign_up">
 					<div class="form-grouping form-header">
 						<h1>Sign up</h1>
 					</div>
@@ -72,8 +72,8 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<input type="email" id="email" name="email" required />
 					</div>
 					<div class="form-grouping">
-						<label for="phone">Phone number</label>
-						<input type="number" id="phoneNumber" name="phoneNumber" required />
+						<label for="phoneNumber">Phone number</label>
+						<input type="number" id="phoneNumber" name="contact" required />
 					</div>
 					<div class="form-grouping">
 						<label for="password">Password</label>
@@ -99,7 +99,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 										<li>2017</li>
 										<li>2016</li>
 									</ul>
-									<select id="select-year" name="year" required>
+									<select id="select-year" name="batch_year" required>
 										<option value="" selected>Batch Year</option>
 										<option value="2022">2022</option>
 										<option value="2021">2021</option>
@@ -119,7 +119,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 										<li>Science</li>
 										<li>Arts</li>
 									</ul>
-									<select id="select-orientation" name="Orientation" required>
+									<select id="select-orientation" name="orientation" required>
 										<option value="" selected>Orientation</option>
 										<option value="Science">Science</option>
 										<option value="Arts">Arts</option>
@@ -140,7 +140,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<label for="aboutme">Let other ex-students know what you are up to</label>
 						<textarea id="aboutme" name="aboutme" required /></textarea>
 					</div>
-					<button type="submit" name="register" class="form-btn">Create account</button>
+					<button type="submit" class="form-btn">Create account</button>
 					<p class="form-footer">Already have an account? <a href="login.php">Sign in</a></p>
 				</form>
 				<div id="form-thumbnail">

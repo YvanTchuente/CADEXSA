@@ -2,86 +2,86 @@
  * Gallery Page Styles
  */
 
- @use "../../abstracts/" as *;
+@use "../../abstracts/" as *;
 
- .gallery-wrapper {
-    display: grid;
-    grid-template-rows: span 12;
-    grid-template-rows: repeat(3, 350px);
-    grid-auto-flow: dense;
-    gap: 0.7em;
+.gallery-wrapper {
+  display: grid;
+  grid-template-rows: span 12;
+  grid-template-rows: repeat(3, 350px);
+  grid-auto-flow: dense;
+  gap: 0.7em;
 
-    @include min-responsify($device-mobile) {
-        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+  @include min-responsify($device-mobile) {
+    grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+  }
+
+  @include min-responsify($device-medium) {
+    grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+  }
+
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    @include min-responsify($device-medium) {
-        grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+    .gallery-hvr-wrap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      color: white;
+      padding: 25px;
+      align-items: flex-end;
+      display: flex;
+      background-color: black;
+      cursor: pointer;
+      opacity: 0;
     }
 
-    .gallery-item {
-        position: relative;
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .gallery-hvr-wrap {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0px;
-            left:0px;
-            color: white;
-            padding: 25px;
-            align-items: flex-end;
-            display: flex;
-            background-color: black;
-            cursor: pointer;
-            opacity: 0;
-        }
-
-        &:hover .gallery-hvr-wrap {
-            opacity: 0.9;
-	        visibility: visible;
-        }
-
-        .gallery-hvr-desc {
-            transition: all 0.5s ease-in-out;
-
-            h6 {
-                margin-bottom: 0.2em;
-            }
-
-            p {
-                font-size: 0.8rem;
-            }
-        }
-
-        .btn-zoom {
-            width: 80px;
-            height:80px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            color: white;
-            display: block;
-            margin: auto;
-
-            &:hover {
-                color: white;
-            }
-
-            img {
-                max-width: 100%;
-                margin: -20px auto 0 auto;
-                display: block;
-            }
-        }
+    &:hover .gallery-hvr-wrap {
+      opacity: 0.9;
+      visibility: visible;
     }
+
+    .gallery-hvr-desc {
+      transition: all 0.5s ease-in-out;
+
+      h6 {
+        margin-bottom: 0.2em;
+      }
+
+      p {
+        font-size: 0.8rem;
+      }
+    }
+
+    .btn-zoom {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: white;
+      display: block;
+      margin: auto;
+
+      &:hover {
+        color: white;
+      }
+
+      img {
+        max-width: 100%;
+        margin: -20px auto 0 auto;
+        display: block;
+      }
+    }
+  }
 }

@@ -1,5 +1,13 @@
+# Static files
+cadexsa_db.sql
+*.ps1
+*.sh
+*.env
+
 # Directories
 app/logs/*
+app/static/database/data/*
+app/members/profile_pictures/*
 vendor/*
 .vscode/*
 node_modules/*

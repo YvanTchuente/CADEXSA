@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Classes\Database;
+namespace Application\Database;
 
 trait ConnectionTrait
 {

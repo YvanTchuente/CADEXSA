@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Classes\Membership;
+namespace Application\Membership;
 
-use Classes\Database\{
+use Application\Database\{
     Connector,
     ConnectionTrait,
     ConnectionAware
 };
-use Classes\Authentication\Authenticator;
-use Classes\MiddleWare\{Stream, Textstream, Response};
+use Application\Authentication\Authenticator;
+use Application\MiddleWare\{Stream, Textstream, Response};
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
 
 class Member implements Authenticator, ConnectionAware

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Classes\Autoload;
+namespace Application\Autoload;
 
 /**
  * Class Autoloader
@@ -43,6 +43,7 @@ class Loader
      */
     public static function autoLoad($class)
     {
+        $class = preg_replace('/Application\\\/', 'library\\', $class);
         $filename = preg_replace('/\\\/', self::DIRECTORY_SEPARATOR, $class) . '.php';
         foreach (self::$dirs as $dir) {
             $filename = $dir . self::DIRECTORY_SEPARATOR . $filename;

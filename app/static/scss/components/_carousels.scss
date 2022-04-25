@@ -1,78 +1,80 @@
 @use "../abstracts" as *;
 
 .carousel {
+  position: relative;
+  overflow: hidden;
+
+  .carousel-item {
+    width: 100%;
+    display: none;
+    float: left;
+    margin-right: -100%;
     position: relative;
-    overflow: hidden;
+    backface-visibility: hidden;
+  }
 
-    .carousel-item {
-        width: 100%;
-        display: none;
-        float: left;
-        margin-right: -100%;
-        position: relative;
-        backface-visibility: hidden;
-    }
-
-    + .carousel-nav {
-        .prev, .next {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 10%;
-            height: 100%;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: transparent;
-
-            @include max-responsify($device-mobile) {
-                align-items: flex-end;
-            }
-    
-            &:hover, &:focus {
-                color: white;
-                border: none;
-                box-shadow: unset;
-            }
-
-            i {
-                font-size: 3em;
-            }
-        }
-    
-        .prev {
-            left: 0;
-        }
-        
-        .next {
-            right: 0;
-        }
-    }
-
-    .active {
-        display: block !important;
-    }
-
-    .f_active {
-        display: flex !important;
-    }
-
-    // Next and Previous classes for next button
+  + .carousel-nav {
+    .prev,
     .next {
-        @include animation(slide_right_center,0.5);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 10%;
+      height: 100%;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+
+      @include max-responsify($device-mobile) {
+        align-items: flex-end;
+      }
+
+      &:hover,
+      &:focus {
+        color: white;
+        border: none;
+        box-shadow: unset;
+      }
+
+      i {
+        font-size: 3em;
+      }
     }
 
-    .previous {
-        @include animation(slide_center_left,0.5);
+    .prev {
+      left: 0;
     }
 
-    // Next and Previous classes for previous button
-    .next-prev {
-        @include animation(slide_left_center,0.5);
+    .next {
+      right: 0;
     }
+  }
 
-    .previous-next {
-        @include animation(slide_center_right,0.5);
-    }
+  .active {
+    display: block !important;
+  }
+
+  .f_active {
+    display: flex !important;
+  }
+
+  // Next and Previous classes for next button
+  .next {
+    @include animation(slide_right_center, 0.5);
+  }
+
+  .previous {
+    @include animation(slide_center_left, 0.5);
+  }
+
+  // Next and Previous classes for previous button
+  .next-prev {
+    @include animation(slide_left_center, 0.5);
+  }
+
+  .previous-next {
+    @include animation(slide_center_right, 0.5);
+  }
 }

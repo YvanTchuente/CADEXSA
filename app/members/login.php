@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/index.php';
 
-use Classes\MiddleWare\{
+use Application\MiddleWare\{
 	Request,
 	Constants,
 	TextStream,
@@ -10,8 +10,9 @@ use Classes\MiddleWare\{
 };
 
 if ($member->is_logged_in()) {
-	$member->logout();
-	$response = "You are logged out";
+	if ($member->logout()) {
+		$response = "You are logged out";
+	}
 }
 
 $incoming = new ServerRequest();
@@ -22,7 +23,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 	$body = new TextStream(json_encode($incoming->getParsedBody()));
 	$response = $member->login($outgoing->withBody($body));
 	if ($response === true) {
-		header('Location: profile.php?id=' . $_SESSION['id']);
+		header('Location: profile/?id=' . $_SESSION['id']);
 	}
 }
 ?>
@@ -53,7 +54,7 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<p>To keep connected with us please login with your personal informations and keep showing love for our alma mater</p>
 					</div>
 				</div>
-				<form action="login.php" method="post" id="login-form">
+				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="login-form">
 					<div class="form-header">
 						<h2>Sign in</h2>
 					</div>
@@ -67,7 +68,8 @@ if ($incoming->getMethod() == Constants::METHOD_POST) {
 						<div><i class="fas fa-lock"></i><input type="password" id="password" name="password" placeholder="Type your password" required /><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
 					</div>
 					<a href="recover_account.php" id="forgot-pass">Forgot Password ?</a>
-					<button name="login" type="submit" class="form-btn">Sign in</button>
+					<button type="submit" class="form-btn" onclick='() => {
+						const pwd = document.getElementById(" password"); const type=pwd.getAttribute("type"); if (type=="text" ) { pwd.setAttribute("type", "password" ); } }'>Sign in</button>
 					<p class="form-footer">Not yet a member? <a href="register.php">Sign up</a></p>
 				</form>
 			</div>

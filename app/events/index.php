@@ -1,3 +1,4 @@
+<?php require_once dirname(__DIR__) . '/config/index.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 

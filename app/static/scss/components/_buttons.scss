@@ -3,61 +3,71 @@
  * Styles relative to buttons
  */
 
- @use "../abstracts" as *;
+@use "../abstracts" as *;
 
-@mixin button($border-enable:1, $font: Roboto-medium, $back-color: $color-theme1, $border-radius: 5px, $hover: $color-button-hover) {
-	color: white;
-    display: inline-block;
-	font-family: $font;
-	font-size: 1rem;
-    position: relative;
-	border-radius: $border-radius;
-	padding: 0.5rem 1.5rem;
-    @if ($border-enable == 1)
-	{border: 2px solid transparent;}
-    @else {border:none;}
-	background: $back-color;
+@mixin button(
+  $border-enable: 1,
+  $font: Roboto-medium,
+  $back-color: $color-theme1,
+  $border-radius: 5px,
+  $hover: $color-button-hover
+) {
+  color: white;
+  display: inline-block;
+  font-family: $font;
+  font-size: 1rem;
+  position: relative;
+  border-radius: $border-radius;
+  padding: 0.5rem 1.5rem;
+  @if ($border-enable == 1) {
+    border: 2px solid transparent;
+  } @else {
+    border: none;
+  }
+  background: $back-color;
 
-    &:hover {
-        color: white;
-        background: $hover;
+  &:hover {
+    color: white;
+    background: $hover;
+  }
+
+  &:focus {
+    color: $hover;
+    background: white;
+    @if ($border-enable == 1) {
+      border: 2px solid $color-button-hover;
+    } @else {
+      border: none;
     }
-    
-    &:focus {
-        color: $hover;
-        background: white;
-        @if ($border-enable == 1)
-        {border: 2px solid $color-button-hover;}
-        @else
-        {border:none;}
-    }
+  }
 }
 
-button, .button, [role="button"] {
-    @include button();
+button,
+.button,
+[role="button"] {
+  @include button();
 }
 
 .header-btn {
-    $hover: rgb(14,181,159);
-    @include button(0, roboto, transparent, 50px, $hover);
-    padding: 0.4em 1.5em 0.3em 1.5em;
+  $hover: rgb(14, 181, 159);
+  @include button(0, roboto, transparent, 50px, $hover);
+  padding: 0.4em 1.5em 0.3em 1.5em;
 }
 
 %social-btn {
-    width: 35px;
-    height: 35px;
-    padding: 0 !important;
-    font-size: 1.6rem !important;
-    text-align: center;
+  width: 35px;
+  height: 35px;
+  padding: 0 !important;
+  font-size: 1.6rem !important;
+  text-align: center;
 }
 
 .btn-facebook {
-    @include button(0, roboto-medium, transparent, 5px, $facebook);
-    @extend %social-btn; 
+  @include button(0, roboto-medium, transparent, 5px, $facebook);
+  @extend %social-btn;
 }
 
 .btn-twitter {
-    @include button(0, roboto-medium, transparent, 5px, $twitter);
-    @extend %social-btn; 
+  @include button(0, roboto-medium, transparent, 5px, $twitter);
+  @extend %social-btn;
 }
-

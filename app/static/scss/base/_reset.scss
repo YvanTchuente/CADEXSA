@@ -5,119 +5,137 @@
 
 @use "../abstracts" as *;
 
- %html {
-    margin: 0;
-    padding: 0;
-    border: none;
+%html {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 html {
-    font-size: 100%;
-    box-sizing: border-box;
-    @extend %html;
+  font-size: 100%;
+  box-sizing: border-box;
+  @extend %html;
 }
 
-*, *::before, *::after {
-    box-sizing: inherit;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+*:disabled {
+  background-color: whitesmoke;
 }
 
 body {
-    @extend %html;
-    color: black;
-    line-height: 1.5;
-    background-color: white;
-    font: {
-        size: inherit;
-        family: $font-general-family;
-        style: normal;
-    }
+  @extend %html;
+  color: black;
+  line-height: 1.5;
+  background-color: white;
+  font: {
+    size: inherit;
+    family: $font-general-family;
+    style: normal;
+  }
 }
 
-header, nav, section, blockquote, footer {
-    @extend %html;
-    font-size: 100%;
+header,
+nav,
+section,
+blockquote,
+footer {
+  @extend %html;
+  font-size: 100%;
 }
 
 %heading {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-style: $headings-font-style;
-    font-weight: $headings-font-weight;
-    line-height: $headings-line-height;
-    color: inherit;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-style: $headings-font-style;
+  font-weight: $headings-font-weight;
+  line-height: $headings-line-height;
+  color: inherit;
 }
 
 h1 {
-    @extend %heading;
-    $font: Inter-semibold, sans-serif;
-    @include font($font, $h1-font-size);
- 
-    @include max-responsify($device-mobile) {
-        @include font($font, 2em);
-    }
+  @extend %heading;
+  $font: Inter-semibold, sans-serif;
+  @include font($font, $h1-font-size);
+
+  @include max-responsify($device-mobile) {
+    @include font($font, 2em);
+  }
 }
 
 h2 {
-    @extend %heading;
-    $font: Inter-semibold, sans-serif;
-    @include font($font, $h2-font-size);
+  @extend %heading;
+  $font: Inter-semibold, sans-serif;
+  @include font($font, $h2-font-size);
 }
 
 h3 {
-    @extend %heading;
-    $font: Inter-semibold, sans-serif;
-    @include font($font, $h3-font-size);
+  @extend %heading;
+  $font: Inter-semibold, sans-serif;
+  @include font($font, $h3-font-size);
 }
 
 h4 {
-    @extend %heading;
-    $font: Inter-medium, sans-serif;
-    @include font($font, $h4-font-size);
+  @extend %heading;
+  $font: Inter-medium, sans-serif;
+  @include font($font, $h4-font-size);
 }
 
 h5 {
-    @extend %heading;
-    $font: Inter-medium, sans-serif;
-    @include font($font, $h5-font-size);
+  @extend %heading;
+  $font: Inter-medium, sans-serif;
+  @include font($font, $h5-font-size);
 
-    @include max-responsify($device-extra-small) {
-        @include font($font, $h5-mobile-size);
-    }
+  @include max-responsify($device-extra-small) {
+    @include font($font, $h5-mobile-size);
+  }
 }
 
 h6 {
-    @extend %heading;
-    $font: Inter-medium, sans-serif;
-    @include font($font, $h6-font-size);
+  @extend %heading;
+  $font: Inter-medium, sans-serif;
+  @include font($font, $h6-font-size);
 
-    @include max-responsify($device-extra-small) {
-        @include font($font, $h6-mobile-size);
-    }
+  @include max-responsify($device-extra-small) {
+    @include font($font, $h6-mobile-size);
+  }
 }
 
 p {
-    margin: 0;
-    padding: 0;
-    font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
 }
 
 a {
-    @extend %html;
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
+  @extend %html;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-ol, ul, dd {
-    @extend %html;
-    list-style: none;
+ol,
+ul,
+dd {
+  @extend %html;
+  list-style: none;
 }
 
-img, svg, figure {
-    vertical-align: middle;
-}   
+img,
+svg,
+figure {
+  vertical-align: middle;
+}
 
-input, label, button, select, textarea {
+input,
+label,
+button,
+select,
+textarea {
   @extend %html;
   text-transform: none;
   font-family: inherit;
@@ -125,60 +143,68 @@ input, label, button, select, textarea {
   line-height: inherit;
 }
 
-textarea:focus-visible, input:focus-visible, button:focus-visible {
-    outline: none;
-    outline-offset: 0;
-    box-shadow: 0 0 0.75rem rgba(0,0,0,10%);
+textarea:focus-visible,
+input:focus-visible,
+button:focus-visible {
+  outline: none;
+  outline-offset: 0;
+  box-shadow: 0 0 0.75rem rgba(0, 0, 0, 10%);
 }
 
-button, [role="button"], [role="submit"], [role="reset"] {
-    appearance: none;
-    cursor: pointer;
-    background-color: transparent;
+button,
+[role="button"],
+[role="submit"],
+[role="reset"] {
+  appearance: none;
+  cursor: pointer;
+  background-color: transparent;
 }
 
 textarea {
-    resize: vertical; // Always and only resize vertically
+  resize: vertical; // Always and only resize vertically
 }
 
 select {
-    word-wrap: normal;
+  word-wrap: normal;
 }
 
 table {
-    @extend %html;
-    border-collapse: collapse;
-    border-spacing: 0;
+  @extend %html;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-thead, tbody, tfoot {
-    @extend %html;
+thead,
+tbody,
+tfoot {
+  @extend %html;
 }
 
 iframe {
-    border: none;
+  border: none;
 }
 
 [hidden] {
-    display: none !important;
+  display: none !important;
 }
 
 ::file-selector-button {
-    font: inherit;
+  font: inherit;
 }
 
 /** Scrollbars style **/
 /* width */
 ::-webkit-scrollbar {
-	width: 10px;
+  width: 10px;
 }
-  
+
 /* Track */
 ::-webkit-scrollbar-track {
-	background: transparent;
+  background: transparent;
 }
-  
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #555;
+  border-radius: 10px;
+  background: #555;
 }

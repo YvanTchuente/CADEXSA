@@ -2,7 +2,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/index.php';
 if ($member->is_logged_in()) {
-    $profilePicture = $member->getInfo($_SESSION['id'])['picture'];
+    $profilePicture = $member->getInfo($_SESSION['ID'])['picture'];
 }
 ?>
 <?php $url = parse_url($_SERVER['PHP_SELF']); ?>
@@ -31,9 +31,9 @@ if ($member->is_logged_in()) {
                                         <span><?= $_SESSION['username']; ?></span>
                                     </div>
                                 </li>
-                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>"><i class="fas fa-user"></i>My Profile</a></li>
-                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>&tab=chats"><i class="fas fa-envelope"></i>My Messages</a></li>
-                                <li><a href="/members/profile.php?id=<?= $_SESSION['id']; ?>&tab=settings"><i class="fas fa-user-cog"></i>Account Settings</a></li>
+                                <li><a href="/members/profile/"><i class="fas fa-user"></i>My Profile</a></li>
+                                <li><a href="/members/profile/?tab=chats"><i class="fas fa-envelope"></i>My Messages</a></li>
+                                <li><a href="/members/profile/?tab=settings"><i class="fas fa-user-cog"></i>Account Settings</a></li>
                                 <li><a href="/members/login.php"><i class="fas fa-sign-out-alt"></i>Log out</a></li>
                             </ul>
                         </div>

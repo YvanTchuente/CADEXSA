@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Classes\Authentication;
+namespace Application\Authentication;
 
 use Psr\Http\Message\{
     RequestInterface,

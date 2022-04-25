@@ -2,16 +2,15 @@
  * Header Logo Section
  */
 
- .logo {
-    width: auto;
-	height: auto;
-    display: flex;
-    align-items: center;
-	transition: all 0.3s;
+.logo {
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
 }
 
-.logo img 
-{
-	width: 170px;
-	max-height: 60px;
+.logo img {
+  width: 170px;
+  max-height: 60px;
 }

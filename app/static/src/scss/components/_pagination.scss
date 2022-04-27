@@ -1,0 +1,71 @@
+/*
+ * Pagination SCSS
+ * Styles for page pagination
+ */
+
+@use "../abstracts/" as *;
+
+.pagination-area {
+  display: flex;
+  justify-content: center;
+  margin-top: 3.125rem;
+
+  .pagination {
+    @include center;
+    flex-wrap: wrap;
+
+    .page-item {
+      display: inline-flex;
+
+      @include max-responsify($device-extra-small) {
+        margin-bottom: 1em;
+      }
+
+      &:first-child .page-link {
+        border-radius: 0.3em 0 0 0.3em;
+      }
+
+      &:last-child .page-link {
+        border-radius: 0 0.3em 0.3em 0;
+      }
+
+      &:not(.active) .page-link:hover {
+        color: white;
+        background-color: $pagination-color;
+      }
+
+      &:not(:last-child) {
+        margin-right: $pagination-item-gutter;
+      }
+
+      &:not(:first-child) .page-link {
+        margin-left: -5px;
+      }
+
+      .page-link {
+        position: relative;
+        font-size: $pagination-font-size;
+        color: $pagination-color;
+        padding: 0.7em 1em;
+        background-color: white;
+        border: 1px solid $pagination-border-color;
+
+        @include min-responsify($device-large) {
+          padding: 0.75em 1.3em;
+        }
+      }
+
+      &.active .page-link {
+        color: white;
+        border-color: $pagination-color;
+        background-color: $pagination-color;
+      }
+
+      &.disabled .page-link {
+        color: $pagination-border-color;
+        pointer-events: none;
+        background-color: white;
+      }
+    }
+  }
+}

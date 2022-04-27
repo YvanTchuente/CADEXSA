@@ -1,0 +1,51 @@
+/*
+ * Typography SCSS
+ * Fonts definition here
+ */
+
+@font-face {
+  font-family: Inter-bold;
+  src: url("/static/fonts/Inter/Inter-Bold.ttf");
+}
+
+@font-face {
+  font-family: Inter-semiBold;
+  src: url("/static/fonts/Inter/Inter-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: Inter-light;
+  src: url("/static/fonts/Inter/Inter-Light.ttf");
+}
+
+@font-face {
+  font-family: Inter-thin;
+  src: url("/static/fonts/Inter/Inter-Thin.ttf");
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/static/fonts/Roboto/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/static/fonts/Roboto/Roboto-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Roboto-light;
+  src: url("/static/fonts/Roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: Roboto-medium;
+  src: url("/static/fonts/Roboto/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: Roboto-bold;
+  src: url("/static/fonts/Roboto/Roboto-Bold.ttf");
+  font-weight: bold;
+}

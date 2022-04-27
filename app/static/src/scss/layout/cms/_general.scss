@@ -1,0 +1,124 @@
+@use "../../abstracts/" as *;
+
+.cms {
+  .cms-header {
+    color: white;
+    background-color: $color-footer;
+    padding: 2rem 0;
+    box-shadow: 0 0.5rem 1em $color-control-border;
+
+    h3,
+    ul {
+      @include min-responsify($device-large) {
+        margin: 0;
+      }
+    }
+
+    ul {
+      @include range-responsify($device-mobile, $device-large) {
+        text-align: center;
+      }
+    }
+
+    h3 {
+      @include max-responsify($device-large) {
+        text-align: center;
+      }
+    }
+
+    > div {
+      @include min-responsify($device-large) {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    ul li {
+      display: inline-block;
+      vertical-align: baseline;
+      vertical-align: -webkit-baseline-middle;
+
+      a {
+        position: relative;
+        padding: 0.5rem 1rem;
+      }
+
+      &.active a:after {
+        content: "";
+        width: 1.5rem;
+        position: absolute;
+        top: 0.9rem;
+        right: -0.5rem;
+        transform: rotate(90deg);
+        border-bottom: 5px solid white;
+      }
+    }
+  }
+
+  .cms-links {
+    text-align: center;
+
+    @include min-responsify($device-large) {
+      text-align: right;
+    }
+
+    span {
+      padding: 1px 1rem;
+      margin: 0;
+      border-right: 2px solid $color-control-border;
+      display: inline-block;
+
+      &:last-child {
+        border: none;
+      }
+
+      a {
+        color: blue;
+      }
+    }
+  }
+
+  .cms-list-wrapper {
+    margin-bottom: 3rem;
+  }
+
+  .list {
+    margin-bottom: 1rem;
+
+    &:first-of-type {
+      margin-top: 2rem;
+    }
+
+    &#mementos {
+      > div.item {
+        margin-bottom: 1rem;
+        padding: 1rem 1.5rem;
+        border: 1px solid $color-control-border;
+
+        &:last-child {
+          margin: 0;
+        }
+
+        .button {
+          padding: 0.2rem 1.5rem;
+        }
+      }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .event_thumbnail {
+      @include min-responsify($device-medium) {
+        height: 10rem;
+      }
+    }
+
+    .event-link {
+      margin-top: 1rem;
+    }
+  }
+}

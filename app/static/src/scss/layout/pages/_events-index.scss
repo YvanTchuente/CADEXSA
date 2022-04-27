@@ -1,0 +1,143 @@
+/* 
+ * Event Homepage styles
+ */
+
+@use "../../abstracts/" as *;
+@use "../../components/buttons" as buttons;
+
+.events_list {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  row-gap: 30px;
+}
+
+.single-event {
+  grid-column: 1 / span 12;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border: 1px solid $color-control-border;
+
+  @include min-responsify($device-medium) {
+    column-gap: 45px;
+  }
+
+  > div:nth-child(1) {
+    grid-column: 1 / span 12;
+    @include min-responsify($device-medium) {
+      grid-column: 1 / span 5;
+    }
+  }
+
+  > div:nth-child(2) {
+    grid-column: 1 / span 12;
+    @include min-responsify($device-medium) {
+      grid-column: 6 / span 7;
+    }
+  }
+
+  .event_thumbnail {
+    height: 20rem;
+    @include min-responsify($device-medium) {
+      height: 25rem;
+    }
+  }
+
+  .display-table .table-cell .event-text .event-link {
+    @include buttons.button(); 
+  }
+
+  .display-table {
+    padding: 24px;
+
+    @include min-responsify($device-medium) {
+      padding: 0;
+      padding-right: 24px;
+    }
+
+    .event-text p {
+      margin: 1rem 0;
+      line-height: inherit;
+    }
+  }
+}
+
+.countdown {
+  margin-bottom: 1rem;
+
+  @include range-responsify($device-medium, $device-large) {
+    margin-bottom: 0.25rem;
+  }
+
+  > div {
+    display: inline-block;
+
+    &:not(:first-child) {
+      margin-left: -5px;
+    }
+
+    &:last-child {
+      @include max-responsify($device-large) {
+        margin-left: 0;
+      }
+    }
+
+    &.timer {
+      margin-right: 1em;
+      position: relative;
+
+      &::before,
+      &::after {
+        position: absolute;
+        bottom: 26%;
+        content: "";
+        width: 5px;
+        height: 5px;
+        z-index: 1;
+        background-color: white;
+        border-radius: 50%;
+      }
+
+      &::before {
+        left: -4.5%;
+      }
+
+      &::after {
+        right: -4.5%;
+      }
+
+      span:last-of-type {
+        width: 3rem;
+        display: block;
+        color: white;
+        line-height: 1;
+        padding: 10px 0px;
+        text-align: center;
+        position: relative;
+        border-radius: 3px;
+        background-color: black;
+        box-shadow: 0 0.2rem 2px rgb(0, 0, 0, 0.3);
+      }
+    }
+
+    &:nth-child(5) {
+      @include max-responsify($device-small) {
+        margin: 0;
+      }
+
+      span {
+        font-size: 1.2em;
+        font-family: roboto-medium;
+        margin: unset !important;
+      }
+    }
+
+    > span {
+      display: block;
+
+      &:first-of-type {
+        margin-bottom: 0.2em;
+        text-align: center;
+      }
+    }
+  }
+}

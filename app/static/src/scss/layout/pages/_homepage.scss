@@ -1,0 +1,355 @@
+/* 
+ * Home Page specific styles
+ */
+
+@use "../../abstracts/" as *;
+
+/* Headline and Sub-headline statements */
+#headline-wrapper {
+  position: relative;
+
+  #head-carousel {
+    #headline2 {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("/static/images/gallery/img9.jpg");
+    }
+
+    #headline1 {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("/static/images/gallery/img.jpg");
+    }
+
+    .headline {
+      --header_height: 0;
+      color: white;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - var(--header_height));
+      background: {
+        repeat: no-repeat;
+        size: cover;
+      }
+
+      @include min-responsify($device-large) {
+        height: calc(100vh - var(--header_height));
+      }
+
+      .container_box {
+        width: 50vw;
+        height: auto;
+        text-align: center;
+
+        @include max-responsify($device-small) {
+          width: 90vw;
+        }
+
+        a.button:focus {
+          border-color: white;
+        }
+
+        h1 {
+          color: inherit;
+          line-height: 1;
+          margin-bottom: 1rem;
+
+          @include min-responsify($device-large) {
+            font-size: 2.5em;
+          }
+        }
+
+        p {
+          margin-bottom: 1.7em;
+        }
+      }
+    }
+  }
+}
+
+.content_block {
+  padding: 60px 0px;
+
+  @include min-responsify($device-extra-small) {
+    padding: 50px 0px 90px 0px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 55px;
+
+    @include max-responsify($device-small) {
+      font-size: 2em;
+      margin-bottom: 50px;
+    }
+  }
+
+  h5 {
+    margin: 1em 0em 0.7em 0em;
+  }
+}
+
+#sub-head {
+  padding-top: 60px;
+  padding-bottom: 60px;
+
+  .grid-container {
+    @include grid-generator(4);
+
+    > div::first-child {
+      grid-column: 1 / 12 !important;
+    }
+  }
+
+  h1 {
+    width: 100%;
+    margin: auto;
+    font-size: 2.5rem;
+    text-align: center;
+
+    @include max-responsify($device-medium) {
+      font-size: 1.8em;
+    }
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: auto;
+  }
+
+  h5 {
+    text-align: center;
+    font-family: "Inter-semiBold";
+    margin-top: 20px;
+  }
+
+  #sh_p {
+    // Sub headline text
+    width: 100%;
+    text-align: center;
+    margin: 20px auto 30px;
+
+    @include min-responsify($device-large) {
+      width: 65%;
+    }
+
+    @include max-responsify($device-medium) {
+      margin-bottom: 0;
+    }
+  }
+}
+
+#features {
+  padding-bottom: 100px;
+  background-color: rgb(208, 208, 222);
+
+  .grid-container {
+    @include grid-generator(4);
+    > div {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  }
+
+  img {
+    width: 45%;
+    display: block;
+    margin: auto;
+
+    @include max-responsify($device-medium) {
+      width: 30%;
+    }
+  }
+}
+
+#events {
+  background: $color-theme1;
+
+  .event-carousel-wrap {
+    color: white;
+    padding: 70px 40px 70px 40px;
+    position: relative;
+
+    .event-title {
+      position: absolute;
+      top: -26px;
+      right: 67%;
+      backface-visibility: hidden;
+
+      @include max-responsify($device-mobile) {
+        top: -30px !important;
+        right: 14% !important;
+      }
+
+      @include max-responsify($device-medium) {
+        top: -30px;
+        right: 19%;
+      }
+
+      @include range-responsify($device-medium, $device-large) {
+        top: -30px;
+        right: 29%;
+      }
+
+      h2 {
+        position: relative;
+        color: black;
+        background: white;
+        padding: 15px 30px;
+        box-shadow: 0 0 3rem rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .carousel-item {
+      > .event-grid-container {
+        > div:first-child {
+          @include max-responsify($device-medium) {
+            margin: 20px 0px 30px 0px;
+          }
+
+          @include range-responsify($device-medium, $device-large) {
+            margin: 10px 0px 0px;
+          }
+
+          .event-text .countdown div {
+            &::before,
+            &::after {
+              background-color: $color-theme1;
+            }
+          }
+        }
+
+        > div:nth-child(2) {
+          @include range-responsify($device-medium, $device-large) {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+
+    .event_nav {
+      color: white;
+      position: absolute;
+      bottom: 34%;
+      right: -2%;
+
+      @include max-responsify($device-extra-small) {
+        left: 30%;
+        bottom: 2% !important;
+      }
+
+      @include max-responsify($device-medium) {
+        bottom: 53%;
+        right: 8%;
+      }
+
+      @include range-responsify($device-medium, $device-large) {
+        bottom: 2%;
+        right: 12%;
+      }
+
+      .event_btn {
+        color: inherit;
+        width: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        border: 5px solid white;
+        border-radius: 50%;
+        background-color: transparent;
+        transition: 0.5s;
+
+        @include max-responsify($device-large) {
+          display: inline-flex;
+          margin: 0 1em 0 0;
+
+          &:last-child {
+            margin: 0;
+          }
+        }
+
+        &:hover {
+          background: white;
+
+          i {
+            color: $color-theme1;
+          }
+        }
+
+        &:last-child {
+          margin: 0;
+        }
+
+        i {
+          font-size: 2em;
+          color: inherit;
+          transition: 0.5s;
+        }
+      }
+    }
+  }
+}
+
+#news {
+  background-color: rgb(208, 208, 222);
+  padding-bottom: 100px;
+
+  @include max-responsify($device-extra-small) {
+    padding-bottom: 50px;
+  }
+
+  .grid-container {
+    @include grid-generator(3);
+  }
+}
+
+#info_box {
+  color: white;
+  background-color: $color-footer;
+  padding: 70px 0px 70px 0px;
+
+  .grid-container {
+    @include grid-generator(4);
+    row-gap: 24px;
+    text-align: center;
+  }
+
+  i {
+    font-size: 3em;
+    margin-right: 15px;
+  }
+
+  span {
+    display: block;
+    line-height: 1.1;
+    text-align: left;
+    font-size: 1em;
+  }
+
+  .emphasis {
+    font-size: 2.5em;
+  }
+}
+
+#gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
+  grid-template-rows: repeat(2, 200px);
+  grid-auto-rows: 200px;
+  grid-auto-flow: dense;
+
+  @include min-responsify($device-mobile) {
+    grid-template-columns: repeat(auto-fit, minmax(25%, 1fr));
+  }
+
+  > div {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

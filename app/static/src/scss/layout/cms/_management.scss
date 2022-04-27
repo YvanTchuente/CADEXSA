@@ -1,0 +1,129 @@
+@use "../../abstracts/" as *;
+
+.cms-manage {
+  .page-content {
+    margin: 2rem 0;
+
+    > div:first-child {
+      text-align: center;
+      margin-bottom: 1rem;
+
+      @include min-responsify($device-large) {
+        display: flex;
+        text-align: unset;
+        justify-content: space-between;
+        margin: unset;
+      }
+    }
+
+    h1 {
+      font-family: Inter-bold;
+      margin-bottom: 1rem;
+    }
+  }
+
+  form {
+    > div {
+      &.form-msg {
+        margin-bottom: 1rem;
+
+        span {
+          display: block;
+          padding: 0.5rem 0;
+          text-align: center;
+          border-radius: 0.5rem;
+        }
+
+        &.success {
+          span {
+            color: white;
+            background-color: green;
+          }
+        }
+
+        &.error {
+          span {
+            background-color: #f8d7da;
+            padding: inherit;
+          }
+        }
+      }
+
+      &:last-child {
+        margin-top: 1rem;
+
+        * {
+          margin-bottom: 1rem;
+
+          &:last-child {
+            margin-bottom: unset;
+          }
+        }
+
+        @include min-responsify($device-large) {
+          display: flex;
+          justify-content: space-between;
+
+          * {
+            margin-bottom: unset;
+          }
+        }
+      }
+    }
+  }
+
+  aside section {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    #thumbnail-upload {
+      width: 100%;
+      height: 300px;
+      @include center;
+      position: relative;
+      background-color: gray;
+
+      &:hover .background-wrapper {
+        display: grid;
+
+        * {
+          margin: auto;
+          max-width: 85%;
+
+          @include min-responsify($device-large) {
+            max-width: initial;
+          }
+        }
+      }
+
+      img {
+        height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+      }
+
+      .background-wrapper {
+        z-index: 1;
+        position: absolute;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &#categories ul {
+      border: 1px solid $color-control-border;
+
+      li {
+        padding: 10px 10px 10px 2rem;
+        border-bottom: 1px solid $color-control-border;
+
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+  }
+}

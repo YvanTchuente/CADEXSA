@@ -1,0 +1,106 @@
+/*
+ * Footer SCSS
+ * Footer styles
+ */
+
+@use "../abstracts/" as *;
+
+footer {
+  color: white;
+  background-color: $color-footer;
+  padding: 5rem 0 0;
+
+  * {
+    position: relative;
+  }
+
+  h5 {
+    color: white;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    text-transform: uppercase;
+
+    &::after {
+      content: "";
+      width: 60px;
+      position: absolute;
+      left: 0%;
+      bottom: 0%;
+      border-bottom: 5px solid $color-theme1;
+    }
+  }
+
+  p {
+    margin-bottom: 1.3em;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  a {
+    &::hover {
+      color: $color-theme1;
+    }
+  }
+
+  #contact_info {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 50px;
+
+    span {
+      padding-right: 20px;
+
+      &:last-child {
+        padding: 0;
+      }
+
+      i {
+        padding-right: 10px;
+        color: $color-theme1;
+      }
+    }
+  }
+
+  /* Go to top button */
+  #gotop_btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    color: white;
+    cursor: pointer;
+    font-size: 2em;
+    border-radius: 2rem;
+    align-items: center;
+    justify-content: center;
+    background: $color-theme1;
+    position: absolute;
+    right: 0;
+
+    @include max-responsify($device-mobile) {
+      top: 25%;
+      right: 2%;
+    }
+    
+    @include range-responsify($device-mobile, $device-small) {
+      right: 4%;
+    }
+
+    @include max-responsify($device-medium) {
+      top: calc((100% - 50px) / 2);
+    }
+
+    @include min-responsify($device-semi-large) {
+      background: $color-footer;
+    }
+  }
+
+  #copyright {
+    color: white;
+    font-weight: 500;
+    padding: 10px 0px 10px 0px;
+    background-color: $color-theme1;
+    text-align: center;
+  }
+}

@@ -3,10 +3,12 @@
  * PROFILE PAGE FUNCTIONS
  */
 
+import validation from "../../../src/js/functions/validation.js";
+import { isset } from "../../../src/js/functions/random.js";
 // Global variable for setInterval
 let interval;
 
-function openTab(event, tab) {
+function openTab(event, tab, socket) {
   // Function for opening and closure of tabs in profile page
   let tabcontents, tabcontent, tablinks, tablink;
   tabcontents = document.getElementsByClassName("tabcontent");
@@ -24,7 +26,7 @@ function openTab(event, tab) {
   document.getElementById(tab).style.display = "block";
   event.currentTarget.parentElement.classList.add("active");
   if (tab == "chats") {
-    if (isset(chats_socket) && chats_socket.readyState == 1) {
+    if (socket.readyState == 1) {
       let users = document.querySelectorAll(".chatbox ul.list_users li.user");
       if (users.length > 0) {
         users[0].click();
@@ -33,14 +35,13 @@ function openTab(event, tab) {
   }
 }
 
-function openChatTab(event, requestedUser, requester) {
+function openChatTab(event, requestedUser, requester, socket) {
   const chat_users = document.querySelectorAll(".chatbox .list_users .user");
   for (let chat_user of chat_users) chat_user.classList.remove("open");
 
   event.currentTarget.classList.add("open");
   const chatReceiver = document.getElementById("chat_receiver");
   chatReceiver.setAttribute("value", requestedUser);
-  const memberID = document.getElementById("chat_sender").value;
 
   if (window.matchMedia("screen and (max-width: 768px)").matches) {
     const menubar = document.querySelectorAll(".menu-wrapper .menu")[1];
@@ -53,11 +54,11 @@ function openChatTab(event, requestedUser, requester) {
     requester: requester,
   };
   let request = JSON.stringify(request_user);
-  if (chats_socket.readyState == 1) {
-    chats_socket.send(request);
+  if (socket.readyState == 1) {
+    socket.send(request);
     if (!isset(interval)) {
       interval = setInterval(() => {
-        update_last_activity();
+        update_last_activity(socket);
       }, 15000);
     }
   }
@@ -94,14 +95,14 @@ function updateChatWindow(chat_user_info) {
   }
 }
 
-function sendChat() {
+function sendChat(socket) {
   const sender = document.getElementById("chat_sender").value;
   const receiver = document.getElementById("chat_receiver").value;
   const chat_msg = document.getElementById("chat_msg");
   const msg = chat_msg.value;
 
   if (isset(msg)) {
-    if (chats_socket.readyState == 1) {
+    if (socket.readyState == 1) {
       let chat = {
         action: "post_chat",
         sender: sender,
@@ -109,7 +110,7 @@ function sendChat() {
         message: msg,
       };
       chat = JSON.stringify(chat);
-      chats_socket.send(chat);
+      socket.send(chat);
       chat_msg.value = "";
     }
   }
@@ -178,15 +179,15 @@ function updateChatUsers(new_states) {
   }
 }
 
-function update_last_activity() {
+function update_last_activity(socket) {
   const memberID = document.getElementById("chat_sender").value;
   let request = {
     action: "update_last_activity",
     member: memberID,
   };
   let request_json = JSON.stringify(request);
-  if (chats_socket.readyState == 1) {
-    chats_socket.send(request_json);
+  if (socket.readyState == 1) {
+    socket.send(request_json);
   }
 }
 
@@ -200,7 +201,7 @@ function update_status(memberID, status) {
   }
 }
 
-function typing(n) {
+function typing(n, socket) {
   const memberID = document.getElementById("chat_sender").value; // ID of the member typing
   const correspondentID = document.getElementById("chat_receiver").value; // ID of the member to notify of this event
   let typing_status = {
@@ -211,7 +212,7 @@ function typing(n) {
   };
   let request = JSON.stringify(typing_status);
   // sends the request
-  chats_socket.send(request);
+  socket.send(request);
 }
 
 async function refreshPicture(memberID) {
@@ -260,16 +261,16 @@ function validateUpdateForm(event, form) {
   let validity = false;
   for (const element of selectedInputs) {
     if (element.type == "text" && isset(element.value)) {
-      validity = validity || validateText(element.value, 4);
+      validity = validity || validation.validateText(element.value, 4);
     }
     if (element.type == "number" && isset(element.value)) {
-      validity = validity || validatePhone(element.value);
+      validity = validity || validation.validatePhone(element.value);
     }
     if (element.type == "email" && isset(element.value)) {
-      validity = validity || validateEmail(element.value);
+      validity = validity || validation.validateEmail(element.value);
     }
     if (element.type == "country" && isset(element.value)) {
-      validity = validity || validateCountry(element.value);
+      validity = validity || validation.validateCountry(element.value);
     }
     if (element.type == "textarea" && isset(element.value)) {
       validity = validity || element.value >= 50;
@@ -279,3 +280,18 @@ function validateUpdateForm(event, form) {
     event.preventDefault();
   }
 }
+
+export default {
+  openTab,
+  openChatTab,
+  updateChatWindow,
+  sendChat,
+  postChat,
+  updateChatUsers,
+  update_last_activity,
+  update_status,
+  typing,
+  refreshPicture,
+  searchChatUsers,
+  validateUpdateForm,
+};

@@ -8,7 +8,7 @@
  * @param {Event} event Event Object
  * @param {HTMLElement} niceSelect The HTML nice-select element
  */
-function openSelect(event, niceSelect) {
+export default function openSelect(event, niceSelect) {
   // Closes all open nice select dropdowns
   const dropdowns = document.querySelectorAll(".nice-select .dropdown");
   for (const dropdown of dropdowns) {

@@ -3,7 +3,10 @@
  * MISCELLANEOUS FUNCTIONS
  */
 
-function gotop() {
+import carousel from "../classes/carousel.js";
+import countdown from "../classes/countdown.js";
+
+export function gotop() {
   window.scrollTo({
     top: "0px",
     left: "0px",
@@ -16,7 +19,7 @@ function gotop() {
  * @param {HTMLElement} elem The HTML element
  * @param {number} ms Time in milliseconds
  */
-function fadeOut(elem, ms) {
+export function fadeOut(elem, ms) {
   if (!elem) {
     return null;
   }
@@ -43,14 +46,13 @@ function fadeOut(elem, ms) {
 /**
  * Activates all existings carousels
  */
-function start_carousels() {
-  let carousel_prev, carousel_next, slides;
-  if ((slides = document.querySelectorAll(".carousel"))) {
+export function start_carousels(slides) {
+  let carousel_prev, carousel_next;
+  if (slides.length > 0) {
     for (const slide of slides) {
       const id = slide.id;
       let slideItem = new carousel(slide);
       slideItem.start();
-
       if (
         (carousel_prev = document.querySelectorAll(
           "#" + id + " + .carousel-nav [data-ride='prev']"
@@ -59,27 +61,20 @@ function start_carousels() {
           "#" + id + " + .carousel-nav [data-ride='next']"
         ))
       ) {
-        for (const prev of carousel_prev) {
-          prev.addEventListener("click", () => {
-            slideItem.prev();
-          });
-        }
-
-        for (const next of carousel_next) {
-          next.addEventListener("click", () => {
-            slideItem.next();
-          });
-        }
+        for (const prev of carousel_prev)
+          prev.addEventListener("click", () => slideItem.prev());
+        for (const next of carousel_next)
+          next.addEventListener("click", () => slideItem.next());
       }
     }
   }
 }
 
 /**
- * Toggles blur backgrounds open
- * @param {string} id Blurred background's ID
+ * Toggles background wrapper open
+ * @param {string} id Background's ID
  */
-function toggle_visibility(id) {
+export function toggleBackgroundWrapperVisibility(id) {
   const elem = document.getElementById(id);
   const child = elem.children[1];
   let display = elem.style.display;
@@ -95,7 +90,7 @@ function toggle_visibility(id) {
 /**
  * Toggle the state of chat users panel: open or closed
  */
-function toggleOpen() {
+export function toggleOpen() {
   const user_panel = document.querySelector("div.chatbox div.chat_users");
   const menubtn = document.querySelector(
     "div.chatbox div.menu-wrapper div.menu"
@@ -117,12 +112,11 @@ function toggleOpen() {
 /**
  * Starts all countdowns of events
  */
-function start_countdowns() {
-  let countdowns = document.querySelectorAll(".countdown");
+export function start_countdowns(countdowns) {
   for (const t_countdown of countdowns) {
     let date = t_countdown.getAttribute("data-date");
     // Initialization of an instance of the countdown
-    let time_countdown = new countdown(t_countdown, date);
+    const time_countdown = new countdown(t_countdown, date);
     time_countdown.start();
   }
 }
@@ -132,7 +126,7 @@ function start_countdowns() {
  * @param {any} variable
  * @returns Either true or false
  */
-function isset(variable) {
+export function isset(variable) {
   // Determines if a variable is set to a value
   return typeof variable == "undefined" ||
     variable === null ||
@@ -148,7 +142,7 @@ function isset(variable) {
  * @param {string} innertext Element's text content
  * @returns The created element
  */
-function element(type, class_list = NULL, innertext) {
+export function element(type, class_list = NULL, innertext) {
   // Generates a new document element
   let element = document.createElement(type);
   element.classList.value = class_list;
@@ -161,25 +155,65 @@ function element(type, class_list = NULL, innertext) {
  * @param {Event} event
  * @param {string} elementID ID of the element
  */
-function selectPicture(event, inputID) {
+export function selectPicture(event, inputID) {
   const input = document.getElementById(inputID);
   const target = event.target;
   input.value = target.src;
 }
 
-function previewPicture(elem1_id, elem2_id, elem3_id) {
+export function previewPicture(elem1_id, elem2_id, elem3_id) {
   const elem1 = document.getElementById(elem1_id);
   const elem2 = document.getElementById(elem2_id);
   const elem3 = document.getElementById(elem3_id);
 
   if (isset(elem1.value)) {
-    elem3.value = elem1.value;
+    const link = elem1.value.slice(
+      document.location.protocol.length +
+        "//".length +
+        document.location.host.length
+    );
+    elem3.value = link;
     const img = document.createElement("img");
     img.src = elem3.value;
 
     const firstChild = elem2.children[0];
     elem2.replaceChild(img, firstChild);
     elem1.value = "";
-    toggle_visibility("bc1");
+    toggleBackgroundWrapperVisibility("bc1");
   }
+}
+
+// Profile page related
+export function routeToTab() {
+  const path = window.location.pathname;
+  let parts = path.split("/");
+  const tab = parts[parts.length - 1];
+
+  switch (tab) {
+    case "chats":
+      document.getElementById("tabBtn2").click();
+      break;
+    case "activities":
+      document.getElementById("tabBtn3").click();
+      break;
+    case "settings":
+      document.getElementById("tabBtn4").click();
+      break;
+    default:
+      document.getElementById("tabBtn1").click();
+      break;
+  }
+}
+
+export function getPercent(value, total) {
+  return (value * 100) / total;
+}
+
+export function stripOff(text, value) {
+  return text.replace(value, "");
+}
+
+export function formatAsPercent(value, total) {
+  let number = stripOff(value, "px");
+  return getPercent(number, total);
 }

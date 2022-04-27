@@ -2,17 +2,7 @@
  * Carousel Class
  */
 
-// Constants
-const PREV = "prev";
-const NEXT = "next";
-
-/*
- ******************************************************
- ***** Class Definition                           *****
- ******************************************************
- */
-
-class carousel {
+export default class carousel {
   constructor(element) {
     this.element = element;
     this.items = element.children; // Carousel items
@@ -21,23 +11,22 @@ class carousel {
     this.duration = 10000; // Carousel duration time in miliseconds
     this.ACTIVE_CLASSNAME = "active";
     this.special_carousels = ["head-carousel"]; // special carousels
+    this.PREV = "prev";
+    this.NEXT = "next";
   }
 
   // Public methods
 
   start() {
-    this._slide(NEXT);
-    // setInterval(() => {
-    //     this._slide(NEXT);
-    // }, this.duration);
+    this._slide(this.NEXT);
   }
 
   prev() {
-    this._slide(PREV);
+    this._slide(this.PREV);
   }
 
   next() {
-    this._slide(NEXT);
+    this._slide(this.NEXT);
   }
 
   // Private methods

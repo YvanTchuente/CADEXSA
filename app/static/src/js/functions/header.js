@@ -4,7 +4,7 @@
  *
  */
 
-function sticky_header() {
+export function sticky_header() {
   let header = document.querySelector("body > header");
   let height = header.clientHeight;
   if (window.pageYOffset >= height) {
@@ -15,7 +15,7 @@ function sticky_header() {
 }
 
 /* Mobile nav dropdown function */
-function drop_menu() {
+export function drop_menu() {
   const menu_links = document.querySelector("header div.menu-links");
   const menubtn = document.querySelector("header div.menu-wrapper div.menu");
 

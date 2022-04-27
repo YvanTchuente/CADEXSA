@@ -49,6 +49,7 @@ function validateText(name, n) {
  * @returns {boolean} Either True or False
  */
 function validateTextArea(text) {
+  let validity;
   const words = text.split(" ");
   const word_length = words.length;
   if (word_length > 50) validity = false;
@@ -62,6 +63,7 @@ function validateTextArea(text) {
  * @returns {boolean} Either True or False
  */
 function validatePhone(phone_number) {
+  let validity;
   if (/^\d{9}$/.test(phone_number)) validity = true;
   else validity = false;
   return validity;
@@ -69,18 +71,12 @@ function validatePhone(phone_number) {
 
 // Fetching valid countries from the json file
 let valid_countries;
-if (
-  /^\/members\/(register|profile){1}\.(html|php){1}$/.test(
-    window.location.pathname
-  )
-) {
-  fetch("/static/database/valid_countries.json")
-    .then((response) => response.json())
-    .then((json) => {
-      valid_countries = json.Countries;
-    })
-    .catch((reason) => console.log(reason));
-}
+fetch("/static/database/valid_countries.json")
+  .then((response) => response.json())
+  .then((json) => {
+    valid_countries = json.Countries;
+  })
+  .catch((reason) => console.log(reason));
 
 /**
  * Verifies that the country inputted is an existing country
@@ -123,3 +119,13 @@ function validateSignUp(formData, formId) {
     msg.push("Invalid city name");
   return msg.length > 0 ? msg : null;
 }
+
+export default {
+  validateText,
+  validateEmail,
+  validatePhone,
+  validateSignUp,
+  validateCountry,
+  validatePassword,
+  validateTextArea,
+};

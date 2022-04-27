@@ -10,6 +10,6 @@
 <!-- Main CSS file -->
 <link rel="stylesheet" href="/static/dist/css/main.css">
 <!-- Main Javascript file -->
-<script src="/static/dist/js/main.js"></script>
+<script type="module" src="/static/dist/js/main.js"></script>
 <!-- Font Awesome 5.0 -->
 <link rel="stylesheet" href="/node_modules/fontawesome/css/all.min.css">

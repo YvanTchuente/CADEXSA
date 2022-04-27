@@ -1,14 +1,9 @@
+import date_diff from "./date_diff.js";
 /*
  * Timer Countdown Class
  */
 
-/*
- ******************************************************
- ***** Class Definition                           *****
- ******************************************************
- */
-
-class countdown {
+export default class countdown {
   constructor(element, event_date) {
     this.date = new Date(event_date);
     this.element = element;

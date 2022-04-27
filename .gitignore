@@ -8,5 +8,6 @@ scripts/*
 node_modules/*
 vendor/*
 app/logs/*
-app/static/database/tmp/*
+app/tmp/*
 app/static/images/profile_pictures/*
+app/static/images/articles_thumbnails/*

@@ -3,6 +3,7 @@
 require_once dirname(__DIR__) . '/config/index.php';
 require_once dirname(__DIR__) . '/config/mailserver.php';
 
+use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Security\Securer;
 use Application\Database\Connection;
@@ -17,7 +18,7 @@ $incoming_request =  (new ServerRequest())->initialize();
 $param = $incoming_request->getParsedBody();
 
 $step = 1;
-if (!empty($param)) {
+if (!empty($param) || !empty($_COOKIE['password_reset_count'])) {
 	if (isset($param['username'])) {
 		$username = $param['username'];
 		if (MemberManager::Instance()->check_member_exist($username)) {
@@ -34,12 +35,32 @@ if (!empty($param)) {
 		$key = sha1(random_bytes(16));
 		$link = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/members/recovery?key=$key";
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$tomail = $email;
-			$from = "From: team@cadexsa.org" . "\r\n";
-			$subject = "Recover your account";
+			//Check if the member has not already already attempted to reset password
+			$stmt = Connection::Instance()->getConnection()->prepare("SELECT * FROM recover_passwords WHERE memberID = ?");
+			$has_attempted = $stmt->execute([$memberID]);
+			if ($has_attempted) {
+				$step = 2;
+				$msg = "Already attempted to reset your password! check you mails for the key sent";
+				exit();
+			}
+			$insert_sql = "INSERT INTO recover_passwords (memberID, email, recover_key) VALUES (?,?,?)";
+			$stmt = Connection::Instance()->getConnection()->prepare($insert_sql);
+			$query = $stmt->execute([$memberID, $email, $key]);
+
+			if (!$query) {
+				$step = 2;
+				$msg = "An error occurred, please retry";
+				exit();
+			}
+
+			$member = MemberManager::Instance()->getMember($memberID);
+
 			$recipientMail = $email;
 			$senderMail = MAILSERVER_ACCOUNTS_ACCOUNT;
-			$mailBody = "<p>Click on the link to recover your account</p><p>$link</p>";
+			$subject = "Recover your account";
+
+			$template_file_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/includes/mail_templates/recover_account_mail.php';
+			$mailBody = (new Requests())->post($template_file_url, ['username' => $member->getUserName(), 'link' => $link]);
 
 			$mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_ACCOUNTS_ACCOUNT, MAILSERVER_PASSWORD);
 			$mailer->setSender($senderMail, "Cadexsa Accounts");
@@ -56,22 +77,67 @@ if (!empty($param)) {
 	}
 	if (isset($param['key'])) {
 		extract($param);
-		$username = MemberManager::Instance()->getMember($id)->getUserName();
-		if ($key == sha1($username . $id . '2Y@#&$')) {
-			$step = 3;
+		$sql = "SELECT * FROM recover_passwords WHERE recover_key = ?";
+		$stmt = Connection::Instance()->getConnection()->prepare($sql);
+		$stmt->execute([$key]);
+		if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+			extract($row);
+			$submit_time = strtotime($timestamp);
+			$expiration_time = 3 * 24 * 60 * 60; // Expiration time of 3 days
+			$expiry_time = $submit_time + $expiration_time;
+			$current_time = time();
+			$time_elpased = $expiry_time - $current_time; // Time in seconds passsed mail to recover account was sent
+			if ($time_elpased <= $expiration_time) {
+				$id = $memberID;
+				$step = 3;
+			} else {
+				$step = 1;
+				$msg = "The key has expired, try again";
+				$stmt = Connection::Instance()->getConnection()->prepare("DELETE FROM recover_passwords WHERE memberID = ?");
+				$stmt->execute([$memberID]);
+			}
+		} else {
+			$step = 1;
+			$msg = "Invalid recovery key";
 		}
 	}
-	if (isset($param['password']) && isset($param['id'])) {
+	if ((isset($param['confirm_password']) && isset($param['id'])) || !empty($_COOKIE['password_reset_count'])) {
+		if (!empty($param)) extract($param);
+		(isset($_COOKIE['password_reset_count'])) ? $count = $_COOKIE['password_reset_count'] : $count = 0;
+		$stmt = Connection::Instance()->getConnection()->prepare("SELECT password, password_key, iv FROM members WHERE id = ?");
+		$stmt->execute([$id]);
+		if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+			extract($row);
+			$db_pwd = (new Securer())->decrypt($password, $password_key, $iv);
+			if ($count <= 2) {
+				if ($confirm_password == trim($db_pwd)) {
+					$step = 4;
+				} else {
+					$step = 3;
+					$count += 1;
+					$msg = "Incorrect password";
+					setcookie('password_reset_count', $count, httponly: true);
+				}
+			} else {
+				$step = 1;
+				$msg = "Could not confirm your identity";
+				$stmt = Connection::Instance()->getConnection()->prepare("DELETE FROM recover_passwords WHERE memberID = ?");
+				$stmt->execute([$id]);
+				setcookie('password_reset_count');
+			}
+		}
+	}
+	if (isset($param['resetted_password']) && isset($param['id'])) {
 		extract($param);
-		if (ctype_alnum($password) && strlen($password) >= 8) {
-			$encryption = (new Securer())->encrypt($password);
-			$stmt = Connection::Instance()->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = '$id'");
+		if (ctype_alnum($resetted_password) && strlen($resetted_password) >= 8) {
+			$encryption = (new Securer())->encrypt($resetted_password);
+			$stmt = Connection::Instance()->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = $id");
 			if ($stmt->execute([$encryption['cipher'], $encryption['key'], $encryption['iv']])) {
 				Connection::Instance()->getConnection()->query("DELETE FROM recover_passwords WHERE memberID = $id");
 				header('Location: login');
 			}
 		} else {
-			$step = 3;
+			$step = 4;
 			$msg = "Invalid password";
 		}
 	}
@@ -104,12 +170,23 @@ if (!empty($param)) {
 					</div>
 					<?php
 					switch ($step):
-						case 3:
+						case 4:
 					?>
-							<p>Reset your password</p>
+							<p>Reset your password, you're passwor should be at least 8 characters long</p>
 							<?= (isset($msg)) ? "<p class='error'>" . $msg . "</p>" : ''; ?>
 							<div class="form-grouping">
-								<div style="position: relative;"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="Enter a password" name="password" required /><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
+								<div style="position: relative;"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="Enter a password" name="resetted_password" required /><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
+							</div>
+							<?= (isset($id)) ? '<input type="hidden" name="id" value="' . $id . '">' : ''; ?>
+							<button type="submit" class="form-btn">Submit</button>
+						<?php
+							break;
+						case '3':
+						?>
+							<p>We verify that you are actually the owner of this account. Enter your current password</p>
+							<?= (isset($msg)) ? "<p class='error'>" . $msg . "</p>" : ''; ?>
+							<div class="form-grouping">
+								<div style="position: relative;"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="Enter a password" name="confirm_password" required /><button type="button" class="password-visibility-btn"><i class="fas fa-eye"></i></button></div>
 							</div>
 							<?= (isset($id)) ? '<input type="hidden" name="id" value="' . $id . '">' : ''; ?>
 							<button type="submit" class="form-btn">Submit</button>
@@ -117,7 +194,7 @@ if (!empty($param)) {
 							break;
 						case 2:
 						?>
-							<p>Enter an email to which a code to recover you account will be sent</p>
+							<p>We will send a link code to your email account to recover you account. Enter an email</p>
 							<?= (isset($msg)) ? "<p class='error'>" . $msg . "</p>" : ''; ?>
 							<div class="form-grouping">
 								<div><i class="fas fa-envelope"></i><input type="email" id="email" name="email" placeholder="Enter an email" required /></div>

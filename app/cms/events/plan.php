@@ -11,6 +11,7 @@ use Application\MiddleWare\{
 use Application\Database\Connection;
 use Application\CMS\Events\EventManager;
 use Application\Membership\MemberManager;
+use Application\CMS\Gallery\PictureManager;
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
@@ -123,28 +124,21 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
         }
     </script>
     <div class="background-wrapper blurred" id="bc1">
-        <span class="fas fa-times" id="exit" onclick="toggle_visibility('bc1')"></span>
+        <span class="fas fa-times" id="exit"></span>
         <div class="box select-picture">
             <div id="header">
                 <h3>Choose a picture</h3>
                 <p>Select a picture from the gallery as the featuring picture</p>
             </div>
             <div id="pictures">
-                <script type="module">
-                    import { selectPicture } from "/static/src/js/functions/random.js";
-                    const pictures = document.getElementById('pictures');
-                    for (const picture of pictures.children) {
-                        picture.addEventListener("click", (e) => selectPicture(e, 'picture-url'))
-                    }
-                </script>
-                <img src="/static/images/gallery/img12.jpg">
-                <img src="/static/images/gallery/img11.jpg">
-                <img src="/static/images/gallery/img10.jpg">
-                <img src="/static/images/gallery/img9.jpg">
-                <img src="/static/images/gallery/img8.jpg">
-                <img src="/static/images/gallery/img7.jpg">
-                <img src="/static/images/gallery/img6.jpg">
-                <img src="/static/images/gallery/img5.jpg">
+                <?php
+                $PictureManager = new PictureManager(Connection::Instance());
+                $pictures = $PictureManager->list(8);
+                foreach ($pictures as $picture) :
+                    $src = $picture->getLocation();
+                ?>
+                    <img src="<?= $src; ?>">
+                <?php endforeach; ?>
             </div>
             <div id="footer">
                 <div>
@@ -152,11 +146,32 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
                     <input type="text" class="form-control" name="picture-url" , id="picture-url">
                 </div>
                 <div>
-                    <button onclick="previewPicture('picture-url','thumbnail-upload','thumbnail')">Select</button>
+                    <button>Select</button>
                 </div>
             </div>
         </div>
     </div>
+    <script type="module">
+        import {
+            selectPicture,
+            previewPicture
+        } from "/static/src/js/functions/random.js";
+        const uploader_picture_elems = document.querySelectorAll(
+            ".select-picture #pictures img"
+        );
+        const select_picture_button = document.querySelector(
+            ".select-picture #footer button"
+        );
+
+        for (const picture of uploader_picture_elems) {
+            picture.addEventListener("click", (event) => {
+                selectPicture(event, "picture-url");
+            });
+        }
+        select_picture_button.addEventListener("click", () =>
+            previewPicture("picture-url", "thumbnail-upload", "thumbnail")
+        );
+    </script>
 </body>
 
 </html>

@@ -12,6 +12,7 @@ use Application\CMS\News\TagManager;
 use Application\Database\Connection;
 use Application\CMS\News\NewsManager;
 use Application\Membership\MemberManager;
+use Application\CMS\Gallery\PictureManager;
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     $goto = urlencode("/cms/news/publish");
@@ -47,6 +48,7 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     <meta name="author" content="Yvan Tchuente">
     <title>Create Articles - CADEXSA</title>
     <?php require_once dirname(__DIR__, 2) . "/includes/head_tag_includes.php"; ?>
+    <script type="module" src="/static/dist/js/pages/cms_publisher.js"></script>
     <script src="/node_modules/ckeditor4/ckeditor.js"></script>
 </head>
 
@@ -140,23 +142,14 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
                 <p>Select a picture from the gallery as the featuring picture</p>
             </div>
             <div id="pictures">
-                <script type="module">
-                    import {
-                        selectPicture
-                    } from "/static/src/js/functions/random.js";
-                    const pictures = document.getElementById('pictures');
-                    for (const picture of pictures.children) {
-                        picture.addEventListener("click", (e) => selectPicture(e, 'picture-url'))
-                    }
-                </script>
-                <img src="/static/images/gallery/img12.jpg">
-                <img src="/static/images/gallery/img11.jpg">
-                <img src="/static/images/gallery/img10.jpg">
-                <img src="/static/images/gallery/img9.jpg">
-                <img src="/static/images/gallery/img8.jpg">
-                <img src="/static/images/gallery/img7.jpg">
-                <img src="/static/images/gallery/img6.jpg">
-                <img src="/static/images/gallery/img5.jpg">
+                <?php
+                $PictureManager = new PictureManager(Connection::Instance());
+                $pictures = $PictureManager->list(8);
+                foreach ($pictures as $picture) :
+                    $src = $picture->getLocation();
+                ?>
+                    <img src="<?= $src; ?>">
+                <?php endforeach; ?>
             </div>
             <div id="footer">
                 <div>
@@ -164,9 +157,28 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
                     <input type="text" class="form-control" name="picture-url" , id="picture-url">
                 </div>
                 <div>
-                    <button onclick="previewPicture('picture-url','thumbnail-upload','thumbnail')">Select</button>
-                    <button>Upload instead</button>
+                    <button>Select</button>
+                    <button>Upload</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="background-wrapper blurred" id="bc2">
+        <span class="fas fa-times" id="exit"></span>
+        <div class="box picture-uploader">
+            <div id="header">
+                <h3>Upload picture</h3>
+                <button>Upload</button>
+            </div>
+            <div id="preview">
+                <button>Drop a picture to upload or browse</button>
+            </div>
+            <div id="footer">
+                <span></span>
+                <form>
+                    <input type="file" name="picture" style="display: none;">
+                    <button type="reset">Reset</button>
+                </form>
             </div>
         </div>
     </div>

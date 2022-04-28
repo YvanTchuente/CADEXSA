@@ -12,8 +12,8 @@
             <li <?php if (preg_match("/\/cms\/news\//", $url['path'])) { ?>class="active" <?php } ?>>
                 <a href="/cms/news/">News articles</a>
             </li>
-            <li <?php if (preg_match("/\/cms\/pictures\//", $url['path'])) { ?>class="active" <?php } ?>>
-                <a href="/cms/pictures/">Gallery Pictures</a>
+            <li <?php if (preg_match("/\/cms\/pictures\/upload/", $url['path'])) { ?>class="active" <?php } ?>>
+                <a href="/cms/pictures/upload">Picture Uploader</a>
             </li>
         </ul>
     </div>

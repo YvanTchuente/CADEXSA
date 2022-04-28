@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Application\CMS\News;
 
-use Exception;
 use Application\Database\{
     Connector,
     ConnectionTrait,
@@ -32,7 +31,7 @@ class TagManager implements ConnectionAware, Manager
         $query = $this->connector->getConnection()->query($sql);
         $data = $query->fetch(\PDO::FETCH_ASSOC);
         if (!$data) {
-            throw new Exception(sprintf("The item identified by ID %d does not exist", $ID));
+            throw new \RuntimeException(sprintf("The item identified by ID %d does not exist", $ID));
         }
         $tag = new Tag($data['ID'], $data['tag']);
         return $tag;

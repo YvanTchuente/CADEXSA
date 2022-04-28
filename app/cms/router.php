@@ -21,6 +21,9 @@ $router->get('/cms/(news|events)/(publish|plan)', function ($matches) {
     })
     ->get('/cms/delete', function () {
         include 'delete.php';
+    })
+    ->get('pictures/upload', function () {
+        include 'pictures/upload.php';
     });
 
 $router->post('/cms/(news|events)/(publish|plan)', function ($matches) {
@@ -28,6 +31,9 @@ $router->post('/cms/(news|events)/(publish|plan)', function ($matches) {
 })
     ->post('/cms/(news|events)/edit', function ($matches) {
         include $matches[1] . '/edit.php';
+    })
+    ->post('pictures/upload', function () {
+        include 'pictures/upload.php';
     });
 
 $router->resolve();

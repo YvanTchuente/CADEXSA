@@ -45,6 +45,7 @@ if (MemberManager::Instance()->is_logged_in()) {
                                 ?>
                                     <li style="text-transform: none;"><a href="/cms/events/plan"><i class="fas fa-calendar-day"></i> Plan an event</a></li>
                                     <li style="text-transform: none;"><a href="/cms/news/publish"><i class="fas fa-layer-group"></i> Publish an article</a></li>
+                                    <li style="text-transform: none;"><a href="/cms/pictures/upload"><i class="fas fa-upload"></i> Upload pictures</a></li>
                                 <?php
                                 }
                                 ?>

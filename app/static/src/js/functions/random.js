@@ -140,7 +140,7 @@ export function isset(variable) {
  * @param {string} type Element's tag name
  * @param {string} class_list Element's class list
  * @param {string} innertext Element's text content
- * @returns The created element
+ * @returns {HTMLElement} The created element
  */
 export function element(type, class_list = NULL, innertext) {
   // Generates a new document element

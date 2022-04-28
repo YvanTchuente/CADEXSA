@@ -3,10 +3,12 @@
 namespace Application\CMS\Events;
 
 use Application\Generic\Command;
+use Application\Generic\Memento;
+use Application\Generic\Originator;
 use Application\MiddleWare\Request;
 use Application\MiddleWare\TextStream;
 
-class DeleteEventCommand implements Command
+class DeleteEventCommand implements Command, Originator
 {
     /**
      * @var EventManager
@@ -34,15 +36,22 @@ class DeleteEventCommand implements Command
         $this->initialize();
     }
 
-    public function createMemento()
+    public function saveToMemento(): memento
     {
-        $memento = new DeleteEventState;
         $state = array('ID' => $this->ID, 'item' => $this->item);
-        $memento->setState($state);
+        $originator = clone $this;
+        $originator->clear(); // Clears all data
+        $memento = new DeleteEventState($originator, $state);
         return $memento;
     }
 
-    public function setMemento(DeleteEventState $m)
+    private function clear()
+    {
+        unset($this->ID);
+        unset($this->item);
+    }
+
+    public function restore(Memento $m)
     {
         $state = $m->getState();
         $this->ID  = $state['ID'];

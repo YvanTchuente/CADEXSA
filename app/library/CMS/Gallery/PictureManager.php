@@ -10,6 +10,7 @@ use Application\Database\{
     ConnectionAware
 };
 use Application\CMS\Manager;
+use Application\CMS\DeleteItemTrait;
 use Application\CMS\ItemExistsTrait;
 use Application\CMS\PictureInterface;
 
@@ -63,6 +64,8 @@ class PictureManager implements ConnectionAware, Manager
         }
         return $pictures;
     }
+
+    use DeleteItemTrait;
 
     use ItemExistsTrait;
 }

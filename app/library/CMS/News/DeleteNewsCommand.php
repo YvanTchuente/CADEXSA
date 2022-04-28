@@ -3,11 +3,13 @@
 namespace Application\CMS\News;
 
 use Application\Generic\Command;
+use Application\Generic\Memento;
 use Application\CMS\NewsInterface;
+use Application\Generic\Originator;
 use Application\MiddleWare\Request;
 use Application\MiddleWare\TextStream;
 
-class DeleteNewsCommand implements Command
+class DeleteNewsCommand implements Command, Originator
 {
     /**
      * @var NewsManager
@@ -40,15 +42,23 @@ class DeleteNewsCommand implements Command
         $this->initialize();
     }
 
-    public function createMemento()
+    public function saveToMemento(): memento
     {
-        $memento = new DeleteNewsState();
         $state = array('ID' => $this->ID, 'item' => $this->item, 'tag' => $this->tag);
-        $memento->setState($state);
+        $originator = clone $this;
+        $originator->clear(); // Clears all data
+        $memento = new DeleteNewsState($originator, $state);
         return $memento;
     }
 
-    public function setMemento(DeleteNewsState $m)
+    private function clear()
+    {
+        unset($this->ID);
+        unset($this->item);
+        unset($this->tag);
+    }
+
+    public function restore(Memento $m)
     {
         $state = $m->getState();
         $this->ID  = $state['ID'];

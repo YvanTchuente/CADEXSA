@@ -1,20 +1,20 @@
 <?php
 
-namespace Application\CMS\Events;
+namespace Application\CMS\Gallery;
 
 use Application\Generic\Memento;
-use Application\CMS\EventInterface;
 use Application\Generic\Originator;
+use Application\CMS\PictureInterface;
 
-class DeleteEventState implements Memento
+class DeletePictureState implements Memento
 {
     /**
-     * @var int 
+     * @var int
      */
     private $ID;
 
     /**
-     * @var EventInterface
+     * @var PictureInterface
      */
     private $item;
 
@@ -33,13 +33,13 @@ class DeleteEventState implements Memento
      */
     private $originator;
 
-    public function __construct(Originator $DeleteEventCommand, array $state)
+    public function __construct(Originator $DeletePictureCommand, array $state)
     {
         $this->ID = $state['ID'];
         $this->item = $state['item'];
         $this->date = date("Y-m-d H:i:s");
-        $this->name = $this->item->getTitle();
-        $this->originator = $DeleteEventCommand;
+        $this->name = $this->item->getName();
+        $this->originator = $DeletePictureCommand;
     }
 
     public function getOriginator()

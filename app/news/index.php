@@ -3,24 +3,24 @@
 require_once dirname(__DIR__) . '/config/index.php';
 
 use Application\DateTime\Constants;
+use Application\CMS\News\TagManager;
 use Application\Database\Connection;
 use Application\CMS\News\NewsManager;
 use Application\DateTime\TimeDuration;
-use Application\CMS\News\CategoryManager;
 use Application\MiddleWare\ServerRequest;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request = (new ServerRequest())->initialize();
 $NewsManager = new NewsManager(Connection::Instance());
-$CategoryManager = new CategoryManager(Connection::Instance());
+$TagManager = new TagManager(Connection::Instance());
 
 // Retrieve all news articles from the database
 $articles = $NewsManager->list();
 $timeDiff = new TimeDuration();
 
-// Retrieve category from the database
-$categoryObjs = $CategoryManager->list();
-foreach ($categoryObjs as $categoryObj) {
-	$categories[] = $categoryObj->getName();
+// Retrieve tag from the database
+$tagObjs = $TagManager->list();
+foreach ($tagObjs as $tagObj) {
+	$tags[] = $tagObj->getName();
 }
 ?>
 <!DOCTYPE html>
@@ -91,23 +91,23 @@ foreach ($categoryObjs as $categoryObj) {
 							</select>
 						</div>
 						<div class="nice-select" id="nice-select-3">
-							<span class="current" onclick="openSelect(event,'nice-select-3')">category</span>
+							<span class="current" onclick="openSelect(event,'nice-select-3')">tag</span>
 							<ul class="dropdown">
-								<li class="selected">Category</li>
+								<li class="selected">Tag</li>
 								<?php
-								foreach ($categories as $category) {
+								foreach ($tags as $tag) {
 								?>
-									<li><?= $category; ?></li>
+									<li><?= $tag; ?></li>
 								<?php
 								}
 								?>
 							</ul>
 							<select id="select-type" name="type" required>
-								<option value="" selected>Category</option>
+								<option value="" selected>Tag</option>
 								<?php
-								foreach ($categories as $category) {
+								foreach ($tags as $tag) {
 								?>
-									<option value="<?= $category; ?>"><?= $category; ?></option>
+									<option value="<?= $tag; ?>"><?= $tag; ?></option>
 								<?php
 								}
 								?>

@@ -7,7 +7,7 @@ use Application\Database\Connection;
 use Application\CMS\Events\EventManager;
 use Application\MiddleWare\ServerRequest;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request = (new ServerRequest())->initialize();
 $EventManager = new EventManager(Connection::Instance());
 
 $events = $EventManager->list();
@@ -39,12 +39,12 @@ $events = $EventManager->list();
 			</div>
 		</div>
 		<div class="ws-container">
-			<!-- Events search start -->
 			<?php if (!empty($events)) : ?>
+				<!-- Events search start -->
 				<div class="filter-area">
 					<form id="news-filter">
 						<div class="nice-select" id="nice-select-1">
-							<span class="current" onclick="openSelect(event,'nice-select-1')">month</span>
+							<span class="current">month</span>
 							<ul class="dropdown">
 								<li class="selected">month</li>
 								<?php
@@ -67,7 +67,7 @@ $events = $EventManager->list();
 							</select>
 						</div>
 						<div class="nice-select" id="nice-select-2">
-							<span class="current" onclick="openSelect(event,'nice-select-2')">year</span>
+							<span class="current">year</span>
 							<ul class="dropdown">
 								<li class="selected">year</li>
 								<li>2021</li>
@@ -80,7 +80,7 @@ $events = $EventManager->list();
 							</select>
 						</div>
 						<div class="nice-select" id="nice-select-3">
-							<span class="current" onclick="openSelect(event,'nice-select-3')">category</span>
+							<span class="current">category</span>
 							<ul class="dropdown">
 								<li class="selected">Category</li>
 								<li>Meetup</li>
@@ -95,8 +95,8 @@ $events = $EventManager->list();
 						<button type="submit">filter</button>
 					</form>
 				</div>
+				<!-- Events search end -->
 			<?php endif; ?>
-			<!-- Events search end -->
 			<?php
 			if (!empty($events)) {
 			?>

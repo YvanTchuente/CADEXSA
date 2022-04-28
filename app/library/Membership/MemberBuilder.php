@@ -43,9 +43,9 @@ class MemberBuilder implements MemberBuilderInterface
         return $this;
     }
 
-    public function setMemberContact(string $contact)
+    public function setMemberContacts(array $contacts)
     {
-        $this->member->setContact($contact);
+        $this->member->setContact($contacts);
         return $this;
     }
 

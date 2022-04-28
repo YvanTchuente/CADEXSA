@@ -34,7 +34,7 @@ interface MemberBuilderInterface
     /**
      * @return static 
      */
-    public function setMemberContact(string $contact);
+    public function setMemberContacts(array $contacts);
 
     /**
      * @return static 

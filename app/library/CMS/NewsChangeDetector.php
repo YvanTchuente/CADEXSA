@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Application\CMS;
 
+use Application\CMS\News\TagManager;
 use Psr\Http\Message\RequestInterface;
-use Application\CMS\News\CategoryManager;
 
 class NewsChangeDetector
 {
@@ -29,16 +29,16 @@ class NewsChangeDetector
     protected $NewsManager;
 
     /**
-     * @var CategoryManager
+     * @var TagManager
      */
-    protected $CategoryManager;
+    protected $TagManager;
 
-    public function __construct(RequestInterface $request, int $articleID, CMSManager $NewsManager, CategoryManager $CategoryManager)
+    public function __construct(RequestInterface $request, int $articleID, CMSManager $NewsManager, TagManager $TagManager)
     {
         $this->request = $request;
         $this->articleID = $articleID;
         $this->NewsManager = $NewsManager;
-        $this->CategoryManager = $CategoryManager;
+        $this->TagManager = $TagManager;
     }
 
     public function detect()
@@ -47,13 +47,13 @@ class NewsChangeDetector
         $params = json_decode($this->request->getBody()->getContents());
         $req_title = $params->title;
         $req_body = $params->body;
-        $req_categories = explode(",", $params->categories);
+        $req_tag = trim($params->tag);
 
         // Data from the database to compare with for changes
         $article = $this->NewsManager->get($this->articleID);
         $title = $article->getTitle();
-        $categories = $this->CategoryManager->getCategory($article);
-        foreach ($categories as $category) $categories_names[] = $category->getName();
+        $tag = $this->TagManager->getTag($article);
+        $tagName = $tag->getName();
         $body = $article->getBody();
 
         if ($title !== $req_title) {
@@ -62,14 +62,8 @@ class NewsChangeDetector
         if ($body !== $req_body) {
             $changes['body'] = $req_body;
         }
-        foreach ($req_categories as $req_category) {
-            $req_category = trim($req_category);
-            $categories = implode(", ", $categories_names);
-            if (preg_match("/$req_category/i", $categories)) {
-                continue;
-            } else {
-                $changes['categories'] = $req_category;
-            }
+        if (!preg_match("/$req_tag/i", $tagName)) {
+            $changes['tag'] = $req_tag;
         }
         if (isset($changes)) {
             return $changes;

@@ -5,10 +5,10 @@ require_once dirname(__DIR__) . '/config/index.php';
 use Application\MiddleWare\ServerRequest;
 use PHPMailer\PHPMailer\PHPMailer;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request =  (new ServerRequest())->initialize();
 
 // Retrieve the content of the contact form
-$payload = $incoming->getParsedBody();
+$payload = $incoming_request->getParsedBody();
 $firstname = $payload['first-name'];
 $lastname = $payload['last-name'];
 $email = $payload['email'];

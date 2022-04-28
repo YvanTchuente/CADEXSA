@@ -69,8 +69,13 @@ class Validator
         if (!self::validateCountry($userInfo['country'])) {
             return "Invalid country";
         }
-        if (!self::validatePhone($userInfo['contact'])) {
+        if (!self::validatePhone($userInfo['main_contact'])) {
             return "Invalid phone number";
+        }
+        if (!empty($userInfo['secondary_contact'])) {
+            if (!self::validatePhone($userInfo['secondary_contact'])) {
+                return "Invalid phone number";
+            }
         }
         if (!self::validatePassword($userInfo['password'])) {
             return "Invalid password";

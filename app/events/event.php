@@ -6,11 +6,11 @@ use Application\Database\Connection;
 use Application\CMS\Events\EventManager;
 use Application\MiddleWare\ServerRequest;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request = (new ServerRequest())->initialize();
 $EventManager = new EventManager(Connection::Instance());
 
 // Retrieve the event details
-$payload = $incoming->getParsedBody();
+$payload = $incoming_request->getParsedBody();
 $id = (int) $payload['id'];
 if (!$EventManager->exists($id)) {
 	header('Location: /events/');

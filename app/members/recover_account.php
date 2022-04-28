@@ -14,9 +14,8 @@ if (MemberManager::Instance()->is_logged_in()) {
 	header('Location: profile.php');
 }
 
-$incoming = (new ServerRequest())->initialize();
-$outgoing = new Request();
-$param = $incoming->getParsedBody();
+$incoming_request =  (new ServerRequest())->initialize();
+$param = $incoming_request->getParsedBody();
 
 $step = 1;
 if (!empty($param)) {
@@ -32,8 +31,8 @@ if (!empty($param)) {
 	}
 	if (isset($param['email']) && isset($param['memberID']) && isset($param['username'])) {
 		extract($param);
-		$key = sha1($username . $memberID . '2Y@#&$');
-		$link = "http://localhost/members/recover?id=" . $memberID . "&key=" . $key;
+		$key = sha1(random_bytes(16));
+		$link = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/members/recovery?key=$key";
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$tomail = $email;
 			$from = "From: team@cadexsa.org" . "\r\n";
@@ -49,7 +48,7 @@ if (!empty($param)) {
 			$msg = "Invalid email address";
 		}
 	}
-	if (isset($param['id']) && isset($param['key'])) {
+	if (isset($param['key'])) {
 		extract($param);
 		$username = MemberManager::Instance()->getMember($id)->getUserName();
 		if ($key == sha1($username . $id . '2Y@#&$')) {
@@ -62,6 +61,7 @@ if (!empty($param)) {
 			$encryption = (new Securer())->encrypt($password);
 			$stmt = Connection::Instance()->getConnection()->prepare("UPDATE members SET password = ?, password_key = ?, iv = ? WHERE ID = '$id'");
 			if ($stmt->execute([$encryption['cipher'], $encryption['key'], $encryption['iv']])) {
+				Connection::Instance()->getConnection()->query("DELETE FROM recover_passwords WHERE memberID = $id");
 				header('Location: login');
 			}
 		} else {
@@ -92,7 +92,7 @@ if (!empty($param)) {
 	<div class="page-content">
 		<div class="ws-container">
 			<div class="password-recovery-form-wrapper">
-				<form action="recover" method="post">
+				<form action="recovery" method="post">
 					<div class="form-header">
 						<h2>Account Recovery</h2>
 					</div>

@@ -192,7 +192,7 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware
      **/
     public function signup(array $visitor, PHPMailer $mail)
     {
-        $isArrayValid = array_key_exists('firstname', $visitor) && array_key_exists('lastname', $visitor) && array_key_exists('username', $visitor) && array_key_exists('email', $visitor) && array_key_exists('contact', $visitor) && array_key_exists('password', $visitor) && array_key_exists('batch_year', $visitor) && array_key_exists('orientation', $visitor) && array_key_exists('city', $visitor) && array_key_exists('country', $visitor) && array_key_exists('aboutme', $visitor);
+        $isArrayValid = array_key_exists('firstname', $visitor) && array_key_exists('lastname', $visitor) && array_key_exists('username', $visitor) && array_key_exists('email', $visitor) && array_key_exists('main_contact', $visitor) && array_key_exists('password', $visitor) && array_key_exists('batch_year', $visitor) && array_key_exists('orientation', $visitor) && array_key_exists('city', $visitor) && array_key_exists('country', $visitor) && array_key_exists('aboutme', $visitor);
         if (!$isArrayValid) {
             throw new \InvalidArgumentException("Invalid user data array");
         }
@@ -208,23 +208,27 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware
                 $data[$key] = $value;
             }
 
-            $fields = ['firstname', 'lastname', 'username', 'email', 'contact', 'password', 'password_key', 'iv', 'batch_year', 'orientation', 'city', 'country', 'aboutme'];
+            $fields = ['firstname', 'lastname', 'username', 'email', 'main_contact', 'password', 'password_key', 'iv', 'batch_year', 'orientation', 'city', 'country', 'aboutme'];
             foreach ($fields as $field) {
                 $placeholders[] = ":$field";
+            }
+            if (isset($visitor['secondary_contact'])) {
+                $fields[] = "secondary_contact";
+                $placeholders[] = ":secondary_contact";
             }
 
             $sql = "INSERT INTO `" . self::TABLE . "` (`" . implode("`,`", $fields) . "`) VALUES (" . implode(",", $placeholders) . ")";
             $stmt = $this->connector->getConnection()->prepare($sql);
             if ($stmt->execute($data)) {
                 // Configuring the welcoming mail
-                $tomail = $visitor['email'];
+                $recipientMail = $visitor['email'];
                 $subject = "Welcome to La Cadenelle Ex-Students Association";
                 $recipientName = $visitor['firstname'] . " " . $visitor['lastname'];
                 $msg = "Hi " . $recipientName . ",\r\n\r\n" . "We are happy, you joined our network. These are your login credentials\r\n" . "username : " . $visitor['username'] . "\r\n" . "password : " . $visitor['password'];
 
                 // Mail Recipients
                 $mail->setFrom('admin@cadexsa.org', 'CADEXSA Administration');
-                $mail->addAddress($tomail, $recipientName);     //Add a recipient
+                $mail->addAddress($recipientMail, $recipientName);     //Add a recipient
 
                 // Mail Content
                 $mail->isHTML(true);                                  //Set email format to HTML

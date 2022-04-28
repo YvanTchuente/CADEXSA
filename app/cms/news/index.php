@@ -12,7 +12,7 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request =  (new ServerRequest())->initialize();
 $NewsManager = new NewsManager(Connection::Instance());
 
 $articles = $NewsManager->list(3);
@@ -43,10 +43,11 @@ $timeDuration = new TimeDuration();
                 <div class="header">
                     <h2>All News articles</h2>
                 </div>
-                <div class="news-grid-container">
-                    <?php
-                    if (!empty($articles)) {
-                        foreach ($articles as $article) {
+
+                <?php
+                if (!empty($articles)) { ?>
+                    <div class="news-grid-container">
+                        <?php foreach ($articles as $article) {
                             $articleID = $article->getID();
                             $preview = $NewsManager->preview((int)$articleID, $timeDuration);
                     ?>
@@ -59,11 +60,11 @@ $timeDuration = new TimeDuration();
                                     </div>
                                 </article>
                             </div>
-                        <?php }
-                    } else { ?>
-                        <div style="width: 80%; margin: auto; text-align: center; padding: 3rem 0 0;">There is no news articles.</div>
-                    <?php } ?>
-                </div>
+                        <?php } ?>
+                    </div>
+                <?php } else { ?>
+                    <div style="width: 80%; margin: auto; text-align: center; padding: 3rem 0;">There is no news articles.</div>
+                <?php } ?>
             </div>
         </div>
     </div>

@@ -12,8 +12,8 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming = (new ServerRequest())->initialize();
-$payload = $incoming->getParsedBody();
+$incoming_request =  (new ServerRequest())->initialize();
+$payload = $incoming_request->getParsedBody();
 
 if (isset($payload['type'])) {
     switch ($payload['type']) {

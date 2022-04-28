@@ -6,10 +6,10 @@ use Application\Database\Connection;
 use Application\MiddleWare\ServerRequest;
 use Application\CMS\Gallery\PictureManager;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request = (new ServerRequest())->initialize();
 $PictureManager = new PictureManager(Connection::Instance());
 
-$params = $incoming->getParsedBody();
+$params = $incoming_request->getParsedBody();
 $pictureID = $params['id'];
 try {
     $picture = $PictureManager->get($pictureID);

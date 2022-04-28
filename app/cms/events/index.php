@@ -11,7 +11,7 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request =  (new ServerRequest())->initialize();
 $EventManager = new EventManager(Connection::Instance());
 $events = $EventManager->list(3);
 ?>
@@ -61,8 +61,8 @@ $events = $EventManager->list(3);
                                             <div class="event-text">
                                                 <h2><a href="/events/<?= $eventID; ?>"><?= $preview['title']; ?></a></h2>
                                                 <h6><i class="fas fa-calendar-day"></i> <?= date("l j F", strtotime($preview['deadline'])); ?> <i class="fas fa-clock"></i> <?= date("g a", strtotime($preview['deadline'])); ?></h6>
+                                                <a href="/cms/delete?type=event&id=<?= $eventID; ?>" class="event-link"><i style="padding-right: 0.5rem;" class="fas fa-trash"></i>Delete</a>
                                                 <a href="/cms/events/edit?id=<?= $eventID; ?>" class="event-link">Update</a>
-                                                <a href="/cms/delete?type=event&id=<?= $eventID; ?>" class="event-link">Delete</a>
                                             </div>
                                         </div>
                                     </div>

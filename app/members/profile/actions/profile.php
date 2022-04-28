@@ -11,11 +11,11 @@ use Application\MiddleWare\{
 
 define('STANDARD_FILES', array('limitSize' => 3 * (1024 * 1024), 'allowedTypes' => ['image/jpeg' => 'jpg']));
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request =  (new ServerRequest())->initialize();
 
-switch ($incoming->getMethod()) {
+switch ($incoming_request->getMethod()) {
     case Constants::METHOD_GET:
-        $param = $incoming->getParsedBody();
+        $param = $incoming_request->getParsedBody();
         $action = $param['action'];
         switch ($action) {
             case 'fetchPicture':
@@ -26,13 +26,13 @@ switch ($incoming->getMethod()) {
         }
 
     case Constants::METHOD_POST:
-        $param = $incoming->getParsedBody();
+        $param = $incoming_request->getParsedBody();
         $action = $param['action'];
         switch ($action) {
             case 'updateAvatar':
                 $memberID = $param['memberID'];
                 $username = $param['username'];
-                $uploadedfile = $incoming->getUploadedFiles()['input_picture'];
+                $uploadedfile = $incoming_request->getUploadedFiles()['input_picture'];
                 $fileSize = $uploadedfile->getStream()->getSize();
                 $fileType = $uploadedfile->getClientMediaType();
                 $fileTempName = $uploadedfile->getTempName();
@@ -44,7 +44,6 @@ switch ($incoming->getMethod()) {
                         $sizex = imagesx($img_php);
                         $sizey = imagesy($img_php);
                         $img_php = imagecrop($img_php, ['x' => $sizex * 0.1, 'y' => $sizey * 0.1, 'width' => $sizex * 0.8, 'height' => $sizey * 0.8]);
-                        $img_php = imagescale($img_php, 120);
 
                         if (imagejpeg($img_php, $fileTempName, 100)) {
                             $content = $uploadedfile->getStream()->getContents();

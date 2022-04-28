@@ -24,23 +24,21 @@ class NewsManager implements ConnectionAware, CMSManager
     protected const TABLE = 'news';
 
     /**
-     * Category manager instance
-     * 
-     * @var CategoryManager
+     * @var TagManager
      */
-    private $CategoryManager;
+    private $TagManager;
 
-    public function __construct(Connector $connector, CategoryManager $CategoryManager = null)
+    public function __construct(Connector $connector, TagManager $TagManager = null)
     {
         $this->setConnector($connector);
-        $this->CategoryManager = $CategoryManager ?? new CategoryManager($connector);
+        $this->TagManager = $TagManager ?? new TagManager($connector);
     }
 
     use ConnectionTrait;
 
-    public function getCategoryManager()
+    public function getTagManager()
     {
-        return $this->CategoryManager;
+        return $this->TagManager;
     }
 
     public function save(RequestInterface $request)
@@ -49,7 +47,7 @@ class NewsManager implements ConnectionAware, CMSManager
         $params = json_decode($content);
         $action = $params->action;
         $title = $params->title;
-        $categories = $params->categories;
+        $tag = $params->tag;
         $body = $params->body;
         $thumbnail = $params->thumbnail;
         $authorID = (int)$params->authorID;
@@ -84,51 +82,55 @@ class NewsManager implements ConnectionAware, CMSManager
         $stmt = $this->connector->getConnection()->prepare($sql);
         $stmt->execute($values);
         $ID = (int) $this->connector->getConnection()->lastInsertId();
-        $has_categorized = $this->categorize($categories, $ID);
-        if (!$has_categorized) {
-            throw new \RuntimeException("Could not categorize the article");
+        $has_classified = $this->classifyByTag($tag, $ID);
+        if (!$has_classified) {
+            throw new \RuntimeException("Could not classify the article");
         }
         return $ID;
     }
 
-    protected function categorize(string|array $categories, int $newsID)
+    protected function classifyByTag(string $tag, int $newsID): bool
     {
-        $res = true;
-        $categoriesID = [];
-        if (is_array($categories)) {
-            $input_categories = $categories;
-        } else {
-            $input_categories = explode(",", $categories);
-        }
-        // Obtaining the ID of categories from their name if they exist
-        $categoriesID = $this->CategoryManager->validate($input_categories);
-        foreach ($categoriesID as $categoryID) {
-            $sql = "INSERT INTO news_categories VALUES ($newsID, $categoryID)";
-            if ($q = $this->connector->getConnection()->query($sql)) {
-                $res = $res && boolval($q);
+        // Obtaining the ID of tag from their name if they exist
+        $tagID = $this->TagManager->validate($tag);
+        $is_item_existing = $this->exists($newsID);
+        $has_succeeded = false;
+        if ($is_item_existing) {
+            $sql = "SELECT * FROM news_tags WHERE newsID = '$newsID'";
+            $res = $this->connector->getConnection()->query($sql);
+            if (!$res->fetch()) {
+                $sql = "INSERT INTO news_tags (newsID, tagID) VALUES (?, ?)";
+                $stmt = $this->connector->getConnection()->prepare($sql);
+                $has_succeeded = $stmt->execute([$newsID, $tagID]);
+            } else {
+                $sql = "UPDATE news_tags SET tagID = ? WHERE newsID = ?";
+                $stmt = $this->connector->getConnection()->prepare($sql);
+                $has_succeeded = $stmt->execute([$newsID, $tagID]);
             }
         }
-        return $res;
+        return $has_succeeded;
     }
 
     public function modify(int $ID, array $changes)
     {
-        $keys = array_keys($changes);
-        $sql = "UPDATE " . self::TABLE . " SET";
-        foreach ($keys as $key) {
-            if ($key == 'categories') {
-                continue;
+        $has_modified = true;
+        if (array_key_exists('tag', $changes)) {
+            $has_classified = $this->classifyByTag($changes['tag'], $ID);
+            $has_modified = $has_classified and $has_modified;
+            unset($changes['tag']);
+        }
+        if (!empty($changes)) {
+            $keys = array_keys($changes);
+            $sql = "UPDATE " . self::TABLE . " SET";
+            foreach ($keys as $key) {
+                $sql .= " $key = :$key,";
             }
-            $sql .= " $key = :$key,";
+            $sql = substr($sql, 0, -1);
+            $sql .= " WHERE ID='$ID'";
+            $stmt = $this->connector->getConnection()->prepare($sql);
+            $has_succeeded = $stmt->execute($changes);
+            $has_modified = $has_succeeded and $has_modified;
         }
-        $sql = substr($sql, 0, -1);
-        $sql .= " WHERE ID='$ID'";
-        $stmt = $this->connector->getConnection()->prepare($sql);
-        // If categories are also changed
-        if (isset($changes['categories'])) {
-            $this->categorize($changes['categories'], $ID);
-        }
-        $has_modified = $stmt->execute($changes);
         return $has_modified;
     }
 
@@ -147,7 +149,7 @@ class NewsManager implements ConnectionAware, CMSManager
         if (!$exists) {
             throw new \InvalidArgumentException(sprintf("The item referenced by ID of %d does not exit", $ID));
         }
-        $sql = "UPDATE " . self::TABLE . " SET published = '1' WHERE ID = $ID";
+        $sql = "UPDATE " . self::TABLE . " SET published = '1', publication_date = current_timestamp() WHERE ID = $ID";
         $has_published = $this->connector->getConnection()->query($sql);
         return (bool) $has_published;
     }
@@ -157,7 +159,7 @@ class NewsManager implements ConnectionAware, CMSManager
      */
     public function list(int $n = 0, int $offset = null, bool $sort = true)
     {
-        $news_articles = array();
+        $news_articles = [];
         $sql = "SELECT ID FROM " . self::TABLE;
         if ($sort) {
             $sql .= " ORDER BY publication_date DESC";
@@ -202,7 +204,7 @@ class NewsManager implements ConnectionAware, CMSManager
     {
         $article = $this->get($ID);
         $title = substr($article->getTitle(), 0, 90);
-        $body = substr($article->getBody(), 0, 180);
+        $body = substr($article->getBody(), 0, 200);
         $publication_date = new \DateTime($article->getPublicationDate());
         $TimeDuration->setReferenceTime($publication_date);
         $TimeDuration->setTargetTime(new \DateTime());

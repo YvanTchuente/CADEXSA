@@ -4,7 +4,7 @@
 --
 -- Host: 127.0.0.1
 -- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.9
+-- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -19,17 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `cadexsa_db`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
-
-CREATE TABLE `categories` (
-  `ID` int(11) NOT NULL,
-  `category` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='News categories';
 
 -- --------------------------------------------------------
 
@@ -94,7 +83,8 @@ CREATE TABLE `members` (
   `password` varchar(255) NOT NULL,
   `password_key` varchar(255) NOT NULL,
   `iv` varchar(255) NOT NULL COMMENT 'Initialization Vector',
-  `contact` int(11) NOT NULL,
+  `main_contact` int(11) NOT NULL,
+  `secondary_contact` int(11) DEFAULT NULL,
   `country` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
   `batch_year` year(4) NOT NULL,
@@ -116,6 +106,15 @@ CREATE TABLE `members_levels` (
   `name` char(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Members'' roles';
 
+--
+-- Dumping data for table `members_levels`
+--
+
+INSERT INTO `members_levels` (`ID`, `name`) VALUES
+(1, 'Admins'),
+(2, 'Editors'),
+(3, 'Regular');
+
 -- --------------------------------------------------------
 
 --
@@ -136,12 +135,12 @@ CREATE TABLE `news` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news_categories`
+-- Table structure for table `news_tags`
 --
 
-CREATE TABLE `news_categories` (
+CREATE TABLE `news_tags` (
   `newsID` int(11) NOT NULL,
-  `categoryID` int(11) NOT NULL
+  `tagID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -167,15 +166,44 @@ CREATE TABLE `profile_pictures` (
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Table that maps members to their profile pictures';
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recover_passwords`
+--
+
+CREATE TABLE `recover_passwords` (
+  `memberID` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `recover_key` varchar(255) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Contains data about attempts of users recovering accounts';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `ID` int(11) NOT NULL,
+  `tag` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='News tags';
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`ID`, `tag`) VALUES
+(1, 'Alumni'),
+(2, 'Members'),
+(3, 'Events'),
+(4, 'School'),
+(5, 'Students');
+
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `chats`
@@ -214,6 +242,12 @@ ALTER TABLE `news`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `news_tags`
+--
+ALTER TABLE `news_tags`
+  ADD PRIMARY KEY (`newsID`);
+
+--
 -- Indexes for table `online_members`
 --
 ALTER TABLE `online_members`
@@ -226,14 +260,20 @@ ALTER TABLE `profile_pictures`
   ADD PRIMARY KEY (`memberID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indexes for table `recover_passwords`
 --
+ALTER TABLE `recover_passwords`
+  ADD PRIMARY KEY (`memberID`);
 
 --
--- AUTO_INCREMENT for table `categories`
+-- Indexes for table `tags`
 --
-ALTER TABLE `categories`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
 
 --
 -- AUTO_INCREMENT for table `chats`
@@ -270,6 +310,12 @@ ALTER TABLE `members_levels`
 --
 ALTER TABLE `news`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

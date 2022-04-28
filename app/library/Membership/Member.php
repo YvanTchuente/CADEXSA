@@ -37,7 +37,12 @@ class Member
     /**
      * @var string
      */
-    protected $contact;
+    protected $main_contact;
+
+    /**
+     * @var string
+     */
+    protected $secondary_contact;
 
     /**
      * @var string
@@ -129,12 +134,15 @@ class Member
         return $this;
     }
 
-    public function setContact(string $contact)
+    public function setContact(array $contacts)
     {
-        if (empty($contact)) {
+        if (empty($contacts)) {
             throw new \InvalidArgumentException("Invalid argument");
         }
-        $this->contact = $contact;
+        $this->main_contact = $contacts['main'];
+        if (!empty($contacts['secondary'])) {
+            $this->secondary_contact = $contacts['secondary'];
+        }
         return $this;
     }
 
@@ -244,9 +252,17 @@ class Member
         return $this->email;
     }
 
-    public function getContact()
+    public function getContact($type = "main")
     {
-        return $this->contact;
+        switch ($type) {
+            case "main":
+                $contact = $this->main_contact;
+                break;
+            case "secondary":
+                $contact = $this->secondary_contact;
+                break;
+        }
+        return $contact;
     }
 
     public function getCountry()

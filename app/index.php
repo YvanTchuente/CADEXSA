@@ -183,7 +183,7 @@
 								</div>
 								<div>
 									<div class="event_thumbnail">
-										<img src="static/images/gallery/img5.jpg" alt="event_thumbnail" />
+										<img src="static/images/gallery/img3.jpg" alt="event_thumbnail" />
 									</div>
 								</div>
 							</div>
@@ -311,7 +311,7 @@
 				</div>
 				<div>
 					<article class="news-item">
-						<div class="news-thumb"><img src="static/images/gallery/img6.jpg" alt="news image"></div>
+						<div class="news-thumb"><img src="static/images/gallery/img3.jpg" alt="news image"></div>
 						<div class="news-content">
 							<h5><a href="#">Several ex-students became ministers of government</a></h5>
 							<p>De create building thinking about your requirment and latest treand on our marketplace area. De create building thinking about your requirment and latest treand</p>
@@ -321,7 +321,7 @@
 				</div>
 				<div>
 					<article class="news-item">
-						<div class="news-thumb"><img src="static/images/gallery/img8.jpg" alt="news image"></div>
+						<div class="news-thumb"><img src="static/images/gallery/img2.jpg" alt="news image"></div>
 						<div class="news-content">
 							<h5><a href="#">The party organized last meeting went all well</a></h5>
 							<p>De create building thinking about your requirment and latest treand on our marketplace area. De create building thinking about your requirment and latest treand</p>
@@ -372,5 +372,11 @@
 	</div>
 	<?php require_once __DIR__ . "/includes/footer.php"; ?>
 </body>
+<script>
+	const header_height = getComputedStyle(document.querySelector("header")).getPropertyValue("height");
+	document.querySelectorAll(".headline").forEach(headline => {
+		headline.style.setProperty("--header_height", header_height)
+	});
+</script>
 
 </html>

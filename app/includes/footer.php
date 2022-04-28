@@ -3,13 +3,6 @@
     <div class="ws-container">
         <div class="footer-grid-container">
             <div>
-                <h5>Stay in touch</h5>
-                <p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
-                <form><input type="text" id="newsletter-input" class="form-control" placeholder="Enter Your Email" /><button type="submit"><span class="far fa-paper-plane"></span></button></form>
-                <a href="#" aria-label="Facebook" class="btn-facebook"><span class="fab fa-facebook-f"></span></a>
-                <a href="#" aria-label="Twitter" class="btn-twitter"><span class="fab fa-twitter"></span></a>
-            </div>
-            <div>
                 <h5>Recent News</h5>
                 <ul>
                     <li><a href="#">News from the ex-students</a></li>

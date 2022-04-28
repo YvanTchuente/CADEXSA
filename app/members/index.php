@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/library/functions.php';
 
 use Application\MiddleWare\Router\Router;
 use Application\Membership\MemberManager;
@@ -36,17 +37,12 @@ $router->get('/members/?', function () {
         }
 
         $memberID = MemberManager::Instance()->getIDByName($username);
-        $url = "http://localhost/members/profile/?id=$memberID";
+        $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/members/profile/?id=$memberID";
         if (isset($tab)) {
             $url .= "&tab=$tab";
         }
 
-        $sessid = 'PHPSESSID=' . $_COOKIE['PHPSESSID'];
-        $options = [CURLOPT_COOKIE => $sessid, CURLOPT_RETURNTRANSFER => true, CURLOPT_URL => $url];
-        $curld = curl_init();
-        curl_setopt_array($curld, $options);
-        $output = curl_exec($curld);
-        curl_close($curld);
+        $output = curl_request_page($url);
         // Display the page
         echo $output;
     });
@@ -57,7 +53,7 @@ $router->post('/members/login', function () {
     ->post('/members/register', function () {
         include 'register.php';
     })
-    ->post('/members/recover', function () {
+    ->post('/members/recovery', function () {
         include 'recover_account.php';
     });
 

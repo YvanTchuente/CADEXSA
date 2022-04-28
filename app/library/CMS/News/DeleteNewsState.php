@@ -16,15 +16,15 @@ class DeleteNewsState implements Memento
      * @var NewsInterface
      */
     private $item;
-
+    
     /**
      * @var string
      */
-    private $categories;
+    private $tag;
 
     public function getState(): array
     {
-        $state = array('ID' => $this->ID, 'item' => $this->item, 'Categories' => $this->categories);
+        $state = array('ID' => $this->ID, 'item' => $this->item, 'tag' => $this->tag);
         return $state;
     }
 
@@ -32,6 +32,6 @@ class DeleteNewsState implements Memento
     {
         $this->ID = $state['ID'];
         $this->item = $state['item'];
-        $this->categories = $state['Categories'];
+        $this->tag = $state['tag'];
     }
 }

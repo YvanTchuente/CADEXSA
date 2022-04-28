@@ -20,7 +20,6 @@ class MemberBuildDirector
             ->setMemberLastName($memberData['lastname'])
             ->setMemberUserName($memberData['username'])
             ->setMemberEmail($memberData['email'])
-            ->setMemberContact($memberData['contact'])
             ->setMemberCountry($memberData['country'])
             ->setMemberCity($memberData['city'])
             ->setMemberBatch($memberData['batch_year'])
@@ -28,6 +27,12 @@ class MemberBuildDirector
             ->setMemberAboutMe($memberData['aboutme'])
             ->setMemberLevel((int) $memberData['level']);
 
+        $contacts["main"] = $memberData['main_contact'];
+        if (!empty($memberData['secondary_contact'])) {
+            $contacts["secondary"] = $memberData['secondary_contact'];
+        }
+        $this->builder->setMemberContacts($contacts);
+        
         if (isset($memberData['last_connection'])) {
             $this->builder->setMemberLastConnection($memberData['last_connection']);
         }

@@ -27,7 +27,7 @@ class DeleteNewsCommand implements Command
     /**
      * @var string
      */
-    protected $categories;
+    protected $tag;
 
     public function __construct(NewsManager $NewsManager)
     {
@@ -43,7 +43,7 @@ class DeleteNewsCommand implements Command
     public function createMemento()
     {
         $memento = new DeleteNewsState();
-        $state = array('ID' => $this->ID, 'item' => $this->item, 'Categories' => $this->categories);
+        $state = array('ID' => $this->ID, 'item' => $this->item, 'tag' => $this->tag);
         $memento->setState($state);
         return $memento;
     }
@@ -53,19 +53,16 @@ class DeleteNewsCommand implements Command
         $state = $m->getState();
         $this->ID  = $state['ID'];
         $this->item = $state['item'];
-        $this->categories = $state['Categories'];
+        $this->tag = $state['tag'];
     }
 
     protected function initialize()
     {
         // Initialize state
         $this->item = $this->NewsManager->get($this->ID);
-        $CategoryManager = $this->NewsManager->getCategoryManager();
-        $categoryObjs = $CategoryManager->getCategory($this->item);
-        foreach ($categoryObjs as $categoryObj) {
-            $categories[] = $categoryObj->getName();
-        }
-        $this->categories = implode(", ", $categories);
+        $TagManager = $this->NewsManager->getTagManager();
+        $tag = ($TagManager->getTag($this->item))->getName();
+        $this->tag = $tag;
     }
 
     public function execute()
@@ -89,7 +86,7 @@ class DeleteNewsCommand implements Command
         $content = array(
             'action' => $action,
             'title' => $this->item->getTitle(),
-            'categories' => $this->categories,
+            'tag' => $this->tag,
             'body' => $this->item->getBody(),
             'thumbnail' => $this->item->getThumbnail(),
             'publication_date' => $this->item->getPublicationDate(),

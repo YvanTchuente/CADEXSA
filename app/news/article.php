@@ -4,16 +4,16 @@ require_once dirname(__DIR__) . '/config/index.php';
 
 use Application\Database\Connection;
 use Application\Membership\MemberManager;
-use Application\CMS\News\CategoryManager;
+use Application\CMS\News\TagManager;
 use Application\CMS\News\NewsManager;
 use Application\MiddleWare\ServerRequest;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming_request = (new ServerRequest())->initialize();
 $NewsManager = new NewsManager(Connection::Instance());
-$CategoryManager = new CategoryManager(Connection::Instance());
+$TagManager = new TagManager(Connection::Instance());
 
 // Retrieve the article
-$payload = $incoming->getParsedBody();
+$payload = $incoming_request->getParsedBody();
 $id = (int) $payload['id'];
 if (!$NewsManager->exists($id)) {
 	header('Location: /news/');
@@ -26,12 +26,21 @@ $publication = array(
 );
 $body = $article->getBody();
 $thumbnail = $article->getThumbnail();
-// Retrieve info about article's category
-$categories = $CategoryManager->getCategory($article);
+// Retrieve info about article's tag
+$tagName = ($TagManager->getTag($article))->getName();
 // Article's author
 $author = MemberManager::Instance()->getMember($article->getAuthorID());
+$authorUserName = $author->getUserName();
 $authorName = $author->getName();
 $authorPicture = $author->getPicture();
+
+// Fetch 5 most reccent articles
+foreach ($NewsManager->list(5) as $article) {
+	if ($article->getID() == $id) {
+		continue;
+	}
+	$articles[] = $article;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,13 +68,16 @@ $authorPicture = $author->getPicture();
 			</div>
 		</div>
 		<div class="ws-container">
-			<div class="cs-grid">
-				<div id="article-wrapper">
+			<div id="article-wrapper">
+				<div id="article-body">
 					<div class="article-content-header">
-						<h2><?= $title; ?></h2>
-						<h6><span><img src="<?= $authorPicture; ?>" alt="article_author" /><?= $authorName; ?></span><span><i class="fas fa-calendar-day"></i><?= $publication['date']; ?></span><span><i class="fas fa-clock"></i><?= $publication['time']; ?></span>
-							<div><?php foreach ($categories as $category) : ?><span class="label"><?= $category->getName(); ?></span><?php endforeach; ?></div>
-						</h6>
+						<h1><?= $title; ?></h1>
+						<div>
+							<span>By<img src="<?= $authorPicture; ?>" alt="article_author" /><a href="/members/profiles/<?= strtolower($authorUserName); ?>"><?= ucwords(strtolower($authorName)); ?></a></span>
+							<span><i class="fas fa-calendar-day"></i><?= $publication['date']; ?></span>
+							<span><i class="fas fa-clock"></i><?= $publication['time']; ?></span>
+						</div>
+						<div><span class="label"><?= $tagName; ?></span></div>
 					</div>
 					<div class="article-content">
 						<div class="article-thumb"><img src="<?= $thumbnail; ?>" alt="news thumbnail"></div>
@@ -79,21 +91,33 @@ $authorPicture = $author->getPicture();
 						</div>
 					</div>
 				</div>
-				<aside id="news-article-aside">
-					<section>
-						<form id="search_articles" action="/search" method="get">
-							<input type="text" class="form-control" name="search" id="search_article" placeholder="Search articles">
-							<button type="submit"><i class="fas fa-search"></i></button>
-						</form>
-					</section>
-					<section>
-						<h4>Categories</h4>
+				<aside id="article-aside">
+					<section id="categories">
+						<h4>Article Tags</h4>
 						<ul>
-							<?php foreach ($CategoryManager->list() as $category) : ?>
-								<li><a href="#"><?= $category->getName(); ?></a></li>
+							<?php foreach ($TagManager->list() as $tag) : ?>
+								<li><a href="#"><?= $tag->getName(); ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</section>
+					<?php if (!empty($articles)) : ?>
+						<section id="articles">
+							<h4>Recent articles</h4>
+							<ul>
+								<?php
+								foreach ($articles as $article) :
+									$id = $article->getID();
+									$thumbnail = $article->getThumbnail();
+									$title = $article->getTitle()
+								?>
+									<li>
+										<img src="<?= $thumbnail; ?>">
+										<div><a href="/news/articles/<?= $id; ?>"><?= $title; ?></a></div>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</section>
+					<?php endif; ?>
 				</aside>
 			</div>
 		</div>

@@ -31,14 +31,14 @@
 			<div id="contact-wrapper">
 				<div id="contact-form">
 					<form action="contact.php" method="POST">
-						<h3>Contact us</h3>
+						<h3>CONTACT US</h3>
 						<p>Please fill out the form completely</p>
 						<div class="form-group">
 							<div><label for="first-name">first name</label><input type="text" class="form-control" id="first-name" name="first-name" required /></div>
 							<div><label for="last-name">last name</label><input type="text" class="form-control" id="last-name" name="last-name" required /></div>
 						</div>
 						<div class="form-grouping"><label for="email">Your email</label><input type="email" class="form-control" id="email" name="email" required /></div>
-						<div class="form-grouping"><label for="phoneNumber">phone number</label><input type="number" class="form-control" id="phoneNumber" name="phoneNumber" /></div>
+						<div class="form-grouping"><label for="phoneNumber">phone number</label><input type="number" class="form-control" class="phone_number" name="phoneNumber" /></div>
 						<label for="message">message</label><textarea id="message" name="message" class="form-control" placeholder="We're interested in what you have to say"></textarea>
 						<button type="submit">Submit</button>
 					</form>

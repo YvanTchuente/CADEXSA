@@ -17,24 +17,24 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming = (new ServerRequest())->initialize();
-$outgoing = new Request();
+$incoming_request =  (new ServerRequest())->initialize();
 $EventManager = new EventManager(Connection::Instance());
 
-if ($incoming->getMethod() == Constants::METHOD_POST) {
-    $eventID = (int)$incoming->getParsedBody()['eventID'];
-    $body = new TextStream(json_encode($incoming->getParsedBody()));
-    $Detector = new EventChangeDetector($outgoing->withBody($body), $eventID, $EventManager);
+if ($incoming_request->getMethod() == Constants::METHOD_POST) {
+    $outgoing_request =  new Request();
+    $eventID = (int)$incoming_request->getParsedBody()['eventID'];
+    $body = new TextStream(json_encode($incoming_request->getParsedBody()));
+    $Detector = new EventChangeDetector($outgoing_request->withBody($body), $eventID, $EventManager);
     if ($changes = $Detector->detect()) {
         $EventManager->modify($eventID, $changes);
         header('Location: /events/' . $eventID);
     } else {
         $error_msg = "No changes were detected";
-        $incoming = $incoming->withParsedBody(array('id' => $eventID));
+        $incoming_request =  $incoming_request->withParsedBody(array('id' => $eventID));
     }
 }
 
-$params = $incoming->getParsedBody();
+$params = $incoming_request->getParsedBody();
 if (empty($params)) {
     header('Location: /cms/events');
 }
@@ -114,6 +114,7 @@ $deadline_timestamp = strtotime($event->getDeadlineDate());
     <?php require_once dirname(__DIR__, 2) . "/includes/footer.php"; ?>
     <script>
         CKEDITOR.replace('editor');
+        CKEDITOR.config.height = 500;
     </script>
 </body>
 

@@ -4,20 +4,16 @@ require_once dirname(__DIR__, 2) . '/config/index.php';
 
 use Application\Membership\MemberManager;
 use Application\DateTime\{ChatTimeDuration, TimeDuration};
-use Application\MiddleWare\{
-	Request,
-	ServerRequest,
-};
+use Application\MiddleWare\ServerRequest;
 
-$incoming = (new ServerRequest())->initialize();
-$outgoing = new Request();
+$incoming_request = (new ServerRequest())->initialize();
 
 $is_visitor = false;
 $memberInfo = MemberManager::Instance()->getMember((int) $_SESSION['ID']);
 
-if ($incoming->getParsedBody()) {
-	$params = $incoming->getParsedBody();
-	if (isset($params['id']) && $params['id'] !== $_SESSION['ID']) {
+if ($incoming_request->getParsedBody()) {
+	$params = $incoming_request->getParsedBody();
+	if (isset($params['id']) && (int) $params['id'] !== $_SESSION['ID']) {
 		$is_visitor = true;
 		$memberID = $params['id'];
 		$memberInfo = MemberManager::Instance()->getMember((int) $memberID);
@@ -29,7 +25,7 @@ if ($incoming->getParsedBody()) {
 	}
 }
 
-if (!isset($memberInfo)) {
+if (empty($memberInfo)) {
 	header("Location: /members/login");
 }
 ?>
@@ -41,6 +37,7 @@ if (!isset($memberInfo)) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?= ucwords($memberInfo->getUserName()); ?> - CADEXSA</title>
 	<?php require_once dirname(__DIR__, 2) . "/includes/head_tag_includes.php"; ?>
+	<script type="module" src="/static/dist/js/pages/profile.js"></script>
 </head>
 
 <body id="profile-page">
@@ -56,7 +53,7 @@ if (!isset($memberInfo)) {
 				<div>
 					<div class="profile-nav">
 						<div class="user-heading">
-							<a href="" onclick="toggle_visibility('update_picture')"><img src="<?= $memberInfo->getPicture(); ?>" alt="user" /></a>
+							<a href="#"><img src="<?= $memberInfo->getPicture(); ?>" alt="<?= $memberInfo->getUserName(); ?>" /></a>
 							<h5><?= $memberInfo->getName(); ?></h5>
 							<p>
 								<span><?= $memberInfo->getEmail(); ?></span>
@@ -65,9 +62,9 @@ if (!isset($memberInfo)) {
 						</div>
 						<nav>
 							<ul>
-								<li class="tablink"><span onclick="openTab(event,'profile-info')" id="tabBtn1"><i class="fas fa-user"></i>Profile</span></li>
-								<?php if (!$is_visitor) : ?><li class="tablink"><span onclick="openTab(event,'chats')" id="tabBtn2"><i class="fas fa-envelope-open-text"></i>Messages</span></li><?php endif; ?>
-								<?php if (!$is_visitor) : ?><li class="tablink"><span onclick="openTab(event,'settings')" id="tabBtn4"><i class="fas fa-user-cog"></i>Account Settings</span></li><?php endif; ?>
+								<li class="tablink"><span id="tabBtn1"><i class="fas fa-user"></i>Profile</span></li>
+								<?php if (!$is_visitor) : ?><li class="tablink"><span id="tabBtn2"><i class="fas fa-envelope-open-text"></i>Messages</span></li><?php endif; ?>
+								<?php if (!$is_visitor) : ?><li class="tablink"><span id="tabBtn4"><i class="fas fa-user-cog"></i>Account Settings</span></li><?php endif; ?>
 							</ul>
 						</nav>
 					</div>
@@ -75,7 +72,7 @@ if (!isset($memberInfo)) {
 				<div class="profile-info">
 					<div class="tabcontent" id="profile-info">
 						<div class="panel bio-info">
-							<h5><i class="fas fa-user"></i>Member info</h5>
+							<h5><i class="fas fa-user"></i>Member</h5>
 							<div>
 								<div>
 									<p><label>First name</label><span><?= $memberInfo->getfirstname(); ?></span></p>
@@ -96,8 +93,13 @@ if (!isset($memberInfo)) {
 									<p><label>City</label><span><?= $memberInfo->getCity(); ?></span></p>
 								</div>
 								<div>
-									<p><label>Phone number</label><span><?= $memberInfo->getContact(); ?></span></p>
+									<p><label>Main phone number</label><span><?= $memberInfo->getContact(); ?></span></p>
 								</div>
+								<?php if (!is_null($memberInfo->getContact("secondary"))) : ?>
+									<div>
+										<p><label>Second phone number</label><?= $memberInfo->getContact("secondary"); ?></p>
+									</div>
+								<?php endif; ?>
 								<div>
 									<p><label>Batch year</label><span><?= $memberInfo->getBatch(); ?></p></span>
 								</div>
@@ -150,7 +152,7 @@ if (!isset($memberInfo)) {
 												$timeDiff = new ChatTimeDuration();
 												$state = MemberManager::Instance()->getState($chatUser->getID(), $timeDiff);
 											?>
-												<li class="user" onclick="openChatTab(event,<?= $chatUser->getID(); ?>,<?= $memberInfo->getID(); ?>)">
+												<li class="user" data-requesterUserID="<?= $memberInfo->getID(); ?>" data-requestedUserID="<?= $chatUser->getID(); ?>">
 													<img src="<?= $chatUser->getPicture(); ?>" />
 													<div>
 														<span class="user_name"><?= $chatUser->getName(); ?></span>
@@ -187,7 +189,7 @@ if (!isset($memberInfo)) {
 											<input type="hidden" name="chat_sender" id="chat_sender" value="<?= $memberInfo->getID(); ?>" form="send_chat" />
 											<input type="hidden" name="chat_receiver" id="chat_receiver" value="" form="send_chat" />
 											<textarea name="chat_msg" placeholder="Type a message" id="chat_msg" form="send_chat"></textarea>
-											<button class="send_btn" onclick="sendChat()"></button>
+											<button class="send_btn"></button>
 										</div>
 									</div>
 								</div>
@@ -199,15 +201,15 @@ if (!isset($memberInfo)) {
 						<div class="tabcontent" id="settings">
 							<div class="panel">
 								<h5><i class="fas fa-cog"></i> Update Profile</h5>
-								<button onclick="toggle_visibility('bc1')">Update Profile picture</button>
+								<button>Update Profile picture</button>
 								<form action="/members/profile/actions/profile.php" method="POST" id="updateProfile">
-									<div><label for="firstname">First name</label><input type="text" id="first-name" name="firstname" class="form-control" disabled /></div>
-									<div><label for="lastname">Last name</label><input type="text" id="lastname" name="lastname" class="form-control" disabled /></div>
+									<div><label for="firstname">First name</label><input type="text" id="first-name" name="firstname" class="form-control" /></div>
+									<div><label for="lastname">Last name</label><input type="text" id="lastname" name="lastname" class="form-control" /></div>
 									<div><label for="username">Username</label><input type="text" id="username" name="username" class="form-control" /></div>
 									<div><label for="email">Email</label><input type="email" id="email" name="email" class="form-control" /></div>
-									<div><label for="country">Country</label><input type="text" id="country" name="country" class="form-control" disabled /></div>
+									<div><label for="country">Country</label><input type="text" id="country" name="country" class="form-control" /></div>
 									<div><label for="city">City</label><input type="text" id="city" name="city" class="form-control" /></div>
-									<div><label for="contact">Phone number</label><input type="number" id="phoneNumber" name="contact" class="form-control" /></div>
+									<div><label for="contact">Phone number</label><input type="number" class="phone_number form-control" name="contact" /></div>
 									<div><label for="batch_year">Batch year</label><input type="number" id="batch_year" name="batch_year" class="form-control" disabled /></div>
 									<div><label for="aboutme">About me</label><textarea id="aboutme" name="aboutme" class="form-control"></textarea></div>
 									<input type="hidden" name="memberID" value="<?= $memberInfo->getID(); ?>" />
@@ -224,21 +226,22 @@ if (!isset($memberInfo)) {
 	<?php require_once dirname(__DIR__, 2) . "/includes/footer.php"; ?>
 	<?php if (!$is_visitor) : ?>
 		<!-- Upload profile picture -->
-		<div class="background-cover blurred" id="bc1">
-			<span class="fas fa-times" id="exit" onclick="toggle_visibility('bc1')"></span>
-			<div class="box upload-picture" id="update_profile_picture">
+		<div class="background-wrapper blurred" id="bc1">
+			<span class="fas fa-times" id="exit"></span>
+			<div class="box profile-picture-uploader" id="update_profile_picture">
 				<div id="header">
 					<h3>Profile Picture</h3>
 					<p>Select a picture and update your profile picture</p>
-					<button id="upload_btn">Upload</button>
 				</div>
-				<!-- Preview thumbnail of picture -->
 				<div id="picture_preview"></div>
 				<div id="footer">
-					<form id="profile_picture">
-						<input type="file" accept=".jpg, .jpeg, .png" id="input_picture" name="input_picture" />
-						<label for="input_picture">Select a picture</label>
-						<span id="input_text"></span>
+					<div>
+						<button>Select a picture</button>
+						<button>Upload</button>
+					</div>
+					<form>
+						<input type="file" accept=".jpg, .jpeg, .png" name="input_picture" />
+						<span id="picture_name"></span>
 						<input type="hidden" name="action" id="action" value="updateAvatar" />
 						<input type="hidden" name="memberID" id="memberID" value="<?= $memberInfo->getID(); ?>" />
 						<input type="hidden" name="username" value="<?= $memberInfo->getUserName(); ?>" />
@@ -248,24 +251,6 @@ if (!isset($memberInfo)) {
 		</div>
 	<?php endif; ?>
 	<!-- End -->
-	<script>
-		<?php if (isset($params['tab'])) {
-			switch ($_GET['tab']) {
-				case "chats":
-					echo "document.getElementById(\"tabBtn2\").click();";
-					break;
-				case "activities":
-					echo "document.getElementById(\"tabBtn3\").click();";
-					break;
-				case "settings":
-					echo "document.getElementById(\"tabBtn4\").click();";
-					break;
-			}
-		?>
-		<?php } else { ?>
-			document.getElementById("tabBtn1").click();
-		<?php } ?>
-	</script>
 </body>
 
 </html>

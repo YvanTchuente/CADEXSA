@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Application\CMS\News;
 
 /**
- * Represents a category used to group news articles
+ * Represents a tag used to label news articles
  */
-class Category
+class Tag
 {
     /**
      * @var int

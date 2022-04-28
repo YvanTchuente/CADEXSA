@@ -1,7 +1,10 @@
 <?php
 
+define('ITEMS_PER_PAGE', 6);
+
 require_once dirname(__DIR__) . '/config/index.php';
 
+use Application\CMS\Paginator;
 use Application\DateTime\Constants;
 use Application\CMS\News\TagManager;
 use Application\Database\Connection;
@@ -13,13 +16,23 @@ $incoming_request = (new ServerRequest())->initialize();
 $NewsManager = new NewsManager(Connection::Instance());
 $TagManager = new TagManager(Connection::Instance());
 
-// Retrieve all news articles from the database
-$articles = $NewsManager->list();
-$timeDiff = new TimeDuration();
+// Pagination
+$page = (int) ($_GET['page'] ?? 1);
+$paginator = new Paginator($NewsManager, ITEMS_PER_PAGE);
+$total_pages = $paginator->getTotalNumberOfPages();
 
-// Retrieve tag from the database
-$tagObjs = $TagManager->list();
-foreach ($tagObjs as $tagObj) {
+try {
+	$articles = $paginator->paginate($page);
+} catch (\Throwable $e) {
+	$url = $incoming_request->getUri()->getPath();
+	header('Location: ' . $url);
+}
+
+// Define time difference object
+$timeDuration = new TimeDuration();
+
+// Retrieve tags from the database
+foreach ($TagManager->list() as $tagObj) {
 	$tags[] = $tagObj->getName();
 }
 ?>
@@ -55,7 +68,7 @@ foreach ($tagObjs as $tagObj) {
 				<div class="filter-area">
 					<form id="news-filter">
 						<div class="nice-select" id="nice-select-1">
-							<span class="current" onclick="openSelect(event,'nice-select-1')">month</span>
+							<span class="current">month</span>
 							<ul class="dropdown">
 								<li class="selected">month</li>
 								<?php
@@ -78,7 +91,7 @@ foreach ($tagObjs as $tagObj) {
 							</select>
 						</div>
 						<div class="nice-select" id="nice-select-2">
-							<span class="current" onclick="openSelect(event,'nice-select-2')">year</span>
+							<span class="current">year</span>
 							<ul class="dropdown">
 								<li class="selected">year</li>
 								<li>2021</li>
@@ -91,7 +104,7 @@ foreach ($tagObjs as $tagObj) {
 							</select>
 						</div>
 						<div class="nice-select" id="nice-select-3">
-							<span class="current" onclick="openSelect(event,'nice-select-3')">tag</span>
+							<span class="current">tag</span>
 							<ul class="dropdown">
 								<li class="selected">Tag</li>
 								<?php
@@ -123,14 +136,15 @@ foreach ($tagObjs as $tagObj) {
 					<?php
 					foreach ($articles as $article) {
 						$articleID = $article->getID();
-						$preview = $NewsManager->preview((int)$articleID, $timeDiff);
+						$preview = $NewsManager->preview((int)$articleID, $timeDuration);
+						$preview['body'] = preg_replace('/<\/?(strong|b)>/', '', $preview['body']);
 					?>
 						<div>
 							<article class="news-item">
 								<div class="news-thumb"><img src="<?= $preview['thumbnail']; ?>" alt="news' thumbnail"></div>
 								<div class="news-content">
 									<h5><a href="/news/articles/<?= $articleID; ?>"><?= $preview['title']; ?></a></h5>
-									<p><?= $preview['body']; ?></p>
+									<?= $preview['body']; ?>
 									<div class="news-item-footer"><a href="/news/articles/<?= $articleID; ?>" class="news-link">More</a><span><i class="fas fa-clock"></i> <?= $preview['timeDiff']; ?></span></div>
 								</div>
 							</article>
@@ -140,16 +154,16 @@ foreach ($tagObjs as $tagObj) {
 			<?php } else { ?>
 				<div style="width: 80%; margin: auto; text-align: center; padding: 4rem 0;">There is no news articles, we invite you to come back later.</div>
 			<?php } ?>
-			<?php if (!empty($articles)) : ?>
+			<?php if ($total_pages > 1) : ?>
 				<div class="pagination-area">
 					<ul class="pagination">
-						<li class="page-item disabled"><a href="#" class="page-link"><span class="fas fa-angle-double-left"></span></a></li>
-						<li class="page-item active"><a href="#" class="page-link">1</a></li>
-						<li class="page-item"><a href="#" class="page-link">2</a></li>
-						<li class="page-item"><a href="#" class="page-link">3</a></li>
-						<li class="page-item"><a href="#" class="page-link">4</a></li>
-						<li class="page-item"><a href="#" class="page-link">5</a></li>
-						<li class="page-item"><a href="#" class="page-link"><span class="fas fa-angle-double-right"></span></a></li>
+						<li class="page-item <?php if ($page == 1) echo "disabled"; ?>"><a href="?page=<?= $page - 1; ?>" class="page-link"><span class="fas fa-angle-double-left"></span></a></li>
+						<?php
+						for ($i = 1; $i <= $total_pages; $i++) :
+						?>
+							<li class="page-item <?php if ($page == $i) echo "active"; ?>"><a href="?page=<?= $i; ?>" class="page-link"><?= $i; ?></a></li>
+						<?php endfor; ?>
+						<li class="page-item <?php if (($page + 1) > $total_pages) echo "disabled"; ?>"><a href="?page=<?= $page + 1; ?>" class="page-link"><span class="fas fa-angle-double-right"></span></a></li>
 					</ul>
 				</div>
 			<?php endif; ?>

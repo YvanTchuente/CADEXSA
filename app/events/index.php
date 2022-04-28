@@ -1,7 +1,10 @@
 <?php
 
+define('ITEMS_PER_PAGE', 3);
+
 require_once dirname(__DIR__) . '/config/index.php';
 
+use Application\CMS\Paginator;
 use Application\DateTime\Constants;
 use Application\Database\Connection;
 use Application\CMS\Events\EventManager;
@@ -10,7 +13,16 @@ use Application\MiddleWare\ServerRequest;
 $incoming_request = (new ServerRequest())->initialize();
 $EventManager = new EventManager(Connection::Instance());
 
-$events = $EventManager->list();
+$page = (int) ($_GET['page'] ?? 1);
+$paginator = new Paginator($EventManager, ITEMS_PER_PAGE);
+$total_pages = $paginator->getTotalNumberOfPages();
+
+try {
+	$events = $paginator->paginate($page);
+} catch (\Throwable $e) {
+	$url = $incoming_request->getUri()->getPath();
+	header('Location: ' . $url);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,16 +163,16 @@ $events = $EventManager->list();
 			<?php } else { ?>
 				<div style="width: 80%; margin: auto; text-align: center; padding: 4rem 0;">There is currently no upcoming event scheduled.</div>
 			<?php } ?>
-			<?php if (!empty($events)) : ?>
+			<?php if ($total_pages > 1) : ?>
 				<div class="pagination-area">
 					<ul class="pagination">
-						<li class="page-item disabled"><a href="#" class="page-link"><span class="fas fa-angle-double-left"></span></a></li>
-						<li class="page-item active"><a href="#" class="page-link">1</a></li>
-						<li class="page-item"><a href="#" class="page-link">2</a></li>
-						<li class="page-item"><a href="#" class="page-link">3</a></li>
-						<li class="page-item"><a href="#" class="page-link">4</a></li>
-						<li class="page-item"><a href="#" class="page-link">5</a></li>
-						<li class="page-item"><a href="#" class="page-link"><span class="fas fa-angle-double-right"></span></a></li>
+						<li class="page-item <?php if ($page == 1) echo "disabled"; ?>"><a href="?page=<?= $page - 1; ?>" class="page-link"><span class="fas fa-angle-double-left"></span></a></li>
+						<?php
+						for ($i = 1; $i <= $total_pages; $i++) :
+						?>
+							<li class="page-item <?php if ($page == $i) echo "active"; ?>"><a href="?page=<?= $i; ?>" class="page-link"><?= $i; ?></a></li>
+						<?php endfor; ?>
+						<li class="page-item <?php if (($page + 1) > $total_pages) echo "disabled"; ?>"><a href="?page=<?= $page + 1; ?>" class="page-link"><span class="fas fa-angle-double-right"></span></a></li>
 					</ul>
 				</div>
 			<?php endif; ?>

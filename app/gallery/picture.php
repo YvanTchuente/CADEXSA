@@ -49,12 +49,16 @@ try {
                 <div><img src="<?= $picture->getLocation(); ?>" alt="image"></div>
                 <div>
                     <div>
-                        <h4>Description</h4>
-                        <p><?= $picture->getDescription(); ?></p>
+                        <h5>Description</h5>
+                        <p style="text-align: justify;"><?= $picture->getDescription(); ?></p>
                     </div>
                     <div>
-                        <h4>Upload date</h4>
-                        <p><?= date('l, j F Y', strtotime($picture->getPublicationDate())); ?></p>
+                        <h5>Snapshot date</h5>
+                        <span><?= date('l, j F Y', strtotime($picture->getSnapshotDate())); ?></span>
+                    </div>
+                    <div>
+                        <h5>Upload date</h5>
+                        <span><?= date('l, j F Y', strtotime($picture->getPublicationDate())); ?></span>
                     </div>
                 </div>
             </div>

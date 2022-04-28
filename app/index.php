@@ -1,4 +1,23 @@
-<?php require_once __DIR__ . '/config/index.php'; ?>
+<?php
+
+require_once __DIR__ . '/config/index.php';
+
+use Application\Database\Connection;
+use Application\CMS\News\NewsManager;
+use Application\DateTime\TimeDuration;
+use Application\CMS\Events\EventManager;
+use Application\MiddleWare\ServerRequest;
+
+$incoming_request =  (new ServerRequest())->initialize();
+$EventManager = new EventManager(Connection::Instance());
+$NewsManager = new NewsManager(Connection::Instance());
+
+$events = $EventManager->list(3);
+$news_articles = $NewsManager->list(3);
+
+// Define time difference object
+$timeDuration = new TimeDuration();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,151 +114,77 @@
 			</div>
 		</div>
 	</div>
-	<!-- Upcomming events slideshow -->
-	<div id="events">
-		<div class="ws-container">
-			<div class="grid-container">
-				<div class="event-carousel-wrap">
-					<div class="event-title">
-						<h2>Upcoming Events</h2>
-					</div>
-					<div id="event_carousel" class="carousel">
-						<div class="carousel-item">
-							<div class="event-grid-container">
-								<div>
-									<div class="display-table">
-										<div class="table-cell">
-											<div class="event-text">
-												<div class="countdown" data-date="2022-01-27 21:00:00">
-													<div class="timer" id="day">
-														<span>Days</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="hour">
-														<span>Hours</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="minute">
-														<span>Min</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="second">
-														<span>Sec</span>
-														<span>00</span>
-													</div>
-													<div>
-														<span>Remaining time</span>
+	<?php if (!empty($events)) : ?>
+		<!-- Upcomming events slideshow -->
+		<div id="events">
+			<div class="ws-container">
+				<div class="grid-container">
+					<div class="event-carousel-wrap">
+						<div class="event-title">
+							<h2>Upcoming Events</h2>
+						</div>
+						<div id="event_carousel" class="carousel">
+							<?php
+							foreach ($events as $event) :
+								$eventID = $event->getID();
+								$preview = $EventManager->preview((int)$eventID);
+							?>
+								<div class="carousel-item">
+									<div class="event-grid-container">
+										<div>
+											<div class="display-table">
+												<div class="table-cell">
+													<div class="event-text">
+														<div class="countdown" data-date="<?= $preview['deadline']; ?>">
+															<div class="timer" id="day">
+																<span>Days</span>
+																<span>00</span>
+															</div>
+															<div class="timer" id="hour">
+																<span>Hours</span>
+																<span>00</span>
+															</div>
+															<div class="timer" id="minute">
+																<span>Min</span>
+																<span>00</span>
+															</div>
+															<div class="timer" id="second">
+																<span>Sec</span>
+																<span>00</span>
+															</div>
+															<div>
+																<span>Remaining time</span>
+															</div>
+														</div>
+														<h2><?= $preview['title']; ?></h2>
+														<h6><i class="fas fa-calendar-day"></i><?= date("l j F", strtotime($preview['deadline'])); ?> <i class="fas fa-clock"></i> <?= date("g a", strtotime($preview['deadline'])); ?></h6>
+														<?= $preview['body']; ?>
+														<a href="/events/<?= $eventID; ?>" class="event-link">Join us</a>
 													</div>
 												</div>
-												<h2>We are organising an End of Year party in december</h2>
-												<h6><i class="fas fa-calendar-day"></i> Monday 27 December <i class="fas fa-clock"></i> 9pm</h6>
-												<p>Lorem ipsm dolor sitg amet, csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam.</p>
-												<a href="/events/event-article.php" class="event-link">Join us</a>
+											</div>
+										</div>
+										<div>
+											<div class="event_thumbnail">
+												<img src="<?= $preview['thumbnail']; ?>" alt="event_thumbnail" />
 											</div>
 										</div>
 									</div>
 								</div>
-								<div>
-									<div class="event_thumbnail">
-										<img src="static/images/gallery/img.jpg" alt="event_thumbnail" />
-									</div>
-								</div>
-							</div>
+							<?php endforeach; ?>
 						</div>
-						<div class="carousel-item">
-							<div class="event-grid-container">
-								<div>
-									<div class="display-table">
-										<div class="table-cell">
-											<div class="event-text">
-												<div class="countdown" data-date="2022-09-25 04:30:00">
-													<div class="timer" id="day">
-														<span>Days</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="hour">
-														<span>Hours</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="minute">
-														<span>Min</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="second">
-														<span>Sec</span>
-														<span>00</span>
-													</div>
-													<div>
-														<span>Remaining time</span>
-													</div>
-												</div>
-												<h2>We are having a meeting at the president's home</h2>
-												<h6><i class="fas fa-calendar-day"></i> Saturday 31 July <i class="fas fa-clock"></i> 3pm</h6>
-												<p>Lorem ipsm dolor sitg amet, csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam.</p>
-												<a href="/events/event-article.php" class="event-link">Join us</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div>
-									<div class="event_thumbnail">
-										<img src="static/images/gallery/img3.jpg" alt="event_thumbnail" />
-									</div>
-								</div>
+						<?php if (count($events) > 1) : ?>
+							<!-- Carousel controls -->
+							<div class="event_nav carousel-nav">
+								<button class="event_btn" data-ride="prev"><i class="fas fa-arrow-left fa-lg"></i></button>
+								<button class="event_btn" data-ride="next"><i class="fas fa-arrow-right fa-lg"></i></button>
 							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="event-grid-container">
-								<div>
-									<div class="display-table">
-										<div class="table-cell">
-											<div class="event-text">
-												<div class="countdown" data-date="2022-01-27 21:00:00">
-													<div class="timer" id="day">
-														<span>Days</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="hour">
-														<span>Hours</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="minute">
-														<span>Min</span>
-														<span>00</span>
-													</div>
-													<div class="timer" id="second">
-														<span>Sec</span>
-														<span>00</span>
-													</div>
-													<div>
-														<span>Remaining time</span>
-													</div>
-												</div>
-												<h2>We are planning to become an non-profit organization</h2>
-												<h6><i class="fas fa-calendar-day"></i> Thursday 25 October<i class="fas fa-clock"></i> 4:30pm</h6>
-												<p>Lorem ipsm dolor sitg amet, csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis csetur adipicing elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam.</p>
-												<a href="/events/event-article.php" class="event-link">Join us</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div>
-									<div class="event_thumbnail">
-										<img src="static/images/gallery/img2.jpg" alt="event_thumbnail" />
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Carousel controls -->
-					<div class="event_nav carousel-nav">
-						<button class="event_btn" data-ride="prev"><i class="fas fa-arrow-left fa-lg"></i></button>
-						<button class="event_btn" data-ride="next"><i class="fas fa-arrow-right fa-lg"></i></button>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<!-- General informations -->
 	<div id="info_box">
 		<div class="ws-container">
@@ -294,43 +239,33 @@
 		<div><img src="static/images/gallery/img11.jpg" /></div>
 		<div><img src="static/images/gallery/img12.jpg" /></div>
 	</div>
-	<!-- Latest News Sections -->
-	<div id="news" class="content_block">
-		<div class="ws-container">
-			<h1>Recent News</h1>
-			<div class="grid-container">
-				<div>
-					<article class="news-item">
-						<div class="news-thumb"><img src="static/images/gallery/img.jpg" alt="news image"></div>
-						<div class="news-content">
-							<h5><a href="#">Recently we launched a massive project for new</a></h5>
-							<p>De create building thinking about your requirment and latest treand on our marketplace area. De create building thinking about your requirment and latest treand</p>
-							<div class="news-item-footer"><a href="" class="news-link">More</a><span><i class="fas fa-clock"></i> 1 day ago</span></div>
+	<?php if (!empty($news_articles)) : ?>
+		<!-- Latest News Sections -->
+		<div id="news" class="content_block">
+			<div class="ws-container">
+				<h1>Recent News</h1>
+				<div class="grid-container">
+					<?php
+					foreach ($news_articles as $article) :
+						$articleID = $article->getID();
+						$preview = $NewsManager->preview((int)$articleID, $timeDuration);
+						$preview['body'] = preg_replace('/<\/?(strong|b)>/', '', $preview['body']);
+					?>
+						<div>
+							<article class="news-item">
+								<div class="news-thumb"><img src="<?= $preview['thumbnail']; ?>" alt="news image"></div>
+								<div class="news-content">
+									<h5><a href="/news/articles/<?= $articleID; ?>"><?= $preview['title']; ?></a></h5>
+									<?= $preview['body']; ?>
+									<div class="news-item-footer"><a href="/news/articles/<?= $articleID; ?>" class="news-link">More</a><span><i class="fas fa-clock"></i> <?= $preview['timeDiff']; ?></span></div>
+								</div>
+							</article>
 						</div>
-					</article>
-				</div>
-				<div>
-					<article class="news-item">
-						<div class="news-thumb"><img src="static/images/gallery/img3.jpg" alt="news image"></div>
-						<div class="news-content">
-							<h5><a href="#">Several ex-students became ministers of government</a></h5>
-							<p>De create building thinking about your requirment and latest treand on our marketplace area. De create building thinking about your requirment and latest treand</p>
-							<div class="news-item-footer"><a href="" class="news-link">More</a><span><i class="fas fa-clock"></i> 5 hours ago</span></div>
-						</div>
-					</article>
-				</div>
-				<div>
-					<article class="news-item">
-						<div class="news-thumb"><img src="static/images/gallery/img2.jpg" alt="news image"></div>
-						<div class="news-content">
-							<h5><a href="#">The party organized last meeting went all well</a></h5>
-							<p>De create building thinking about your requirment and latest treand on our marketplace area. De create building thinking about your requirment and latest treand</p>
-							<div class="news-item-footer"><a href="" class="news-link">More</a><span><i class="fas fa-clock"></i> 5 months ago</span></div>
-						</div>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<!-- Testimonials section -->
 	<div id="testimonials" class="content_block">
 		<div class="ws-container">

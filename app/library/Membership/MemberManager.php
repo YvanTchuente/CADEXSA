@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Application\Membership;
 
+require_once dirname(__DIR__, 2) . '/config/mailserver.php';
+
 use Application\Database\{
     Connector,
     Connection,
     ConnectionTrait,
     ConnectionAware
 };
+use Application\MailerAware;
+use Application\MailerAwareTrait;
+use Application\Network\Requests;
 use Application\Security\Securer;
-use PHPMailer\PHPMailer\PHPMailer;
 use Application\Authentication\Authenticator;
 use Application\DateTime\TimeDurationInterface;
 use Application\MiddleWare\{Response, TextStream};
@@ -21,7 +25,7 @@ use Application\Security\{Decrypter, SecurerAware, SecurerAwareTrait};
 /**
  * Manages members and site visitors
  */
-class MemberManager implements Authenticator, ConnectionAware, SecurerAware
+class MemberManager implements Authenticator, ConnectionAware, SecurerAware, MailerAware
 {
     /**
      * Member's database table name
@@ -62,6 +66,8 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware
     use ConnectionTrait;
 
     use SecurerAwareTrait;
+
+    use MailerAwareTrait;
 
     public function Authenticate(RequestInterface $request, Decrypter $decrypter = null): ResponseInterface
     {
@@ -190,7 +196,7 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware
      * 
      * @throws \InvalidArgumentException For an invalid visitor argument
      **/
-    public function signup(array $visitor, PHPMailer $mail)
+    public function signup(array $visitor)
     {
         $isArrayValid = array_key_exists('firstname', $visitor) && array_key_exists('lastname', $visitor) && array_key_exists('username', $visitor) && array_key_exists('email', $visitor) && array_key_exists('main_contact', $visitor) && array_key_exists('password', $visitor) && array_key_exists('batch_year', $visitor) && array_key_exists('orientation', $visitor) && array_key_exists('city', $visitor) && array_key_exists('country', $visitor) && array_key_exists('aboutme', $visitor);
         if (!$isArrayValid) {
@@ -220,23 +226,22 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware
             $sql = "INSERT INTO `" . self::TABLE . "` (`" . implode("`,`", $fields) . "`) VALUES (" . implode(",", $placeholders) . ")";
             $stmt = $this->connector->getConnection()->prepare($sql);
             if ($stmt->execute($data)) {
+                // Subscribe the member newsletter notifications
+                $stmt = $this->connector->getConnection()->prepare("INSERT INTO newsletter (name, email) VALUES (:name, :email)");
+                $stmt->execute(["name" => $visitor['firstname'] . " " . $visitor['lastname'], "email" => $visitor['email']]);
                 // Configuring the welcoming mail
                 $recipientMail = $visitor['email'];
                 $subject = "Welcome to La Cadenelle Ex-Students Association";
-                $recipientName = $visitor['firstname'] . " " . $visitor['lastname'];
-                $msg = "Hi " . $recipientName . ",\r\n\r\n" . "We are happy, you joined our network. These are your login credentials\r\n" . "username : " . $visitor['username'] . "\r\n" . "password : " . $visitor['password'];
+                $recipientName = join(" ", [$visitor['firstname'], $visitor['lastname']]);
 
-                // Mail Recipients
-                $mail->setFrom('admin@cadexsa.org', 'CADEXSA Administration');
-                $mail->addAddress($recipientMail, $recipientName);     //Add a recipient
+                $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/welcome_mail.php?name=" . urlencode($recipientName);
+                $mail = (new Requests())->get($url);
+                $mail = preg_replace('/\$receiver_mail_address\$/', $recipientMail, $mail);
 
-                // Mail Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = $subject;
-                $mail->Body    = $msg;
-
-                // Send the mail
-                $mail->send();
+                $this->mailer->setSender(MAILSERVER_ACCOUNTS_ACCOUNT, "Cadexsa Welcome Team");
+                $this->mailer->setRecipient($recipientMail, $recipientName);
+                $this->mailer->setBody($mail, $subject);
+                $this->mailer->send();
 
                 return true;
             } else {

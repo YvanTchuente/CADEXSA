@@ -1,14 +1,13 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/config/mailserver.php';
 
-use Application\MiddleWare\{
-	Request,
-	ServerRequest
-};
+use Application\PHPMailerAdapter;
 use Application\Security\Securer;
 use Application\Database\Connection;
 use Application\Membership\MemberManager;
+use Application\MiddleWare\ServerRequest;
 
 if (MemberManager::Instance()->is_logged_in()) {
 	header('Location: profile.php');
@@ -22,8 +21,9 @@ if (!empty($param)) {
 	if (isset($param['username'])) {
 		$username = $param['username'];
 		if (MemberManager::Instance()->check_member_exist($username)) {
-			$res = Connection::Instance()->getConnection()->query("SELECT ID FROM members WHERE username = '" . $username . "'");
-			$memberID = $res->fetch(\PDO::FETCH_ASSOC)['ID'];
+			$stmt = Connection::Instance()->getConnection()->prepare("SELECT ID FROM members WHERE username = ?");
+			$stmt->execute([$username]);
+			$memberID = $stmt->fetch(\PDO::FETCH_ASSOC)['ID'];
 			$step = 2;
 		} else {
 			$msg = "Member does not exist";
@@ -37,12 +37,18 @@ if (!empty($param)) {
 			$tomail = $email;
 			$from = "From: team@cadexsa.org" . "\r\n";
 			$subject = "Recover your account";
-			$mail_msg = "Click on the link to recover your account\r\n\r\n" . $link;
+			$recipientMail = $email;
+			$senderMail = MAILSERVER_ACCOUNTS_ACCOUNT;
+			$mailBody = "<p>Click on the link to recover your account</p><p>$link</p>";
 
-			if (mail($tomail, $subject, $mail_msg, $from)) {
-				$step = 2;
-				$msg = "Check your mail for the code sent";
-			}
+			$mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_ACCOUNTS_ACCOUNT, MAILSERVER_PASSWORD);
+			$mailer->setSender($senderMail, "Cadexsa Accounts");
+			$mailer->setRecipient($recipientMail);
+			$mailer->setBody($mailBody, $subject);
+			$mailer->send();
+
+			$step = 2;
+			$msg = "Check your mail for the code sent";
 		} else {
 			$step = 2;
 			$msg = "Invalid email address";

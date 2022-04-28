@@ -2,6 +2,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/config/mailserver.php';
 
 use Application\Membership\MemberManager;
 use Application\MiddleWare\ServerRequest;
@@ -18,7 +19,7 @@ if (MemberManager::Instance()->is_logged_in()) {
                 <div id="contact-us">
                     <div class="contact_info">
                         <span><i class="fas fa-phone-alt"></i> (+237) 657384876</span>
-                        <span><i class="fas fa-envelope"></i> contact@cadexsa.org</span>
+                        <span><i class="fas fa-envelope"></i> <?= MAILSERVER_INFO_ACCOUNT; ?></span>
                     </div>
                 </div>
                 <div id="members-space">

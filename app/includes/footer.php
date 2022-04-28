@@ -1,3 +1,4 @@
+<?php require_once dirname(__DIR__) . '/config/mailserver.php'; ?>
 <!-- Website Footer Section -->
 <footer>
     <div class="ws-container">
@@ -45,7 +46,7 @@
         <div class="ws-container">
             <p>
                 <span><i class="fas fa-phone-alt"></i>(+237) 657384876</span>
-                <span><i class="fas fa-envelope"></i>contact@cadexsa.org</span>
+                <span><i class="fas fa-envelope"></i><?= MAILSERVER_INFO_ACCOUNT; ?></span>
             </p>
         </div>
     </div>

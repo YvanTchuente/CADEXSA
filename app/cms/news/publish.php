@@ -1,18 +1,23 @@
 <?php
 
 require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/config/mailserver.php';
 
 use Application\MiddleWare\{
+    Stream,
     Request,
     Constants,
     TextStream,
     ServerRequest
 };
-use Application\CMS\News\TagManager;
+use Application\Network\Requests;
+use Application\PHPMailerAdapter;
 use Application\Database\Connection;
-use Application\CMS\News\NewsManager;
+use Application\DateTime\TimeDuration;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
+use Application\Membership\NewsletterAgent;
+use Application\CMS\News\{NewsManager, TagManager};
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     $goto = urlencode("/cms/news/publish");
@@ -26,11 +31,38 @@ $TagManager = new TagManager(Connection::Instance());
 
 if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     $action = $incoming_request->getParsedBody()['action'];
+    // In case the user uploaded a picture as thumbnail
+    if (!preg_match('/\/articles_thumbnails\//', $incoming_request->getParsedBody()['thumbnail'])) {
+        $filename = sha1($_SESSION['username'] . $_SESSION['ID']) . ".jpg";
+        if (file_exists($filename)) unlink($filename);
+    } else {
+        $oldName = sha1($_SESSION['username'] . $_SESSION['ID']) . ".jpg";
+        $path = dirname(__DIR__, 2) . "/static/images/articles_thumbnails/";
+        $picture = new Stream($path . $oldName);
+        $newName = sha1($picture->getContents()) . ".jpg";
+        $is_renamed = rename($path . $oldName, $path . $newName);
+        if ($is_renamed) {
+            $body = $incoming_request->getParsedBody();
+            $body['thumbnail'] = "/static/images/articles_thumbnails/" . $newName;
+            $incoming_request =  $incoming_request->withParsedBody($body);
+        }
+    }
     $body = new TextStream(json_encode($incoming_request->getParsedBody()));
+    $outgoing_request =  $outgoing_request->withBody($body);
     // Creates and save and/or publish the result
     $articleID = $NewsManager->save($outgoing_request->withBody($body));
     switch ($action) {
         case 'publish':
+            sleep(1);
+            $preview = $NewsManager->preview($articleID, new TimeDuration());
+            $template_file_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/includes/mail_templates/new_article_mail.php';
+            $template_file_content = (new Requests())->post($template_file_url, $preview);
+
+            $mail_subject = $NewsManager->get($articleID)->getTitle();
+            $mail_body = $template_file_content;
+            $mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_NEWSLETTER_ACCOUNT, MAILSERVER_PASSWORD);
+            $newsletter_agent = new NewsletterAgent(Connection::Instance(), $mailer);
+            $newsletter_agent->broadcast($mail_subject, $mail_body, 'Cadexsa Article Alerts');
             header('Location: /news/articles/' . $articleID);
             break;
         case 'save':

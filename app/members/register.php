@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/config/mailserver.php';
 
 use Application\MiddleWare\{
 	Request,
@@ -8,7 +9,7 @@ use Application\MiddleWare\{
 	TextStream,
 	ServerRequest
 };
-use PHPMailer\PHPMailer\PHPMailer;
+use Application\PHPMailerAdapter;
 use Application\Membership\Validator;
 use Application\Membership\MemberManager;
 
@@ -24,8 +25,9 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
 	$outgoing_request =  $outgoing_request->withBody($body);
 	$response = Validator::validateRegistration($outgoing_request);
 	if (is_array($response)) {
-		$mailer = new PHPMailer(true);
-		$response = MemberManager::Instance()->signup($response, $mailer);
+		$mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_ACCOUNTS_ACCOUNT, MAILSERVER_PASSWORD);
+		MemberManager::Instance()->SetMailer($mailer);
+		$response = MemberManager::Instance()->signup($response);
 		if ($response === true) {
 			header('Location: login');
 		}

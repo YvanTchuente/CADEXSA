@@ -1,10 +1,10 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/index.php';
-require_once dirname(__DIR__) . '/library/functions.php';
 
-use Application\MiddleWare\Router\Router;
+use Application\Network\Requests;
 use Application\Membership\MemberManager;
+use Application\MiddleWare\Router\Router;
 use Application\MiddleWare\ServerRequest;
 
 $incoming = (new ServerRequest())->initialize();
@@ -42,7 +42,7 @@ $router->get('/members/?', function () {
             $url .= "&tab=$tab";
         }
 
-        $output = curl_request_page($url);
+        $output = (new Requests())->get($url);
         // Display the page
         echo $output;
     });

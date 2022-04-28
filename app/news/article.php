@@ -51,6 +51,9 @@ foreach ($NewsManager->list(5) as $article) {
 	<meta name="author" content="Yvan Tchuente">
 	<title>CADEXSA News: <?= $title; ?></title>
 	<?php require_once dirname(__DIR__) . "/includes/head_tag_includes.php"; ?>
+	<?php if (!MemberManager::Instance()->is_logged_in()) : ?>
+		<script type="module" src="/static/dist/js/newsletter.js"></script>
+	<?php endif; ?>
 </head>
 
 <body id="news_article">
@@ -123,6 +126,29 @@ foreach ($NewsManager->list(5) as $article) {
 		</div>
 	</div>
 	<?php require_once dirname(__DIR__) . "/includes/footer.php"; ?>
+	<?php if (!MemberManager::Instance()->is_logged_in()) : ?>
+		<div class="background-wrapper blurred" id="bw1">
+			<span class="fas fa-times" id="exit"></span>
+			<div class="newsletter-box">
+				<img src="/static/images/logo/Logo.png" alt="Logo">
+				<h2>Stay in touch with our newsletter</h2>
+				<p>Receive emails about our planned events and news of our activities on a monthly basis.</p>
+				<div class="form-grouping">
+					<div>
+						<i class="fas fa-user"></i>
+						<input type="text" class="form-control" placeholder="Name">
+					</div>
+				</div>
+				<div class="form-grouping">
+					<div>
+						<i class="fas fa-envelope"></i>
+						<input type="email" class="form-control" placeholder="E-mail" />
+					</div>
+				</div>
+				<button>Subscribe</button>
+			</div>
+		</div>
+	<?php endif; ?>
 </body>
 
 </html>

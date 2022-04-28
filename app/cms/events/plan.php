@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/config/mailserver.php';
 
 use Application\MiddleWare\{
     Request,
@@ -8,10 +9,14 @@ use Application\MiddleWare\{
     TextStream,
     ServerRequest
 };
+use Application\Network\Requests;
+use Application\PHPMailerAdapter;
 use Application\Database\Connection;
+use Application\DateTime\TimeDuration;
 use Application\CMS\Events\EventManager;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
+use Application\Membership\NewsletterAgent;
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
@@ -25,6 +30,17 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     $body = new TextStream(json_encode($incoming_request->getParsedBody()));
     // Creates and publish the result
     $eventID = $EventManager->save($outgoing_request->withBody($body));
+    sleep(1);
+    $preview = $EventManager->preview($eventID, new TimeDuration());
+    $template_file_url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/new_event_mail.php?deadline=" . urlencode($preview['deadline']);
+    $template_file_content = (new Requests())->post($template_file_url, $preview);
+
+    $title = $EventManager->get($eventID)->getTitle();
+    $mail_subject = 'Event: ' . $title;
+    $mail_body = $template_file_content;
+    $mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_NEWSLETTER_ACCOUNT, MAILSERVER_PASSWORD);
+    $newsletter_agent = new NewsletterAgent(Connection::Instance(), $mailer);
+    $newsletter_agent->broadcast($mail_subject, $mail_body, 'Cadexsa Event Alerts');
     header('Location: /events/' . $eventID);
 }
 ?>

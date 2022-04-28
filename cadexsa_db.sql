@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Server version: 10.4.20-MariaDB
+-- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -106,15 +106,6 @@ CREATE TABLE `members_levels` (
   `name` char(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Members'' roles';
 
---
--- Dumping data for table `members_levels`
---
-
-INSERT INTO `members_levels` (`ID`, `name`) VALUES
-(1, 'Admins'),
-(2, 'Editors'),
-(3, 'Regular');
-
 -- --------------------------------------------------------
 
 --
@@ -131,6 +122,17 @@ CREATE TABLE `news` (
   `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
   `publication_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='News article table';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter`
+--
+
+CREATE TABLE `newsletter` (
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -240,6 +242,12 @@ ALTER TABLE `members_levels`
 --
 ALTER TABLE `news`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `newsletter`
+--
+ALTER TABLE `newsletter`
+  ADD PRIMARY KEY (`email`);
 
 --
 -- Indexes for table `news_tags`

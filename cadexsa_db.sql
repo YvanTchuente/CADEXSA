@@ -40,6 +40,21 @@ CREATE TABLE `chats` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contact_page_messages`
+--
+
+CREATE TABLE `contact_page_messages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `timestamp` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
@@ -214,6 +229,12 @@ ALTER TABLE `chats`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `contact_page_messages`
+--
+ALTER TABLE `contact_page_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
@@ -288,6 +309,12 @@ ALTER TABLE `tags`
 --
 ALTER TABLE `chats`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contact_page_messages`
+--
+ALTER TABLE `contact_page_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `events`

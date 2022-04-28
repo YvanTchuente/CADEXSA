@@ -13,6 +13,16 @@
     column-gap: 50px;
   }
 
+  .msg {
+    display: block;
+    text-align: center;
+    padding: 0.3rem 1rem;
+    background: #deb887;
+    border-radius: 0.3rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 1rem rgb(0 0 0 / 20%);
+  }
+
   > div:last-of-type {
     grid-column: 1 / span 12;
     @include min-responsify($device-medium) {

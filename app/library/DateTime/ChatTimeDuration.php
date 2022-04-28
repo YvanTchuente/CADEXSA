@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace Application\DateTime;
 
+use Application\Membership\MemberStatus;
+
 class ChatTimeDuration extends TimeDuration implements TimeDurationInterface
 {
+    protected $status;
+
+    public function set_status(MemberStatus $status)
+    {
+        $this->status = $status->value;
+    }
+
     public function getLongestDuration()
     {
         if (empty($this->referenceTime)) {
@@ -36,12 +45,15 @@ class ChatTimeDuration extends TimeDuration implements TimeDurationInterface
                         break;
                     case 's':
                         $longest_duration = ($value > 1) ? $value . " secs ago" : $value . " sec ago";
-                        if ($value <= 15) {
+                        if ($value <= 15 && $this->status) {
                             $longest_duration = "Active";
                         }
                         break;
                     case 'f':
-                        $longest_duration = "0 sec ago";
+                        if ($this->status === 1)
+                            $longest_duration = "Active";
+                        else
+                            $longest_duration = "Offline";
                         break;
                 }
                 break;

@@ -69,7 +69,7 @@ while (true) {
                 }
                 $timeDuration = new ChatTimeDuration();
                 $state = MemberManager::Instance()->getState($chatUser->getID(), $timeDuration);
-                $users_states[] = array('n' => $n, 'status' => $state['status'], 'lastSeen' => $state['lastSeen']);
+                $users_states[] = array('n' => $n, 'memberID' => $chatUser->getID(), 'memberName' => $chatUser->getName(), 'status' => ucfirst($state['status']), 'lastSeen' => $state['lastSeen']);
                 $n++;
             }
             $states = array('type' => 'chat_users_states', 'states' => $users_states);

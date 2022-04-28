@@ -20,18 +20,18 @@ const user_search = document.querySelector("#user_search");
 const chats_menu_btn = document.querySelector("div.chatbox div.menu-wrapper");
 const updateProfileForm = document.querySelector("#updateProfile");
 let intervalID; // For the typing function
+// ID of the logged-in member
+const member = document.querySelector("#chat_sender").value;
+// Sockets variable
+let chats_socket, chats_update_socket;
 
-const member = document.querySelector("#chat_sender").value; // ID of the logged-in member
-
-// Stream chat-related updates from the chat update server
-const chats_update_socket = new WebSocket(
-  "ws://localhost:5050/members/profile/actions/chats-updates.php?member=" +
-    member
-);
-
-// Communicate with chat server
-const chats_socket = new WebSocket(
+// Establish a  connection and communicate with chat server
+start_connection_with_chatserver (
   "ws://localhost:5000/members/profile/actions/chats.php?member=" + member
+);
+// Establish a connection to stream chat-related updates from the chat update server
+start_connection_with_update_chatserver (
+  "ws://localhost:5050/members/profile/actions/chats-updates.php?member=" + member
 );
 
 const tablinks = document.getElementsByClassName("tablink");
@@ -73,44 +73,6 @@ pp_uploader_btn.addEventListener("click", () => {
 });
 
 routeToTab();
-
-chats_update_socket.onmessage = (e) => {
-  const msg = JSON.parse(e.data);
-  profile.updateChatUsers(msg.states);
-};
-
-chats_update_socket.onclose = (e) => {
-  console.log("Connection closed with the chat update server");
-};
-
-chats_socket.onopen = () => {
-  let users = document.querySelectorAll(".chatbox ul.list_users li.user");
-  if (users.length > 0) {
-    users[0].click();
-  }
-};
-
-chats_socket.onmessage = (e) => {
-  const msg = JSON.parse(e.data);
-  switch (msg.type) {
-    // updates the chat window with the new chat
-    case "new_chat":
-      profile.postChat(msg);
-      break;
-    // Updates the status of chat member
-    case "member_status":
-      profile.update_status(msg.member, msg.status);
-      break;
-    // Updates the chat window with the selected chat user
-    case "chat_user_info":
-      profile.updateChatWindow(msg);
-      break;
-  }
-};
-
-chats_socket.onclose = (e) => {
-  console.log("Connection closed with the chat server");
-};
 
 // Add an event listener to the menu button of the chat section
 chats_menu_btn.addEventListener("click", () => toggleOpen());
@@ -181,6 +143,53 @@ updateProfileForm.addEventListener("submit", (e) =>
 window.onresize = () => {
   resize(uploader_preview);
 };
+
+function start_connection_with_update_chatserver(url) {
+  chats_update_socket = new WebSocket(url);
+  chats_update_socket.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    profile.updateChatUsers(msg.states);
+  };
+  chats_update_socket.onclose = (e) => {
+    console.log("Connection closed with the chat update server, restoring the connection in 5 seconds");
+    setTimeout(() => {
+      start_connection_with_update_chatserver(url) // Reconnects
+    }, 5000);
+  };
+}
+
+function start_connection_with_chatserver  (url) {
+  chats_socket = new WebSocket(url);
+  chats_socket.onopen = () => {
+    let users = document.querySelectorAll(".chatbox ul.list_users li.user");
+    if (users.length > 0) {
+      users[0].click();
+    }
+  };
+  chats_socket.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    switch (msg.type) {
+      // updates the chat window with the new chat
+      case "new_chat":
+        profile.postChat(msg);
+        break;
+      // Updates the status of chat member
+      case "member_status":
+        profile.update_status(msg.member, msg.status);
+        break;
+      // Updates the chat window with the selected chat user
+      case "chat_user_info":
+        profile.updateChatWindow(msg);
+        break;
+    }
+  };
+  chats_socket.onclose = (e) => {
+    console.log("Connection closed with the chat server, restoring the connection in 5 seconds");
+    setTimeout(() => {
+      start_connection_with_chatserver(url) // Reconnects
+    }, 5000);
+  };
+}
 
 function resize(element) {
   const parent_element = element.parentElement;

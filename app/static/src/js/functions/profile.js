@@ -59,7 +59,7 @@ function openChatTab(event, requestedUser, requester, socket) {
     if (!isset(interval)) {
       interval = setInterval(() => {
         update_last_activity(socket);
-      }, 15000);
+      }, 10000);
     }
   }
 }
@@ -92,6 +92,17 @@ function updateChatWindow(chat_user_info) {
       const element = conversation[index];
       chatWindow.innerHTML += element;
     }
+  }
+}
+
+async function update_current_correspondent(member_name, status) {
+  const correspondent_status = document.getElementById("correspondent_status");
+  const correspondent_name = document.getElementById("correspondent_name").innerText;
+
+  if (correspondent_name == member_name) {
+    if (status !== 'online') correspondent_status.className = `status ${status.toLowerCase()}`;
+    else correspondent_status.classList.remove('offline');
+    correspondent_status.innerText = status;
   }
 }
 
@@ -173,7 +184,9 @@ function updateChatUsers(new_states) {
     for (let i = 0; i < new_states.length; i++) {
       if (j === new_states[i].n) {
         users[j][0].innerHTML = new_states[i].lastSeen;
-        users[j][1].className = `status ${new_states[i].status}`;
+        users[j][1].className = `status ${new_states[i].status.toLowerCase()}`;
+        // in case current chat member being processed is the correspondent of the member
+        update_current_correspondent(new_states[i].memberName, new_states[i].status);
       }
     }
   }

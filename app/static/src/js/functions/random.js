@@ -101,10 +101,14 @@ export function toggleOpen() {
     user_panel.classList.remove("open");
     setTimeout(() => {
       chats_section.removeAttribute("style");
+      user_panel.removeAttribute("style");
     }, 500);
   } else {
-    user_panel.classList.add("open");
-    chats_section.style.width = "60%";
+    user_panel.style.display = "block";
+    setTimeout(() => {
+      user_panel.classList.add("open");
+      chats_section.style.width = "60%";
+    }, 50);
   }
   menubtn.classList.toggle("open");
 }

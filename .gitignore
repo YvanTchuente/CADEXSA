@@ -1,5 +1,7 @@
 # Static files
 *.env
+results.xml
+.phpunit.result.cache
 cadexsa_db_with_data.sql
 
 # Directories
@@ -9,5 +11,6 @@ node_modules/*
 vendor/*
 app/logs/*
 app/tmp/*
+html-coverage/*
 app/static/images/profile_pictures/*
 app/static/images/articles_thumbnails/*

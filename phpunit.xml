@@ -15,8 +15,11 @@
             <directory suffix=".php">app/Library</directory>
         </include>
         <exclude>
+            <directory>app/library/Database</directory>
+            <directory>app/library/Security</directory>
             <file>app/library/Autoload/Loader.php</file>
             <file>app/library/PHPMailerAdapter.php</file>
+            <file>app/library/Network/WebSocketServer.php</file>
         </exclude>
         <report>
             <html outputDirectory="html-coverage" />

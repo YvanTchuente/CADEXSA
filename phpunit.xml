@@ -17,9 +17,14 @@
         <exclude>
             <directory>app/library/Database</directory>
             <directory>app/library/Security</directory>
+            <file>app/library/Error/Handler.php</file>
             <file>app/library/Autoload/Loader.php</file>
             <file>app/library/PHPMailerAdapter.php</file>
             <file>app/library/Network/WebSocketServer.php</file>
+            <file>app/library/CMS/News/DeleteNewsState.php</file>
+            <file>app/library/CMS/Events/DeleteEventState.php</file>
+            <file>app/library/CMS/Gallery/DeletePictureState.php</file>
+            <file>app/library/Membership/MemberBuildDirector.php</file>
         </exclude>
         <report>
             <html outputDirectory="html-coverage" />

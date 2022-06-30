@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\Network\Requests;
+use Application\Network\Client;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
 use Application\MiddleWare\Http\Message\Factory;
@@ -53,6 +53,14 @@ function format_mail($message, $senderName, $senderMail, $phone)
     global $when;
     $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/contact_form_mail.php";
     $data = ['name' => $senderName, 'email' => $senderMail, 'phone' => $phone, 'message' => $message, 'when' => date('l, j F Y', strtotime($when))];
-    $mail_message = (new Requests())->post($url, $data);
+
+    $client = new Client(Factory::instance(), Factory::instance(), Factory::instance());
+    $body = Factory::instance()->createStream(http_build_query($data));
+    $request = Factory::instance()->createRequest('post', $url)
+        ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+        ->withBody($body);
+    $response = $client->sendRequest($request);
+    $mail_message = (string) $response->getBody();
+
     return $mail_message;
 }

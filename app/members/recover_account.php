@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\Network\Requests;
+use Application\Network\Client;
 use Application\PHPMailerAdapter;
 use Application\Security\Securer;
 use Application\Database\Connection;
@@ -59,7 +59,15 @@ if (!empty($param) || !empty($_COOKIE['password_reset_count'])) {
 			$subject = "Recover your account";
 
 			$template_file_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/includes/mail_templates/recover_account_mail.php';
-			$mailBody = (new Requests())->post($template_file_url, ['username' => $member->getUserName(), 'link' => $link]);
+
+			$data = ['username' => $member->getUserName(), 'link' => $link];
+			$client = new Client(Factory::instance(), Factory::instance(), Factory::instance());
+			$body = Factory::instance()->createStream(http_build_query($data));
+			$request = Factory::instance()->createRequest('post', $template_file_url)
+				->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+				->withBody($body);
+			$response = $client->sendRequest($request);
+			$mailBody = (string) $response->getBody();
 
 			$mailer = new PHPMailerAdapter(MAILSERVER_HOST, MAILSERVER_ACCOUNTS_ACCOUNT, MAILSERVER_PASSWORD);
 			$mailer->setSender($senderMail, "Cadexsa Accounts");

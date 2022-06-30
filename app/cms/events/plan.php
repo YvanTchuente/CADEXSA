@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
-use Application\Network\Requests;
+use Application\Network\Client;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
 use Application\DateTime\Difference;
@@ -28,7 +28,14 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     sleep(1);
     $preview = $EventManager->preview($eventID, new Difference());
     $template_file_url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/new_event_mail.php?deadline=" . urlencode($preview['deadline']);
-    $template_file_content = (new Requests())->post($template_file_url, $preview);
+
+    $client = new Client(Factory::instance(), Factory::instance(), Factory::instance());
+    $body = Factory::instance()->createStream(http_build_query($preview));
+    $request = Factory::instance()->createRequest('post', $template_file_url)
+        ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+        ->withBody($body);
+    $response = $client->sendRequest($request);
+    $template_file_content = (string) $response->getBody();
 
     $title = $EventManager->get($eventID)->getTitle();
     $mail_subject = 'Event: ' . $title;

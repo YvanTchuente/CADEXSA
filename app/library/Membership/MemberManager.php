@@ -13,15 +13,15 @@ use Application\Database\{
     ConnectionAware
 };
 use Application\MailerAware;
+use Application\Network\Client;
 use Application\MailerAwareTrait;
-use Application\Network\Requests;
 use Application\Security\Securer;
 use Application\Membership\MemberStatus;
 use Application\DateTime\ChatTimeDifference;
-use Application\Authentication\Authenticator;
-use Application\MiddleWare\{Response, TextStream};
+use Application\MiddleWare\Http\Message\Factory;
+use Application\MiddleWare\Authentication\Authenticator;
+use Application\Security\{SecurerAware, SecurerAwareTrait};
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
-use Application\Security\{Decrypter, SecurerAware, SecurerAwareTrait};
 
 /**
  * Manages members and site visitors
@@ -70,13 +70,13 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
 
     use MailerAwareTrait;
 
-    public function Authenticate(RequestInterface $request, Decrypter $decrypter = null): ResponseInterface
+    public function Authenticate(RequestInterface $request): ResponseInterface
     {
         $code = 401;
-        $body = new TextStream('Authentication credentials incorrect');
+        $body = Factory::instance()->createStream('Authentication credentials incorrect');
         $contents = (string) $request->getBody();
         $params = json_decode($contents);
-        $response = new Response();
+        $response = Factory::instance()->createResponse();
         $username = $params->username ?? false;
         if ($username) {
             $sql = 'SELECT * FROM ' . self::TABLE . ' WHERE username = ?';
@@ -93,7 +93,7 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
                     unset($row['password']);
                     unset($row['password_key']);
                     unset($row['iv']);
-                    $body = new TextStream(json_encode($row));
+                    $body = Factory::instance()->createStream(json_encode($row));
                     $response = $response->withBody($body);
                     $code = 200;
                 }
@@ -139,7 +139,7 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
      **/
     public function login(RequestInterface $request)
     {
-        $response = $this->Authenticate($request, $this->decrypter);
+        $response = $this->Authenticate($request);
         if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             $member = json_decode($response->getBody()->getContents());  // Stores the member in an object
             // Checks online members records 
@@ -236,7 +236,12 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
                 $recipientName = join(" ", [$visitor['firstname'], $visitor['lastname']]);
 
                 $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/welcome_mail.php?name=" . urlencode($recipientName);
-                $mail = (new Requests())->get($url);
+
+                $client = new Client(Factory::instance(), Factory::instance(), Factory::instance());
+                $request = Factory::instance()->createRequest('get', $url);
+                $response = $client->sendRequest($request);
+                $mail = (string) $response->getBody();
+
                 $mail = preg_replace('/\$receiver_mail_address\$/', $recipientMail, $mail);
 
                 $this->mailer->setSender(MAILSERVER_ACCOUNTS_ACCOUNT, "Cadexsa Welcome Team");

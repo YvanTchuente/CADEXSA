@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\Network\Requests;
+use Application\Network\Client;
 use Application\Membership\MemberManager;
 use Application\MiddleWare\Routing\Router;
 use Application\MiddleWare\Http\Message\Factory;
@@ -42,7 +42,10 @@ $router->get('/members/?', function () {
             $url .= "&tab=$tab";
         }
 
-        $output = (new Requests())->get($url);
+        $client = new Client(Factory::instance(), Factory::instance(), Factory::instance());
+        $request = Factory::instance()->createRequest('get', $url);
+        $response = $client->sendRequest($request);
+        $output = (string) $response->getBody();
         // Display the page
         echo $output;
     });

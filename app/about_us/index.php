@@ -1,4 +1,4 @@
-<?php require_once dirname(__DIR__) . '/config/index.php'; ?>
+<?php require_once dirname(__DIR__) . '/bootstrap/starter.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 

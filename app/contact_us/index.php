@@ -1,7 +1,6 @@
-<?php 
+<?php
 
-require_once dirname(__DIR__) . '/config/index.php'; 
-require_once dirname(__DIR__) . '/config/mailserver.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
 use Application\MiddleWare\ServerRequest;
@@ -15,9 +14,13 @@ if ($payload) {
 	$lastItem_time = $query->fetch()[0];
 	$diff = time() - strtotime($lastItem_time);
 	if ($diff <= 2) {
-		if (in_array('success', $payload_keys)) { $msg = "Your request has successfully been saved"; }
-		if (in_array('error', $payload_keys)) { $msg = "A error occurred while processing the request"; }
-	} else { 
+		if (in_array('success', $payload_keys)) {
+			$msg = "Your request has successfully been saved";
+		}
+		if (in_array('error', $payload_keys)) {
+			$msg = "A error occurred while processing the request";
+		}
+	} else {
 		header('Location: /contact_us/');
 	}
 }
@@ -56,7 +59,7 @@ if ($payload) {
 					<form action="contact.php" method="POST">
 						<h3>CONTACT US</h3>
 						<p>Please fill out the form completely</p>
-						<?php if(isset($msg)): ?><span class="msg"><?= $msg; ?></span><?php endif; ?>
+						<?php if (isset($msg)) : ?><span class="msg"><?= $msg; ?></span><?php endif; ?>
 						<div class="form-group">
 							<div><label for="first-name">first name</label><input type="text" class="form-control" id="first-name" name="first-name" required /></div>
 							<div><label for="last-name">last name</label><input type="text" class="form-control" id="last-name" name="last-name" required /></div>

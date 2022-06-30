@@ -2,7 +2,7 @@
 
 define('ITEMS_PER_PAGE', 8);
 
-require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\CMS\Paginator;
 use Application\DateTime\Constants;

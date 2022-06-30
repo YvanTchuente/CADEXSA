@@ -2,7 +2,7 @@
 
 define('STANDARD_FILES', array('limitSize' => 3 * (1024 * 1024), 'allowedTypes' => ['image/jpeg' => 'jpg']));
 
-require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
 use Application\MiddleWare\Constants;

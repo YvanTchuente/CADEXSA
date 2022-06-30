@@ -2,14 +2,14 @@
 
 define('ITEMS_PER_PAGE', 6);
 
-require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\CMS\Paginator;
 use Application\DateTime\Constants;
 use Application\CMS\News\TagManager;
 use Application\Database\Connection;
+use Application\DateTime\Difference;
 use Application\CMS\News\NewsManager;
-use Application\DateTime\TimeDuration;
 use Application\MiddleWare\ServerRequest;
 
 $incoming_request = (new ServerRequest())->initialize();
@@ -29,7 +29,7 @@ try {
 }
 
 // Define time difference object
-$timeDuration = new TimeDuration();
+$timeDifference = new Difference();
 
 // Retrieve tags from the database
 foreach ($TagManager->list() as $tagObj) {
@@ -136,7 +136,7 @@ foreach ($TagManager->list() as $tagObj) {
 					<?php
 					foreach ($articles as $article) {
 						$articleID = $article->getID();
-						$preview = $NewsManager->preview((int)$articleID, $timeDuration);
+						$preview = $NewsManager->preview((int)$articleID, $timeDifference);
 						$preview['body'] = preg_replace('/<\/?(strong|b)>/', '', $preview['body']);
 					?>
 						<div>

@@ -1,11 +1,11 @@
 <?php
 
-require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Network\Requests;
 use Application\Membership\MemberManager;
-use Application\MiddleWare\Router\Router;
 use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Routing\Router;
 
 $incoming = (new ServerRequest())->initialize();
 $router = new Router($incoming);

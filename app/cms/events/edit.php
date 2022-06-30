@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\MiddleWare\{
     Request,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\MiddleWare\Router;
+namespace Application\MiddleWare\Routing;
 
 class RouteNotFoundException extends \RuntimeException
 {

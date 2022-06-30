@@ -1,7 +1,6 @@
 <?php
 
-require_once dirname(__DIR__, 2) . '/config/index.php';
-require_once dirname(__DIR__, 2) . '/config/mailserver.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\MiddleWare\{
     Stream,
@@ -13,7 +12,7 @@ use Application\MiddleWare\{
 use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
-use Application\DateTime\TimeDuration;
+use Application\DateTime\Difference;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
 use Application\Membership\NewsletterAgent;
@@ -54,7 +53,7 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     switch ($action) {
         case 'publish':
             sleep(1);
-            $preview = $NewsManager->preview($articleID, new TimeDuration());
+            $preview = $NewsManager->preview($articleID, new Difference());
             $template_file_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/includes/mail_templates/new_article_mail.php';
             $template_file_content = (new Requests())->post($template_file_url, $preview);
 

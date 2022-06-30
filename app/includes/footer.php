@@ -1,4 +1,4 @@
-<?php require_once dirname(__DIR__) . '/config/mailserver.php'; ?>
+<?php require_once dirname(__DIR__) . '/bootstrap/config.php'; ?>
 <!-- Website Footer Section -->
 <footer>
     <div class="ws-container">

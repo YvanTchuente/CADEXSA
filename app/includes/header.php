@@ -1,8 +1,7 @@
 <!-- Website Header Section -->
 <?php
 
-require_once dirname(__DIR__) . '/config/index.php';
-require_once dirname(__DIR__) . '/config/mailserver.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Membership\MemberManager;
 use Application\MiddleWare\ServerRequest;

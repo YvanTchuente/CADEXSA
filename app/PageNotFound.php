@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config/index.php';
+require_once __DIR__ . '/bootstrap/starter.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/config/index.php';
+require_once __DIR__ . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
+use Application\DateTime\Difference;
 use Application\CMS\News\NewsManager;
-use Application\DateTime\TimeDuration;
 use Application\CMS\Events\EventManager;
 use Application\MiddleWare\ServerRequest;
 
@@ -16,7 +16,7 @@ $events = $EventManager->list(3);
 $news_articles = $NewsManager->list(3);
 
 // Define time difference object
-$timeDuration = new TimeDuration();
+$timeDifference = new Difference();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -248,7 +248,7 @@ $timeDuration = new TimeDuration();
 					<?php
 					foreach ($news_articles as $article) :
 						$articleID = $article->getID();
-						$preview = $NewsManager->preview((int)$articleID, $timeDuration);
+						$preview = $NewsManager->preview((int)$articleID, $timeDifference);
 						$preview['body'] = preg_replace('/<\/?(strong|b)>/', '', $preview['body']);
 					?>
 						<div>

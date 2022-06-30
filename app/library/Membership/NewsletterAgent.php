@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Application\Membership;
 
-require_once dirname(__DIR__, 2) . '/config/mailserver.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/config.php';
 
 use Application\MailerAware;
 use Application\MailerInterface;

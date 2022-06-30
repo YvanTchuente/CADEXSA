@@ -1,9 +1,9 @@
 <?php
 // Membership profile page
-require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
+use Application\DateTime\Difference;
 use Application\Membership\MemberManager;
-use Application\DateTime\{ChatTimeDuration, TimeDuration};
 use Application\MiddleWare\ServerRequest;
 
 $incoming_request = (new ServerRequest())->initialize();
@@ -17,7 +17,7 @@ if ($incoming_request->getParsedBody()) {
 		$is_visitor = true;
 		$memberID = $params['id'];
 		$memberInfo = MemberManager::Instance()->getMember((int) $memberID);
-		$state = MemberManager::Instance()->getState($memberID, new TimeDuration());
+		$state = MemberManager::Instance()->getState($memberID, new Difference());
 		$status = $state['status'];
 		if ($status == "offline") {
 			$lastConnection = $state['lastSeen'];
@@ -149,7 +149,7 @@ if (empty($memberInfo)) {
 												if ($memberInfo->getID() == $chatUser->getID()) {
 													continue;
 												}
-												$timeDiff = new ChatTimeDuration();
+												$timeDiff = new Difference();
 												$state = MemberManager::Instance()->getState($chatUser->getID(), $timeDiff);
 											?>
 												<li class="user" data-requesterUserID="<?= $memberInfo->getID(); ?>" data-requestedUserID="<?= $chatUser->getID(); ?>">

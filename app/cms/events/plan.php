@@ -1,7 +1,6 @@
 <?php
 
-require_once dirname(__DIR__, 2) . '/config/index.php';
-require_once dirname(__DIR__, 2) . '/config/mailserver.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\MiddleWare\{
     Request,
@@ -12,7 +11,7 @@ use Application\MiddleWare\{
 use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
-use Application\DateTime\TimeDuration;
+use Application\DateTime\Difference;
 use Application\CMS\Events\EventManager;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
@@ -31,7 +30,7 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     // Creates and publish the result
     $eventID = $EventManager->save($outgoing_request->withBody($body));
     sleep(1);
-    $preview = $EventManager->preview($eventID, new TimeDuration());
+    $preview = $EventManager->preview($eventID, new Difference());
     $template_file_url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/includes/mail_templates/new_event_mail.php?deadline=" . urlencode($preview['deadline']);
     $template_file_content = (new Requests())->post($template_file_url, $preview);
 

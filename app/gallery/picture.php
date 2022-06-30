@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__DIR__) . '/config/index.php';
+require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
 use Application\MiddleWare\ServerRequest;

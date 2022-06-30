@@ -1,10 +1,10 @@
 <?php
 
-require_once dirname(__DIR__, 2) . '/config/index.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
+use Application\DateTime\Difference;
 use Application\CMS\News\NewsManager;
-use Application\DateTime\TimeDuration;
 use Application\Membership\MemberManager;
 use Application\MiddleWare\ServerRequest;
 
@@ -16,7 +16,7 @@ $incoming_request =  (new ServerRequest())->initialize();
 $NewsManager = new NewsManager(Connection::Instance());
 
 $articles = $NewsManager->list(3);
-$timeDuration = new TimeDuration();
+$timeDifference = new Difference();
 ?>
 <!DOCTYPE html>
 <html class="cms" lang="en">
@@ -49,8 +49,8 @@ $timeDuration = new TimeDuration();
                     <div class="news-grid-container">
                         <?php foreach ($articles as $article) {
                             $articleID = $article->getID();
-                            $preview = $NewsManager->preview((int)$articleID, $timeDuration);
-                    ?>
+                            $preview = $NewsManager->preview((int)$articleID, $timeDifference);
+                        ?>
                             <div>
                                 <article class="news-item">
                                     <div class="news-thumb"><img src="<?= $preview['thumbnail']; ?>" alt="news' thumbnail"></div>

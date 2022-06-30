@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Application\Membership;
 
-require_once dirname(__DIR__, 2) . '/config/mailserver.php';
+require_once dirname(__DIR__, 2) . '/bootstrap/config.php';
 
 use Application\Database\{
     Connector,
@@ -17,10 +17,10 @@ use Application\MailerAwareTrait;
 use Application\Network\Requests;
 use Application\Security\Securer;
 use Application\Membership\MemberStatus;
+use Application\DateTime\ChatTimeDifference;
 use Application\Authentication\Authenticator;
 use Application\MiddleWare\{Response, TextStream};
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
-use Application\DateTime\{ChatTimeDuration, TimeDurationInterface};
 use Application\Security\{Decrypter, SecurerAware, SecurerAwareTrait};
 
 /**
@@ -32,12 +32,12 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
      * Member's database table name
      */
     private const TABLE = 'members';
-    
+
     /**
      * @var MemberBuilder
      */
     private $builder;
-    
+
     /**
      * @var MemberBuildDirector
      */
@@ -335,27 +335,27 @@ class MemberManager implements Authenticator, ConnectionAware, SecurerAware, Mai
      * 
      * @return array The array contains the keys 'status and 'lastSeen'
      **/
-    public function getState(int $memberID, TimeDurationInterface|ChatTimeDuration $timeDuration)
+    public function getState(int $memberID, ChatTimeDifference $timeDifference)
     {
         $member = $this->getMember($memberID);
         $res = $this->connector->getConnection()->query("SELECT last_activity FROM online_members WHERE memberID='" . $member->getID() . "'");
         if ($row = $res->fetch(\PDO::FETCH_ASSOC)) {
             $status = "online";
             $lastActivity = new \DateTime($row['last_activity']);
-            if (ChatTimeDuration::class == get_class($timeDuration))
-                $timeDuration->set_status(MemberStatus::ONLINE);
-            $timeDuration->setReferenceTime($lastActivity);
-            $timeDuration->setTargetTime(new \DateTime());
-            $last_seen = $timeDuration->getLongestDuration();
+            if (ChatTimeDifference::class == get_class($timeDifference))
+                $timeDifference->setStatus(MemberStatus::ONLINE);
+            $timeDifference->setReferenceTime($lastActivity);
+            $timeDifference->setTargetTime(new \DateTime());
+            $last_seen = $timeDifference->diff('short');
         } else {
             $status = "offline";
             $last_connection = $member->getLastConnection();
             $last_connection = (isset($last_connection)) ? new \DateTime($member->getLastConnection()) : new \DateTime();
-            if (ChatTimeDuration::class == get_class($timeDuration))
-                $timeDuration->set_status(MemberStatus::OFFLINE);
-            $timeDuration->setReferenceTime($last_connection);
-            $timeDuration->setTargetTime(new \DateTime());
-            $last_seen = $timeDuration->getLongestDuration();
+            if (ChatTimeDifference::class == get_class($timeDifference))
+                $timeDifference->setStatus(MemberStatus::OFFLINE);
+            $timeDifference->setReferenceTime($last_connection);
+            $timeDifference->setTargetTime(new \DateTime());
+            $last_seen = $timeDifference->diff('short');
         }
         $state = array('status' => $status, 'lastSeen' => $last_seen);
         return $state;

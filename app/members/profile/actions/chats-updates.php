@@ -13,7 +13,6 @@ ob_implicit_flush();
 
 use Application\Network\WebSocketServer;
 use Application\Membership\MemberManager;
-use Application\DateTime\ChatTimeDuration;
 
 $address = gethostbyname("localhost");
 $port = 5050;
@@ -67,8 +66,8 @@ while (true) {
                 if ($memberID == $chatUser->getID()) {
                     continue;
                 }
-                $timeDuration = new ChatTimeDuration();
-                $state = MemberManager::Instance()->getState($chatUser->getID(), $timeDuration);
+                $timeDifference = new Difference();
+                $state = MemberManager::Instance()->getState($chatUser->getID(), $timeDifference);
                 $users_states[] = array('n' => $n, 'memberID' => $chatUser->getID(), 'memberName' => $chatUser->getName(), 'status' => ucfirst($state['status']), 'lastSeen' => $state['lastSeen']);
                 $n++;
             }

@@ -1,6 +1,6 @@
 <?php
 // Handles profile related tasks
-require_once dirname(__DIR__, 3) . '/config/index.php';
+require_once dirname(__DIR__, 3) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
 use Application\Membership\MemberManager;

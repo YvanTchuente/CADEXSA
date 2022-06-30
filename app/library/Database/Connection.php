@@ -54,7 +54,13 @@ class Connection implements Connector
     public static function Instance(): self
     {
         if (!isset(self::$instance)) {
-            require dirname(__DIR__, 2) . '/config/db-config-development.php';
+            $params = [
+                'driver' => DB_DRIVER,
+                'host' => DB_HOST,
+                'user' => DB_USER,
+                'password' => DB_PASSWORD,
+                'dbname' => DB_NAME,
+            ];
             self::$instance = new self($params);
         }
         return self::$instance;

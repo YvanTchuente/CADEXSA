@@ -19,6 +19,11 @@ class Loader
     private static $dirs;
 
     /**
+     * @var string[]
+     */
+    private static $translations = [];
+
+    /**
      * Loads a class
      * 
      * @param string $filename Filename of the class
@@ -43,7 +48,7 @@ class Loader
      */
     public static function autoLoad($class)
     {
-        $class = preg_replace('/Application\\\/', 'library\\', $class);
+        $class = self::getTranslatedClass($class);
         $filename = preg_replace('/\\\/', self::DIRECTORY_SEPARATOR, $class) . '.php';
         foreach (self::$dirs as $dir) {
             $filename = $dir . self::DIRECTORY_SEPARATOR . $filename;
@@ -53,6 +58,16 @@ class Loader
         }
         trigger_error("Unable to load: " . $class);
         return false;
+    }
+
+    private static function getTranslatedClass(string $class)
+    {
+        foreach (self::$translations as $key => $value) {
+            if (preg_match("/$key/", $class)) {
+                $class = preg_replace("/$key\\\/", "$value\\", $class);
+            }
+        }
+        return $class;
     }
 
     /**
@@ -68,6 +83,16 @@ class Loader
             throw new \InvalidArgumentException("$path is not a directory");
         }
         self::$dirs[] = $path;
+    }
+
+    public static function addTranslation(string $name, string $translation)
+    {
+        if (!$name || !$translation) {
+            throw new \LogicException('Some argument(s) is/are empty');
+        }
+        $name = preg_replace('/\\\/', "\\\\\\", $name);
+        $translation = preg_replace('/\\\/', "\\\\\\", $translation);
+        self::$translations[$name] = $translation;
     }
 
     /**

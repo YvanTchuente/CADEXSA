@@ -14,7 +14,7 @@ use Application\CMS\NewsInterface;
 use Application\CMS\DeleteItemTrait;
 use Application\CMS\ItemExistsTrait;
 use Psr\Http\Message\RequestInterface;
-use Application\DateTime\TimeDurationInterface;
+use Application\DateTime\DifferenceInterface;
 
 class NewsManager implements ConnectionAware, CMSManager
 {
@@ -200,15 +200,15 @@ class NewsManager implements ConnectionAware, CMSManager
         return $article;
     }
 
-    public function preview(int $ID, TimeDurationInterface $TimeDuration)
+    public function preview(int $ID, DifferenceInterface $timeDifference)
     {
         $article = $this->get($ID);
         $title = substr($article->getTitle(), 0, 90);
         $body = substr($article->getBody(), 0, 200);
         $publication_date = new \DateTime($article->getPublicationDate());
-        $TimeDuration->setReferenceTime($publication_date);
-        $TimeDuration->setTargetTime(new \DateTime());
-        $duration = $TimeDuration->getLongestDuration();
+        $timeDifference->setReferenceTime($publication_date);
+        $timeDifference->setTargetTime(new \DateTime());
+        $duration = $timeDifference->diff('short');
         $preview = array('id' => $ID, 'thumbnail' => $article->getThumbnail(), 'title' => $title, 'body' => $body, 'timeDiff' => $duration);
         return $preview;
     }

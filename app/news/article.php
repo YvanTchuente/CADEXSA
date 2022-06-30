@@ -2,13 +2,13 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\Database\Connection;
-use Application\Membership\MemberManager;
 use Application\CMS\News\TagManager;
+use Application\Database\Connection;
 use Application\CMS\News\NewsManager;
-use Application\MiddleWare\ServerRequest;
+use Application\Membership\MemberManager;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $NewsManager = new NewsManager(Connection::Instance());
 $TagManager = new TagManager(Connection::Instance());
 

@@ -3,11 +3,11 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
 define('STANDARD_FILES', array('limitSize' => 3 * (1024 * 1024), 'allowedTypes' => ['image/jpeg' => 'jpg']));
 
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 
 $picture = $incoming_request->getUploadedFiles()['picture'];
 $fileSize = $picture->getStream()->getSize();

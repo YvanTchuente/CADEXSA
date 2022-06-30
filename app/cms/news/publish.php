@@ -2,13 +2,6 @@
 
 require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
-use Application\MiddleWare\{
-    Stream,
-    Request,
-    Constants,
-    TextStream,
-    ServerRequest
-};
 use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
@@ -16,6 +9,8 @@ use Application\DateTime\Difference;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
 use Application\Membership\NewsletterAgent;
+use Application\MiddleWare\Http\Message\Factory;
+use Application\MiddleWare\Http\Message\Constants;
 use Application\CMS\News\{NewsManager, TagManager};
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
@@ -23,8 +18,8 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login?goto=' . $goto);
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
-$outgoing_request =  new Request();
+$incoming_request = Factory::createServerRequestFromGlobals();
+$outgoing_request = Factory::instance()->createRequest('get', $incoming_request->getUri());
 $NewsManager = new NewsManager(Connection::Instance());
 $TagManager = new TagManager(Connection::Instance());
 
@@ -37,7 +32,7 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
     } else {
         $oldName = sha1($_SESSION['username'] . $_SESSION['ID']) . ".jpg";
         $path = dirname(__DIR__, 2) . "/static/images/articles_thumbnails/";
-        $picture = new Stream($path . $oldName);
+        $picture = Factory::instance()->createStreamFromFile($path . $oldName);
         $newName = sha1($picture->getContents()) . ".jpg";
         $is_renamed = rename($path . $oldName, $path . $newName);
         if ($is_renamed) {
@@ -46,7 +41,7 @@ if ($incoming_request->getMethod() == Constants::METHOD_POST) {
             $incoming_request =  $incoming_request->withParsedBody($body);
         }
     }
-    $body = new TextStream(json_encode($incoming_request->getParsedBody()));
+    $body = Factory::instance()->createStream(json_encode($incoming_request->getParsedBody()));
     $outgoing_request =  $outgoing_request->withBody($body);
     // Creates and save and/or publish the result
     $articleID = $NewsManager->save($outgoing_request->withBody($body));

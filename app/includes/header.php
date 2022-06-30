@@ -4,13 +4,13 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Membership\MemberManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
 if (MemberManager::Instance()->is_logged_in()) {
     $profilePicture = MemberManager::Instance()->getMember($_SESSION['ID'])->getPicture();
 }
 ?>
-<?php $urlPath = (((new ServerRequest())->initialize())->getUri())->getPath(); ?>
+<?php $urlPath = Factory::createServerRequestFromGlobals()->getUri()->getPath(); ?>
 <header>
     <div id="topnav">
         <div class="ws-container">

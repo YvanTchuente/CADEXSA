@@ -5,9 +5,9 @@ require_once dirname(__DIR__) . '/bootstrap/starter.php';
 use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 
 // Retrieve the content of the contact form
 $payload = $incoming_request->getParsedBody();

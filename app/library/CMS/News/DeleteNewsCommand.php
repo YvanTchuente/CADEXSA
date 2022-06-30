@@ -6,8 +6,9 @@ use Application\Generic\Command;
 use Application\Generic\Memento;
 use Application\CMS\NewsInterface;
 use Application\Generic\Originator;
-use Application\MiddleWare\Request;
-use Application\MiddleWare\TextStream;
+use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 class DeleteNewsCommand implements Command, Originator
 {
@@ -31,9 +32,15 @@ class DeleteNewsCommand implements Command, Originator
      */
     protected $tag;
 
-    public function __construct(NewsManager $NewsManager)
+    /**
+     * @var RequestFactoryInterface&StreamFactoryInterface&UriFactoryInterface
+     */
+    protected $factory;
+
+    public function __construct(NewsManager $NewsManager, RequestFactoryInterface&StreamFactoryInterface&UriFactoryInterface $factory)
     {
         $this->NewsManager = $NewsManager;
+        $this->factory = $factory;
     }
 
     public function setID(int $ID)
@@ -102,8 +109,8 @@ class DeleteNewsCommand implements Command, Originator
             'publication_date' => $this->item->getPublicationDate(),
             'authorID' => $this->item->getAuthorID()
         );
-        $body = new TextStream(json_encode($content));
-        $request = (new Request())->withBody($body);
+        $body = $this->factory->createStream(json_encode($content));
+        $request = $this->factory->createRequest('get', $this->factory->createUri())->withBody($body);
         return (bool) $this->NewsManager->save($request);
     }
 }

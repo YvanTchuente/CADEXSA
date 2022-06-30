@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Application\MiddleWare;
+namespace Application\MiddleWare\Http\Message;
 
 use Psr\Http\Message\{
     UriInterface,

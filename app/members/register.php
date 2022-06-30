@@ -2,25 +2,21 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\MiddleWare\{
-	Request,
-	Constants,
-	TextStream,
-	ServerRequest
-};
 use Application\PHPMailerAdapter;
 use Application\Membership\Validator;
 use Application\Membership\MemberManager;
+use Application\MiddleWare\Http\Message\Factory;
+use Application\MiddleWare\Http\Message\Constants;
 
 if (MemberManager::Instance()->is_logged_in()) {
 	header("Location: /members/login");
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 
 if ($incoming_request->getMethod() == Constants::METHOD_POST) {
-	$outgoing_request =  new Request();
-	$body = new TextStream(json_encode($incoming_request->getParsedBody()));
+	$outgoing_request = Factory::instance()->createRequest('get', $incoming_request->getUri());
+	$body = Factory::instance()->createStream(json_encode($incoming_request->getParsedBody()));
 	$outgoing_request =  $outgoing_request->withBody($body);
 	$response = Validator::validateRegistration($outgoing_request);
 	if (is_array($response)) {

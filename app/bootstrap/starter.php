@@ -21,6 +21,7 @@ session_start();
 
 // Setup class autoloader
 Loader::addTranslation('Application', 'library');
+Loader::addTranslation("Http\Message", 'Message');
 Loader::init(DOCUMENT_ROOT);
 
 // Global exception and error handler

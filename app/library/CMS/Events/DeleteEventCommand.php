@@ -5,8 +5,9 @@ namespace Application\CMS\Events;
 use Application\Generic\Command;
 use Application\Generic\Memento;
 use Application\Generic\Originator;
-use Application\MiddleWare\Request;
-use Application\MiddleWare\TextStream;
+use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 class DeleteEventCommand implements Command, Originator
 {
@@ -25,9 +26,15 @@ class DeleteEventCommand implements Command, Originator
      */
     protected $item;
 
-    public function __construct(EventManager $EventManager)
+    /**
+     * @var RequestFactoryInterface&StreamFactoryInterface&UriFactoryInterface
+     */
+    protected $factory;
+
+    public function __construct(EventManager $EventManager, RequestFactoryInterface&StreamFactoryInterface&UriFactoryInterface $factory)
     {
         $this->EventManager = $EventManager;
+        $this->factory = $factory;
     }
 
     public function setID(int $ID)
@@ -86,8 +93,8 @@ class DeleteEventCommand implements Command, Originator
             'deadline' => $deadline[0],
             'deadline_time' => substr($deadline[1], 0, -3)
         );
-        $body = new TextStream(json_encode($content));
-        $request = (new Request())->withBody($body);
+        $body = $this->factory->createStream(json_encode($content));
+        $request = $this->factory->createRequest('get', $this->factory->createUri())->withBody($body);
         return (bool) $this->EventManager->save($request);
     }
 }

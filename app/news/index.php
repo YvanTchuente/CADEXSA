@@ -10,9 +10,9 @@ use Application\CMS\News\TagManager;
 use Application\Database\Connection;
 use Application\DateTime\Difference;
 use Application\CMS\News\NewsManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $NewsManager = new NewsManager(Connection::Instance());
 $TagManager = new TagManager(Connection::Instance());
 

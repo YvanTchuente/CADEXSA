@@ -4,9 +4,9 @@ require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
 use Application\DateTime\Difference;
 use Application\Membership\MemberManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 
 $is_visitor = false;
 $memberInfo = MemberManager::Instance()->getMember((int) $_SESSION['ID']);

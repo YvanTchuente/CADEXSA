@@ -2,12 +2,6 @@
 
 require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 
-use Application\MiddleWare\{
-    Request,
-    Constants,
-    TextStream,
-    ServerRequest
-};
 use Application\Network\Requests;
 use Application\PHPMailerAdapter;
 use Application\Database\Connection;
@@ -16,17 +10,19 @@ use Application\CMS\Events\EventManager;
 use Application\Membership\MemberManager;
 use Application\CMS\Gallery\PictureManager;
 use Application\Membership\NewsletterAgent;
+use Application\MiddleWare\Http\Message\Factory;
+use Application\MiddleWare\Http\Message\Constants;
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $EventManager = new EventManager(Connection::Instance());
 
 if ($incoming_request->getMethod() == Constants::METHOD_POST) {
-    $outgoing_request =  new Request();
-    $body = new TextStream(json_encode($incoming_request->getParsedBody()));
+    $outgoing_request = Factory::instance()->createRequest('get', $incoming_request->getUri());
+    $body = Factory::instance()->createStream(json_encode($incoming_request->getParsedBody()));
     // Creates and publish the result
     $eventID = $EventManager->save($outgoing_request->withBody($body));
     sleep(1);

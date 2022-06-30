@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Application\Membership;
 
-use Application\MiddleWare\Stream;
+use Application\MiddleWare\Http\Message\Factory;
 use Psr\Http\Message\RequestInterface;
 
 class Validator
 {
     public static function validateCountry(string $country)
     {
-        $stream = new Stream(dirname(__DIR__, 2) . '/static/database/valid_countries.json');
+        $stream = Factory::instance()->createStreamFromFile(dirname(__DIR__, 2) . '/static/database/valid_countries.json');
         $valid_countries = (json_decode($stream->getContents()))->Countries;
         foreach ($valid_countries as $valid_country) {
             if ($valid_country == $country) {

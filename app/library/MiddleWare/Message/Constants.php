@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\MiddleWare;
+namespace Application\MiddleWare\Http\Message;
 
 abstract class Constants
 {

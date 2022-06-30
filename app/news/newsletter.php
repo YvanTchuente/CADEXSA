@@ -3,10 +3,10 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
 $connection = Connection::Instance()->getConnection();
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $params = $incoming_request->getParsedBody();
 
 $userName = $params['name'];

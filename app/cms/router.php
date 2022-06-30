@@ -2,10 +2,10 @@
 
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 use Application\MiddleWare\Routing\Router;
 
-$incoming = (new ServerRequest())->initialize();
+$incoming = Factory::createServerRequestFromGlobals();
 $router = new Router($incoming);
 
 $default_action = function () {

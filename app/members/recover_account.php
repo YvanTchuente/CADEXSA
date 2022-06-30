@@ -7,13 +7,13 @@ use Application\PHPMailerAdapter;
 use Application\Security\Securer;
 use Application\Database\Connection;
 use Application\Membership\MemberManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
 if (MemberManager::Instance()->is_logged_in()) {
 	header('Location: profile.php');
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $param = $incoming_request->getParsedBody();
 
 $step = 1;

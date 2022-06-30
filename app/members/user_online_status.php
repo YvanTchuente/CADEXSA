@@ -3,9 +3,9 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 
 if (isset($incoming_request->getParsedBody()['logout'])) {
     $uid = md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);

@@ -3,10 +3,10 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\Database\Connection;
-use Application\MiddleWare\ServerRequest;
 use Application\CMS\Gallery\PictureManager;
+use Application\MiddleWare\Http\Message\Factory;
 
-$incoming_request = (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $PictureManager = new PictureManager(Connection::Instance());
 
 $params = $incoming_request->getParsedBody();

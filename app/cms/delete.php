@@ -3,10 +3,9 @@
 require_once dirname(__DIR__) . '/bootstrap/starter.php';
 
 use Application\CMS\Caretaker;
-use Application\MiddleWare\Stream;
 use Application\Database\Connection;
 use Application\Membership\MemberManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 use Application\CMS\News\{DeleteNewsCommand, NewsManager, DeleteNewsState};
 use Application\CMS\Events\{DeleteEventCommand, EventManager, DeleteEventState};
 
@@ -14,7 +13,7 @@ if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $payload = $incoming_request->getParsedBody();
 
 $filePath = dirname(__DIR__) . '/tmp/cms_deleted_items';
@@ -27,7 +26,7 @@ if (!file_exists($filePath)) {
 }
 
 try {
-    $cms_deletion_history_file = new Stream($filePath);
+    $cms_deletion_history_file = Factory::instance()->createStreamFromFile($filePath);
 } catch (RuntimeException $e) {
     goto stream_not_opened;
 }
@@ -71,11 +70,11 @@ if (isset($payload['type']) && isset($payload['id'])) {
     switch ($payload['type']) {
         case 'event':
             $manager = new EventManager(Connection::Instance());
-            $deleteCommand = new DeleteEventCommand($manager);
+            $deleteCommand = new DeleteEventCommand($manager, Factory::instance());
             break;
         case 'news':
             $manager = new NewsManager(Connection::Instance());
-            $deleteCommand = new DeleteNewsCommand($manager);
+            $deleteCommand = new DeleteNewsCommand($manager, Factory::instance());
             break;
     }
 

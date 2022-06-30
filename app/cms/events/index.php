@@ -5,13 +5,13 @@ require_once dirname(__DIR__, 2) . '/bootstrap/starter.php';
 use Application\Database\Connection;
 use Application\CMS\Events\EventManager;
 use Application\Membership\MemberManager;
-use Application\MiddleWare\ServerRequest;
+use Application\MiddleWare\Http\Message\Factory;
 
 if (!(MemberManager::Instance()->is_logged_in() && $_SESSION['level'] != 3)) {
     header('Location: /members/login');
 }
 
-$incoming_request =  (new ServerRequest())->initialize();
+$incoming_request = Factory::createServerRequestFromGlobals();
 $EventManager = new EventManager(Connection::Instance());
 $events = $EventManager->list(3);
 ?>

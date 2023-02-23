@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.2
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -23,33 +23,34 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chats`
+-- Table structure for table `chat_messages`
 --
 
-CREATE TABLE `chats` (
-  `ID` int(11) NOT NULL,
-  `senderID` int(11) NOT NULL,
-  `receiverID` int(11) NOT NULL,
-  `messageText` text NOT NULL,
-  `message_key` varchar(255) NOT NULL,
-  `iv` varchar(255) NOT NULL COMMENT 'Initialization Vector',
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('0','1') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Members'' conversations chats';
+CREATE TABLE `chat_messages` (
+  `id` bigint(11) NOT NULL,
+  `sender_id` bigint(11) NOT NULL,
+  `receiver_id` bigint(11) NOT NULL,
+  `body` text NOT NULL,
+  `status` enum('0','1') NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_at` datetime DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contact_page_messages`
+-- Table structure for table `contact_messages`
 --
 
-CREATE TABLE `contact_page_messages` (
+CREATE TABLE `contact_messages` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
   `message` text NOT NULL,
-  `timestamp` datetime NOT NULL
+  `sent_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -59,15 +60,59 @@ CREATE TABLE `contact_page_messages` (
 --
 
 CREATE TABLE `events` (
-  `ID` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text NOT NULL,
+  `id` bigint(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `venue` varchar(255) NOT NULL,
-  `thumbnail` varchar(255) NOT NULL,
-  `publication_date` datetime NOT NULL,
-  `deadline` datetime NOT NULL,
-  `has_happened` enum('0','1') NOT NULL DEFAULT '0'
+  `occurs_on` datetime NOT NULL,
+  `description` text NOT NULL,
+  `status` enum('0','1') NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `published_on` datetime NOT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_participants`
+--
+
+CREATE TABLE `event_participants` (
+  `event_id` bigint(20) NOT NULL,
+  `exstudent_id` bigint(20) NOT NULL,
+  `attended` enum('0','1') NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exstudents`
+--
+
+CREATE TABLE `exstudents` (
+  `id` bigint(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `batch_year` year(4) NOT NULL,
+  `orientation` enum('Arts','Science','Commercial') NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `phone_number` varchar(30) NOT NULL,
+  `description` text NOT NULL,
+  `level` enum('1','2','3') NOT NULL DEFAULT '3',
+  `status` enum('0','1','2') NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `last_session_on` datetime DEFAULT NULL,
+  `registered_on` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_at` datetime DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Registered ex-students';
 
 -- --------------------------------------------------------
 
@@ -76,75 +121,23 @@ CREATE TABLE `events` (
 --
 
 CREATE TABLE `gallery_pictures` (
-  `ID` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint(11) NOT NULL,
+  `location` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `snapshot_date` datetime NOT NULL,
-  `publication_date` datetime NOT NULL DEFAULT current_timestamp()
+  `shot_on` datetime NOT NULL,
+  `published_on` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified_at` datetime DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `members`
+-- Table structure for table `newsletter_subscribers`
 --
 
-CREATE TABLE `members` (
-  `ID` int(11) NOT NULL,
-  `firstname` varchar(255) NOT NULL,
-  `lastname` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `password_key` varchar(255) NOT NULL,
-  `iv` varchar(255) NOT NULL COMMENT 'Initialization Vector',
-  `main_contact` int(11) NOT NULL,
-  `secondary_contact` int(11) DEFAULT NULL,
-  `country` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `batch_year` year(4) NOT NULL,
-  `orientation` enum('Arts','Science','Commercial') NOT NULL,
-  `aboutme` text NOT NULL,
-  `level` enum('1','2','3') NOT NULL DEFAULT '3',
-  `last_connection` datetime DEFAULT NULL,
-  `registered_on` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Registered members';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `members_levels`
---
-
-CREATE TABLE `members_levels` (
-  `ID` int(11) NOT NULL,
-  `name` char(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Members'' roles';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `news`
---
-
-CREATE TABLE `news` (
-  `ID` int(11) NOT NULL,
-  `authorID` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  `thumbnail` varchar(255) NOT NULL,
-  `published` enum('0','1') NOT NULL,
-  `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `publication_date` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='News article table';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `newsletter`
---
-
-CREATE TABLE `newsletter` (
+CREATE TABLE `newsletter_subscribers` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -152,12 +145,21 @@ CREATE TABLE `newsletter` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news_tags`
+-- Table structure for table `news_articles`
 --
 
-CREATE TABLE `news_tags` (
-  `newsID` int(11) NOT NULL,
-  `tagID` int(11) NOT NULL
+CREATE TABLE `news_articles` (
+  `id` bigint(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `tags` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` enum('0','1') NOT NULL,
+  `author_id` bigint(11) NOT NULL,
+  `published_on` datetime NOT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -167,190 +169,92 @@ CREATE TABLE `news_tags` (
 --
 
 CREATE TABLE `online_members` (
-  `memberID` int(11) NOT NULL,
-  `unique_identifier` varchar(255) NOT NULL,
+  `exStudentId` bigint(11) NOT NULL,
+  `uid` varchar(255) NOT NULL,
   `last_activity` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profile_pictures`
+-- Table structure for table `password_reset_attempts`
 --
 
-CREATE TABLE `profile_pictures` (
-  `memberID` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Table that maps members to their profile pictures';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `recover_passwords`
---
-
-CREATE TABLE `recover_passwords` (
-  `memberID` int(11) NOT NULL,
+CREATE TABLE `password_reset_attempts` (
+  `memberId` bigint(11) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `recover_key` varchar(255) NOT NULL,
+  `reset_key` varchar(255) NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Contains data about attempts of users recovering accounts';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tags`
---
-
-CREATE TABLE `tags` (
-  `ID` int(11) NOT NULL,
-  `tag` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='News tags';
-
---
--- Dumping data for table `tags`
---
-
-INSERT INTO `tags` (`ID`, `tag`) VALUES
-(1, 'Alumni'),
-(2, 'Members'),
-(3, 'Events'),
-(4, 'School'),
-(5, 'Students');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `chats`
+-- Indexes for table `chat_messages`
 --
-ALTER TABLE `chats`
-  ADD PRIMARY KEY (`ID`);
+ALTER TABLE `chat_messages`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `contact_page_messages`
+-- Indexes for table `contact_messages`
 --
-ALTER TABLE `contact_page_messages`
+ALTER TABLE `contact_messages`
   ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `exstudents`
+--
+ALTER TABLE `exstudents`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `gallery_pictures`
 --
 ALTER TABLE `gallery_pictures`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `members`
+-- Indexes for table `newsletter_subscribers`
 --
-ALTER TABLE `members`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `members_levels`
---
-ALTER TABLE `members_levels`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `news`
---
-ALTER TABLE `news`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `newsletter`
---
-ALTER TABLE `newsletter`
+ALTER TABLE `newsletter_subscribers`
   ADD PRIMARY KEY (`email`);
 
 --
--- Indexes for table `news_tags`
+-- Indexes for table `news_articles`
 --
-ALTER TABLE `news_tags`
-  ADD PRIMARY KEY (`newsID`);
+ALTER TABLE `news_articles`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `online_members`
 --
 ALTER TABLE `online_members`
-  ADD PRIMARY KEY (`memberID`);
+  ADD PRIMARY KEY (`exStudentId`);
 
 --
--- Indexes for table `profile_pictures`
+-- Indexes for table `password_reset_attempts`
 --
-ALTER TABLE `profile_pictures`
-  ADD PRIMARY KEY (`memberID`);
-
---
--- Indexes for table `recover_passwords`
---
-ALTER TABLE `recover_passwords`
-  ADD PRIMARY KEY (`memberID`);
-
---
--- Indexes for table `tags`
---
-ALTER TABLE `tags`
-  ADD PRIMARY KEY (`ID`);
+ALTER TABLE `password_reset_attempts`
+  ADD PRIMARY KEY (`memberId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `chats`
+-- AUTO_INCREMENT for table `contact_messages`
 --
-ALTER TABLE `chats`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `contact_page_messages`
---
-ALTER TABLE `contact_page_messages`
+ALTER TABLE `contact_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `events`
---
-ALTER TABLE `events`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `gallery_pictures`
---
-ALTER TABLE `gallery_pictures`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `members`
---
-ALTER TABLE `members`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `members_levels`
---
-ALTER TABLE `members_levels`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `news`
---
-ALTER TABLE `news`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tags`
---
-ALTER TABLE `tags`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity name="Cadexsa\Domain\Model\Message\Message" table="chat_messages">
+    <field name="id" column="id"/>
+    <field name="senderId" column="sender_id"/>
+    <field name="receiverId" column="receiver_id"/>
+    <field name="body" column="body"/>
+    <embedded-field name="status">
+        <attribute name="value" column="status"/>
+    </embedded-field>
+    <field name="createdAt" column="created_at"/>
+</entity>

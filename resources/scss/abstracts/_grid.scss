@@ -1,0 +1,8 @@
+@use "helpers" as *;
+
+// Grid template starter
+%grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}

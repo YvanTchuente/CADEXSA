@@ -1,0 +1,324 @@
+/*
+ * Website header styles 
+ */
+
+@use "../../abstracts" as *;
+@use "../../components";
+
+header {
+  &.page-header {
+    padding: 0;
+    width: 100%;
+    z-index: 1000;
+    position: relative;
+    background-color: white;
+
+    &.scroll-state {
+      position: sticky;
+      top: 0;
+      left: 0;
+      box-shadow: 0 0.3125rem 1.5rem rgba(0, 0, 0, 10%);
+    }
+
+    > div:first-child {
+      color: white;
+      background-color: $primary-theme-color;
+
+      @include max-responsify($device-large) {
+        display: none;
+      }
+
+      > div:first-child {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #admin-space {
+        display: flex;
+        align-items: center;
+
+        i {
+          padding-right: 0.5rem;
+        }
+      }
+
+      #member-space {
+        position: relative;
+
+        .header-button {
+          margin: 7px 0px;
+
+          &:first-child:focus {
+            color: $primary-theme-color;
+          }
+
+          &:last-child {
+            color: $primary-theme-color;
+            background-color: white;
+
+            &:hover {
+              color: white;
+              background: $button-hover-color;
+            }
+          }
+        }
+
+        // Panel that appear when a user is logged in
+        .user-panel {
+          color: black;
+          display: inline-block;
+          padding: 5px 0px 5px 0px;
+
+          img {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            margin-left: 5px;
+            object-fit: cover;
+            display: inline-block;
+          }
+
+          > span {
+            color: white;
+          }
+
+          a {
+            color: black;
+
+            > i {
+              font-size: 0.9em;
+              padding-right: 0.6em;
+            }
+          }
+
+          .dropdown {
+            @extend .dropdown;
+            width: 230px;
+            top: 200%;
+            right: 0;
+            border-radius: 0.5em;
+
+            &:before {
+              content: "";
+              position: absolute;
+              bottom: 100%;
+              right: 10px;
+              border-left: 5px solid transparent;
+              border-right: 5px solid transparent;
+              border-bottom: 5px solid white;
+            }
+
+            a {
+              display: block;
+              padding: 0.4em 0.6em 0.4em 1.8em;
+              transition: 0.3s;
+
+              &:hover {
+                color: white;
+                background-color: $primary-theme-color;
+                border-bottom-color: $primary-theme-color;
+              }
+            }
+
+            li {
+              &:first-child {
+                text-align: center;
+                padding: 0.6em 0.6em 0em 0.6em;
+                margin-bottom: 1em;
+
+                div {
+                  width: 120px;
+                  display: inline-block;
+                  vertical-align: middle;
+
+                  span {
+                    display: block;
+
+                    &:first-child {
+                      font-family: Inter-semiBold;
+                    }
+
+                    &:last-child {
+                      text-align: center;
+                      padding: 0;
+                    }
+                  }
+                }
+              }
+
+              &:last-child {
+                a {
+                  margin-bottom: 0.7em;
+                }
+              }
+            }
+
+            img {
+              width: 80px;
+              height: 80px;
+              margin: auto;
+              display: block;
+              object-fit: cover;
+              border-radius: 50%;
+              margin-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
+
+    > div:last-child {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+
+      @include max-responsify($device-large) {
+        position: relative;
+        grid-template-rows: 3.5rem;
+      }
+
+      // Logo block
+      > *:nth-child(1) {
+        grid-column: 1 / span 10;
+
+        @include range-responsify($device-large, $device-extra-large) {
+          grid-column: 1 / span 2;
+        }
+
+        @include min-responsify($device-extra-large) {
+          grid-column: 1 / span 3;
+        }
+      }
+
+      // Navigation block
+      > *:nth-child(2) {
+        display: none;
+
+        @include range-responsify($device-large, $device-extra-large) {
+          display: block;
+          grid-column: 3 / span 10;
+        }
+
+        @include min-responsify($device-extra-large) {
+          display: block;
+          grid-column: 4 / span 9;
+        }
+      }
+
+      // Mobile hamburger menu button
+      > *:nth-child(3) {
+        grid-column: 11 / 13;
+
+        @include min-responsify($device-large) {
+          display: none;
+        }
+      }
+
+      // Mobile navigation
+      > *:nth-child(4) {
+        display: block;
+        grid-column: 1 / span 12;
+
+        @include min-responsify($device-large) {
+          display: none;
+        }
+      }
+    }
+
+    .hamburger-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+
+      @include max-responsify($device-large) {
+        display: block;
+      }
+    }
+
+    .mobile-menu {
+      color: white;
+      position: fixed;
+      top: 115px;
+      left: 0;
+      right: 0;
+      width: 95%;
+      opacity: 0;
+      margin: auto;
+      padding: 1rem 0;
+      visibility: hidden;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      transition: all 0.5s ease-out;
+
+      @include min-responsify($device-extra-small) {
+        width: 90%;
+      }
+
+      &.open {
+        top: 88px;
+        opacity: 1;
+        visibility: visible;
+      }
+
+      ul {
+        display: block;
+
+        li {
+          display: block;
+          padding: 0.625rem 1.25rem;
+
+          &.active {
+            color: $primary-theme-color;
+          }
+
+          a {
+            font-size: 1.2em;
+            transition: all 0.3s;
+
+            :hover {
+              color: $primary-theme-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.page-content-header {
+    padding: 2rem;
+    color: white;
+    @include center-content;
+    background-color: $primary-theme-color;
+
+    h1 {
+      margin: 0;
+      font-family: Roboto;
+    }
+
+    &#contact-header {
+      padding: 3.125em 0;
+      flex-direction: column;
+
+      h2,
+      p {
+        max-width: 90%;
+        text-align: center;
+      }
+
+      p {
+        @include min-responsify($device-large) {
+          width: 50%;
+        }
+      }
+    }
+
+    & + div {
+      padding-top: 3.125rem;
+      padding-bottom: 3.125rem;
+    }
+  }
+}

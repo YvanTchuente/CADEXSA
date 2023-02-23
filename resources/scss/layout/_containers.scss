@@ -1,0 +1,76 @@
+/*
+ * Grid system
+ */
+
+@use "../abstracts" as *;
+@use "sass:math";
+
+.ws-container {
+  width: 100%;
+  margin: auto;
+
+  @include max-responsify($device-small) {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  @include min-responsify($device-small) {
+    max-width: 540px;
+  }
+
+  @include min-responsify($device-medium) {
+    max-width: 720px;
+  }
+
+  @include min-responsify($device-large) {
+    max-width: 960px;
+  }
+
+  @include min-responsify($device-semi-large) {
+    max-width: 1140px;
+  }
+
+  @include min-responsify($device-extra-large) {
+    max-width: 1320px;
+  }
+}
+
+// Content-Aside container
+.cs-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  row-gap: 1.25rem;
+
+  @include min-responsify($device-large) {
+    column-gap: 3rem;
+  }
+
+  > *:first-child {
+    grid-column: 1 / span 12;
+
+    @include min-responsify($device-large) {
+      grid-column: 1 / span 8;
+    }
+  }
+
+  > *:last-child {
+    grid-column: 1 / span 12;
+
+    @include min-responsify($device-large) {
+      grid-column: 9 / span 4;
+    }
+
+    @include min-responsify($device-extra-large) {
+      grid-column: 10 / span 3;
+    }
+  }
+}
+
+.list-container {
+  display: flex;
+  row-gap: 1.5rem;
+}
+
+.news-container {
+  @include grid-generator(3, 9);
+}

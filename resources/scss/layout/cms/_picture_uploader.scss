@@ -1,0 +1,140 @@
+@use "../../abstracts/" as *;
+
+#cms-picture-uploader {
+  .error {
+    position: relative;
+    top: 1.5rem;
+    display: block;
+    text-align: center;
+    padding: 0.3rem 1rem;
+    background: #deb887;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 1rem rgb(0 0 0 / 20%);
+  }
+
+  #page-container {
+    display: flex;
+    row-gap: 1.5rem;
+    margin: 4rem auto;
+    flex-direction: column;
+
+    @include min-responsify($device-large) {
+      width: 70%;
+    }
+  }
+
+  h1,
+  h2 {
+    color: $primary-theme-color;
+  }
+
+  header {
+    text-align: center;
+  }
+
+  #dropbox {
+    height: 30rem;
+    overflow: hidden;
+    @include center-content;
+    background-color: rgba(0, 0, 0, 0.03);
+    border: 5px dashed $control-border-color;
+
+    > div {
+      text-align: center;
+
+      * {
+        margin: 0;
+      }
+
+      img {
+        width: 100px;
+        margin-bottom: 1em;
+      }
+
+      span {
+        cursor: pointer;
+        color: $primary-theme-color;
+      }
+
+      p {
+        color: gray;
+      }
+    }
+
+    > img {
+      max-height: 100%;
+    }
+  }
+
+  #picture-upload {
+    display: none;
+  }
+
+  #pictures {
+    display: flex;
+    row-gap: 1rem;
+    flex-direction: column;
+
+    h2 {
+      text-align: center;
+    }
+
+    .picture {
+      width: 100%;
+      display: flex;
+      padding: 0.5em 1rem;
+      align-items: center;
+      justify-content: space-between;
+      border: 2px solid $control-border-color;
+
+      > div {
+        &:first-child {
+          display: flex;
+          align-items: center;
+          column-gap: 1rem;
+
+          img {
+            height: 50px;
+          }
+
+          > div {
+            display: flex;
+            flex-direction: column;
+
+            > span:first-child {
+              line-height: 1.4;
+              font-size: 1.2em;
+              font-family: Inter-semiBold;
+            }
+
+            > div {
+              display: flex;
+              column-gap: 0.7rem;
+              align-items: center;
+              flex-direction: row;
+
+              span {
+                color: gray;
+              }
+            }
+          }
+        }
+
+        &:last-child {
+          display: flex;
+          column-gap: 0.5em;
+          align-items: center;
+
+          span {
+            width: 2em;
+            height: 2em;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            @include center-content;
+          }
+        }
+      }
+    }
+  }
+}

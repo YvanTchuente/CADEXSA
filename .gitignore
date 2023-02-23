@@ -2,15 +2,14 @@
 *.env
 results.xml
 .phpunit.result.cache
-cadexsa_db_with_data.sql
 
 # Directories
+vendor/*
 scripts/*
 .vscode/*
+storage/*
 node_modules/*
-vendor/*
-app/logs/*
-app/tmp/*
 html-coverage/*
-app/static/images/profile_pictures/*
-app/static/images/articles_thumbnails/*
+resources/temporary/*
+public/images/profile_pictures/*
+public/images/articles_thumbnails/*

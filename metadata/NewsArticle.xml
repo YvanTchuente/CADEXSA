@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity name="Cadexsa\Domain\Model\News\NewsArticle" table="news_articles">
+    <field name="id" column="id"/>
+    <field name="title" column="title"/>
+    <field name="body" column="body"/>
+    <field name="image" column="image"/>
+    <field name="tags" column="tags"/>
+    <embedded-field name="status">
+        <attribute name="value" column="status"/>
+    </embedded-field>
+    <field name="authorId" column="author_id"/>
+    <field name="publishedOn" column="published_on"/>
+</entity>

@@ -1,14 +1,46 @@
 {
+    "type": "project",
+    "authors": [
+        {
+            "name": "Yvan Tchuente",
+            "email": "yvantchuente@gmail.com"
+        }
+    ],
     "require": {
-        "psr/http-message": "^1.0",
+        "php": ">=8.0",
         "phpmailer/phpmailer": "^6.5",
-        "psr/http-factory": "^1.0",
+        "psr/event-dispatcher": "^1.0",
         "psr/http-client": "^1.0",
-        "psr/log": "^3.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0",
         "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0"
+        "psr/http-server-middleware": "^1.0",
+        "psr/log": "^3.0",
+        "tym/encryption": "^1.0",
+        "tym/http-message": "^1.0",
+        "tym/http-client": "^1.0",
+        "tym/http-message-compression": "^1.0",
+        "tym/websocket": "^1.0",
+        "vlucas/phpdotenv": "^5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Cadexsa\\": "app/"
+        },
+        "files": [
+            "app/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cadexsa\\Tests\\": "tests/"
+        }
     }
 }

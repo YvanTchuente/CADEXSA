@@ -7,17 +7,16 @@ const postcss = require("gulp-postcss");
 const uglify = require("gulp-uglify");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
-// const browsersync = require('browser-sync').create();
 
 // File path variables
 const sourceFiles = {
-  sassPath: "app/static/src/scss/**/*.scss",
-  jsPath: "app/static/src/js/**/*.js",
+  sassPath: "resources/scss/**/*.scss",
+  jsPath: "resources/js/**/*.js",
 };
 
 const destination = {
-  cssPath: "app/static/dist/css",
-  jsPath: "app/static/dist/js",
+  cssPath: "public/css",
+  jsPath: "public/js",
 };
 
 // Sass task
@@ -30,7 +29,7 @@ function buildCSS() {
 
 // Minifies the Main JS file for production environments
 function minifyJs() {
-  return src("app/static/dist/js/main.js", { sourcemaps: true })
+  return src("public/js/main.js", { sourcemaps: true })
     .pipe(uglify())
     .pipe(dest(destination.jsPath, { sourcemaps: "." }));
 }

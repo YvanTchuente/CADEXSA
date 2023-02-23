@@ -1,0 +1,55 @@
+@use "../abstracts" as *;
+
+.hamburger-icon {
+  cursor: pointer;
+  width: $menu-bar-width;
+  height: $menu-bar-height + ($menu-bar-spacing * 2);
+
+  > .bars {
+    display: block;
+    position: relative;
+    width: $menu-bar-width;
+    height: $menu-bar-height;
+    transform: translateY($menu-bar-spacing);
+    border-radius: $border-radius;
+    background-color: black;
+    transition: all 0.5s;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: $menu-bar-width;
+      height: $menu-bar-height;
+      border-radius: $menu-border-radius;
+      background-color: rgba(0, 0, 0, 1);
+    }
+
+    &::before {
+      bottom: $menu-bar-spacing;
+      transition: bottom 0.2s 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    &::after {
+      top: $menu-bar-spacing;
+      transition: top 0.2s 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+  }
+
+  &.open .bars {
+    background-color: rgba(0, 0, 0, 0);
+
+    &::before {
+      bottom: 0;
+      transform: rotate(-45deg);
+      transition: bottom 0.2s ease-in-out, transform 0.2s 0.2s ease-in-out;
+    }
+
+    &::after {
+      top: 0;
+      transform: rotate(45deg);
+      transition: top 0.2s ease-in-out, transform 0.2s 0.2s ease-in-out;
+    }
+  }
+}

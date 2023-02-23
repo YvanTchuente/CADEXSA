@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity name="Cadexsa\Domain\Model\Picture\Picture" table="gallery_pictures">
+    <field name="id" column="id"/>
+    <field name="location" column="location"/>
+    <field name="description" column="description"/>
+    <field name="shotOn" column="shot_on"/>
+    <field name="publishedOn" column="published_on"/>
+</entity>

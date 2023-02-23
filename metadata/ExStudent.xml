@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity name="Cadexsa\Domain\Model\ExStudent\ExStudent" table="exStudents">
+    <field name="id" column="id"/>
+    <field name="username" column="username"/>
+    <field name="password" column="password"/>
+    <field name="email" column="email_address"/>
+    <embedded-field name="name">
+        <attribute name="firstname" column="firstname"/>
+        <attribute name="lastname" column="lastname"/>
+    </embedded-field>
+    <field name="batchYear" column="batch_year"/>
+    <embedded-field name="orientation">
+        <attribute name="value" column="orientation"/>
+    </embedded-field>
+    <embedded-field name="address">
+        <attribute name="country" column="country"/>
+        <attribute name="city" column="city"/>
+    </embedded-field>
+    <field name="description" column="description"/>
+    <field name="phoneNumber" column="phone_number"/>
+    <embedded-field name="level">
+        <attribute name="value" column="level"/>
+    </embedded-field>
+    <embedded-field name="status">
+        <attribute name="value" column="status"/>
+    </embedded-field>
+    <field name="avatar" column="avatar"/>
+    <field name="lastSessionOn" column="last_session_on"/>
+    <field name="registeredOn" column="registered_on"/>
+</entity>

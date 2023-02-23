@@ -1,0 +1,38 @@
+@use "../../abstracts" as *;
+
+#picture_wrapper {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+  @include max-responsify($device-large) {
+    row-gap: 1rem;
+  }
+
+  > div:first-child {
+    grid-column: 1 / span 12;
+
+    @include min-responsify($device-large) {
+      grid-column: 1 / span 8;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  > div:last-child {
+    padding: 1.5rem 2rem;
+    grid-column: 1 / span 12;
+    background-color: whitesmoke;
+
+    @include min-responsify($device-large) {
+      grid-column: 9 / span 4;
+    }
+
+    div:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+}

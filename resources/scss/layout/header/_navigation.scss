@@ -1,0 +1,49 @@
+/*
+ * Header Navigation Bar
+ */
+
+@use "../../abstracts/" as *;
+
+header nav#main-menu {
+  ul {
+    float: right;
+
+    li {
+      float: left;
+      margin: 0;
+      text-align: center;
+      transition: all 0.3s;
+
+      @include min-responsify($device-semi-large) {
+        margin-left: 10px;
+      }
+
+      &:hover a {
+        color: $primary-theme-color;
+      }
+
+      &:not(:last-child) {
+        margin-right: 0;
+
+        @include min-responsify($device-semi-large) {
+          margin-right: 0.5em;
+        }
+      }
+
+      a {
+        position: relative;
+        display: block;
+        font-family: roboto-medium;
+        padding: 25px 20px;
+
+        &:hover {
+          color: $primary-theme-color;
+        }
+      }
+
+      &.active a {
+        color: $primary-theme-color;
+      }
+    }
+  }
+}

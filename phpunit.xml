@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests\bootstrap.php" colors="true">
-    <php>
-        <server name="DOCUMENT_ROOT" value="C:/Users/User/Desktop/CADEXSA/app" />
-    </php>
     <testsuites>
-        <testsuite name="unit">
-            <directory>tests/unit</directory>
-            <directory>tests/integration</directory>
-            <directory>tests/functional</directory>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">tests/unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">tests/integration</directory>
         </testsuite>
     </testsuites>
     <coverage pathCoverage="true">
         <include>
-            <directory suffix=".php">app/Library</directory>
+            <directory suffix=".php">app</directory>
         </include>
         <exclude>
-            <directory>app/library/Database</directory>
-            <directory>app/library/Security</directory>
-            <file>app/library/Error/Handler.php</file>
-            <file>app/library/Autoload/Loader.php</file>
-            <file>app/library/PHPMailerAdapter.php</file>
-            <file>app/library/Network/WebSocketServer.php</file>
-            <file>app/library/CMS/News/DeleteNewsState.php</file>
-            <file>app/library/CMS/Events/DeleteEventState.php</file>
-            <file>app/library/CMS/Gallery/DeletePictureState.php</file>
-            <file>app/library/Membership/MemberBuildDirector.php</file>
+            <file>app/Domain/DeleteNewsState.php</file>
+            <file>app/Domain/DeleteEventState.php</file>
+            <file>app/Domain/DeletePictureState.php</file>
+            <file>app/Infrastructure/ExceptionHandler.php</file>
+            <file>app/Infrastructure/Messaging/Mailer.php</file>
         </exclude>
         <report>
             <html outputDirectory="html-coverage" />

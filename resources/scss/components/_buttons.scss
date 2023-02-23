@@ -1,0 +1,72 @@
+/* 
+ * Buttons SCSS File
+ * Styles relative to buttons
+ */
+
+@use "../abstracts" as *;
+
+@mixin button(
+  $border-enable: 1,
+  $back-color: $primary-theme-color,
+  $border-radius: 2rem,
+  $hover: $button-hover-color
+) {
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  border-radius: $border-radius;
+  padding: 0.5rem 2rem;
+  @if ($border-enable == 1) {
+    border: 2px solid transparent;
+  } @else {
+    border: none;
+  }
+  background: $back-color;
+
+  &:hover {
+    color: white;
+    background: $hover;
+  }
+
+  &:active {
+    color: $hover;
+    background: white;
+    @if ($border-enable == 1) {
+      border: 2px solid $button-hover-color;
+    } @else {
+      border: none;
+    }
+  }
+}
+
+button,
+.button,
+[role="button"] {
+  @include button();
+}
+
+.header-button {
+  @include button(0, transparent);
+  padding: 0.4em 2em;
+}
+
+%social-button {
+  width: 1.5em;
+  height: 1.5em;
+  @include center-content;
+  padding: 0 !important;
+  font-family: Roboto-medium;
+  font-size: 1.6rem !important;
+}
+
+.btn-facebook {
+  @include button(0, transparent, 5px, $facebook-color);
+  @extend %social-button;
+}
+
+.btn-twitter {
+  @include button(0, transparent, 5px, $twitter-color);
+  @extend %social-button;
+}

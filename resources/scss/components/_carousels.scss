@@ -1,0 +1,75 @@
+@use "../abstracts" as *;
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+
+  .carousel-item {
+    width: 100%;
+    float: left;
+    display: none;
+    position: relative;
+    margin-right: -100%;
+  }
+
+  + .carousel-navigation {
+    > * {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      border-radius: 0;
+      padding: 0 1rem;
+      @include center-content;
+      background-color: transparent;
+
+      @include max-responsify($device-small) {
+        align-items: flex-end;
+        padding-bottom: 1.5rem;
+      }
+
+      &:hover,
+      &:focus {
+        border: none;
+        color: white;
+        box-shadow: unset;
+      }
+
+      i {
+        font-size: 2rem;
+
+        @include min-responsify($device-small) {
+          font-size: 2.5rem;
+        }
+      }
+    }
+
+    .previous-item-button {
+      left: 0;
+    }
+
+    .next-item-button {
+      right: 0;
+    }
+  }
+
+  .active-item {
+    display: block;
+  }
+
+  .next-button-next-item {
+    @include animation(slide_right_center, 0.5);
+  }
+
+  .next-button-previous-item {
+    @include animation(slide_center_left, 0.5);
+  }
+
+  .previous-button-next-item {
+    @include animation(slide_left_center, 0.5);
+  }
+
+  .previous-button-previous-item {
+    @include animation(slide_center_right, 0.5);
+  }
+}

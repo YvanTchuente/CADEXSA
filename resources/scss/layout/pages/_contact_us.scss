@@ -1,0 +1,127 @@
+/*
+ * Contact Page styles
+ */
+
+@use "../../abstracts/" as *;
+
+#contact-us-content {
+  display: grid;
+  row-gap: 1.5em;
+  grid-template-columns: repeat(12, 1fr);
+
+  @include min-responsify($device-medium) {
+    column-gap: 50px;
+  }
+
+  .msg {
+    display: block;
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.3rem 1rem;
+    background: #deb887;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  }
+
+  > form {
+    grid-column: 1 / span 12;
+
+    @include min-responsify($device-medium) {
+      grid-column: 1 / span 9;
+    }
+
+    h3,
+    p {
+      @include max-responsify($device-medium) {
+        text-align: center;
+      }
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input,
+    textarea {
+      margin-bottom: 0.75rem;
+    }
+
+    textarea {
+      height: 16rem;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 1.25rem;
+    }
+  }
+
+  > div:last-child {
+    text-align: center;
+    grid-column: 1 / span 12;
+
+    @include min-responsify($device-medium) {
+      text-align: unset;
+      grid-column: 10 / span 3;
+    }
+
+    > div {
+      display: flex;
+      row-gap: 0.3em;
+      flex-direction: column;
+
+      &:not(:last-of-type) {
+        margin-bottom: 1em;
+      }
+
+      > span:first-child {
+        font-weight: 600;
+      }
+
+      > div:last-child {
+        display: flex;
+        justify-content: center;
+
+        @include min-responsify($device-medium) {
+          justify-content: flex-start;
+        }
+
+        *:not(:last-child) {
+          margin-right: 0.2em;
+        }
+      }
+    }
+
+    a.btn-facebook {
+      color: white;
+      background-color: $facebook-color;
+    }
+
+    a.btn-twitter {
+      color: white;
+      background-color: $twitter-color;
+    }
+  }
+}
+
+#contact_footer {
+  color: white;
+  padding: 50px 0px;
+  text-align: center;
+  background-color: $primary-theme-color;
+
+  p {
+    width: 70%;
+    margin: 1.5em auto;
+  }
+
+  a {
+    color: $primary-theme-color;
+    background-color: white;
+  }
+}

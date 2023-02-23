@@ -1,0 +1,149 @@
+/*
+ * Event page styles
+ */
+
+@use "../../abstracts/" as *;
+
+#event-container {
+  margin: auto;
+
+  h2 {
+    text-align: center;
+  }
+
+  @include min-responsify($device-large) {
+    width: 80%;
+  }
+
+  @include min-responsify($device-semi-large) {
+    width: 70%;
+  }
+
+  > label:first-child {
+    display: block;
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 0.3125em;
+    font-family: Inter-semiBold;
+
+    span {
+      color: $primary-theme-color;
+    }
+  }
+
+  .countdown {
+    width: auto;
+    margin-bottom: 2em;
+    justify-content: center;
+  }
+
+  #event {
+    &-image {
+      width: 100%;
+      height: 16rem;
+      background-color: rgba(0, 0, 0, 0.05);
+
+      @include min-responsify($device-extra-small) {
+        height: 25rem;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-metadata {
+      width: 100%;
+      color: white;
+      text-align: center;
+      padding: 2rem 5rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(0.1rem);
+      background-color: rgba($color: $primary-theme-color, $alpha: 0.8);
+
+      h1 {
+        &::after {
+          content: "at";
+          display: block;
+          font: {
+            size: 0.5em;
+            family: Roboto;
+          }
+          margin: 0.5rem auto;
+        }
+      }
+
+      p {
+        span {
+          display: block;
+
+          @include min-responsify($device-extra-small) {
+            margin-right: 1rem;
+            display: inline-block;
+
+            &:last-child {
+              margin: 0;
+            }
+          }
+
+          i {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+
+    &-description {
+      p {
+        margin-bottom: 1em;
+        text-align: justify;
+      }
+    }
+  }
+
+  #event-description,
+  #call-to-action {
+    margin-bottom: 2em;
+  }
+
+  #call-to-action {
+    * {
+      width: 100%;
+    }
+
+    span {
+      padding: 0.7rem 0;
+    }
+  }
+
+  #event-participants {
+    &-container {
+      display:flex;
+      gap: 1.5rem;
+    }
+
+    > h2 {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .event-participant {
+    width: 150px;
+    display: flex;
+    row-gap: 0.8em;
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 0.3em;
+    flex-direction: column;
+    border: 1px solid $control-border-color;
+
+    img {
+      width: 5rem;
+      height: 5rem;
+      margin: auto;
+      border-radius: 50%;
+    }
+  }
+}
